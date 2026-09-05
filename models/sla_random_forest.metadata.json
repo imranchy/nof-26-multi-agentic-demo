@@ -1,0 +1,97 @@
+{
+  "model": "RandomForestClassifier",
+  "features": [
+    "enterprise_gbps",
+    "ran_gbps",
+    "pon_gbps",
+    "total_gbps",
+    "hour_sin",
+    "hour_cos",
+    "minute_of_day_sin",
+    "minute_of_day_cos"
+  ],
+  "rows": 288,
+  "failure_threshold": 0.024928631742263323,
+  "classification_reports": {
+    "clean_test": {
+      "degraded": {
+        "precision": 0.8333333333333334,
+        "recall": 1.0,
+        "f1-score": 0.9090909090909091,
+        "support": 10.0
+      },
+      "failure_prone": {
+        "precision": 1.0,
+        "recall": 0.6,
+        "f1-score": 0.75,
+        "support": 5.0
+      },
+      "normal": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 57.0
+      },
+      "accuracy": 0.9722222222222222,
+      "macro avg": {
+        "precision": 0.9444444444444445,
+        "recall": 0.8666666666666667,
+        "f1-score": 0.8863636363636364,
+        "support": 72.0
+      },
+      "weighted avg": {
+        "precision": 0.9768518518518517,
+        "recall": 0.9722222222222222,
+        "f1-score": 0.9700126262626263,
+        "support": 72.0
+      }
+    },
+    "noisy_test": {
+      "degraded": {
+        "precision": 0.8333333333333334,
+        "recall": 1.0,
+        "f1-score": 0.9090909090909091,
+        "support": 10.0
+      },
+      "failure_prone": {
+        "precision": 1.0,
+        "recall": 0.6,
+        "f1-score": 0.75,
+        "support": 5.0
+      },
+      "normal": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 57.0
+      },
+      "accuracy": 0.9722222222222222,
+      "macro avg": {
+        "precision": 0.9444444444444445,
+        "recall": 0.8666666666666667,
+        "f1-score": 0.8863636363636364,
+        "support": 72.0
+      },
+      "weighted avg": {
+        "precision": 0.9768518518518517,
+        "recall": 0.9722222222222222,
+        "f1-score": 0.9700126262626263,
+        "support": 72.0
+      }
+    }
+  },
+  "noise": {
+    "type": "multiplicative_gaussian",
+    "std": 0.05,
+    "columns": [
+      "enterprise_gbps",
+      "ran_gbps",
+      "pon_gbps",
+      "total_gbps"
+    ]
+  },
+  "python": "3.12.13 (main, Aug  7 2026, 02:25:39) [Clang 22.1.3 ]",
+  "platform": "Linux-6.18.35-x86_64-with-glibc2.39",
+  "scikit_learn": "1.8.0",
+  "limitation": "Simulator-derived surrogate evaluated with a random interval split from one scenario day."
+}
