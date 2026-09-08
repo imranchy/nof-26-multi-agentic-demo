@@ -27,6 +27,7 @@ TOOL_TO_INTENT = {
     "get_state_distribution": "state_distribution",
     "validate_forecast": "validate",
     "decline_out_of_scope": "out_of_scope",
+    "analyze_subcarrier_scenario": "recovery",
 }
 
 
@@ -124,6 +125,7 @@ class MultiAgentRuntime:
             "compare_service_loads": lambda: self._compare(arguments),
             "get_state_distribution": self._distribution,
             "validate_forecast": self._validation,
+            "analyze_subcarrier_scenario": lambda: self._allocation_scenario(arguments, trace),
             "decline_out_of_scope": self._out_of_scope,
         }
         evidence, fallback = handlers[name]()
@@ -315,6 +317,119 @@ class MultiAgentRuntime:
     def _peak_row(self) -> pd.Series:
         return self.frame.loc[self.frame.failure_probability.idxmax()]
 
+    def _allocation_scenario(
+        self,
+        args: dict[str, Any],
+        trace: list[AgentEvent],
+    ) -> tuple[dict[str, Any], str]:
+
+        row = self._peak_row()
+
+        fixed = {}
+
+        mapping = {
+            "enterprise_subcarriers": "enterprise",
+            "pon_subcarriers": "pon",
+            "ran_subcarriers": "ran",
+        }
+
+        for argument, service in mapping.items():
+            if argument in args:
+                fixed[service] = int(args[argument])
+
+        result = self.recovery.analyze_constraints(
+            row=row,
+            fixed=fixed,
+            total_subcarriers=4,
+        )
+
+        trace.append(
+            AgentEvent(
+                "Recovery Agent",
+                "Evaluated constrained NoF subcarrier allocations",
+                detail="priority_trf layout catalogue",
+            )
+        )
+
+        evidence = {
+            "interval": self._row(row),
+            "scenario": result,
+        }
+
+        if not result["constraint_feasible"]:
+            fallback = (
+                "The requested subcarrier constraint cannot be "
+                "represented by any allocation in the NoF "
+                "priority_trf layout catalogue."
+            )
+            return evidence, fallback
+
+        alloc = result["allocation"]
+        overflow = result["total_overflow_gbps"]
+
+        # Describe only constraints explicitly requested by the operator.
+        constraint_parts = []
+
+        if "enterprise" in fixed:
+            count = fixed["enterprise"]
+            constraint_parts.append(
+                f"Enterprise fixed at {count} SC"
+                f"{'' if count == 1 else 's'}"
+            )
+
+        if "pon" in fixed:
+            count = fixed["pon"]
+            constraint_parts.append(
+                f"PON fixed at {count} SC"
+                f"{'' if count == 1 else 's'}"
+            )
+
+        if "ran" in fixed:
+            count = fixed["ran"]
+            constraint_parts.append(
+                f"RAN fixed at {count} SC"
+                f"{'' if count == 1 else 's'}"
+            )
+
+        constraint_text = ", ".join(constraint_parts)
+
+        if result["traffic_fully_served"]:
+            fallback = (
+                f"At the highest-risk interval ({row.time}), with "
+                f"{constraint_text}, the minimum-overflow NoF allocation "
+                f"assigns {alloc['enterprise']} SC"
+                f"{'' if alloc['enterprise'] == 1 else 's'} to Enterprise, "
+                f"{alloc['pon']} SC"
+                f"{'' if alloc['pon'] == 1 else 's'} to PON, and "
+                f"{alloc['ran']} SC"
+                f"{'' if alloc['ran'] == 1 else 's'} to RAN. "
+                "All predicted traffic can be accommodated. "
+                "Operator approval is required."
+            )
+
+        else:
+            affected = [
+                service.upper()
+                for service, value in result["overflow_gbps"].items()
+                if value > 1e-9
+            ]
+
+            fallback = (
+                f"At the highest-risk interval ({row.time}), with "
+                f"{constraint_text}, the minimum-overflow NoF allocation "
+                f"assigns {alloc['enterprise']} SC"
+                f"{'' if alloc['enterprise'] == 1 else 's'} to Enterprise, "
+                f"{alloc['pon']} SC"
+                f"{'' if alloc['pon'] == 1 else 's'} to PON, and "
+                f"{alloc['ran']} SC"
+                f"{'' if alloc['ran'] == 1 else 's'} to RAN. "
+                f"This allocation leaves an estimated {overflow:.2f} Gbps "
+                f"unmet for {', '.join(affected)}. "
+                "Operator approval is required."
+            )
+
+        return evidence, fallback
+
     @staticmethod
     def _service(args: dict[str, Any]) -> str:
         service = str(args.get("service", "")).lower()
@@ -348,7 +463,9 @@ class MultiAgentRuntime:
             service=args.get("service"),
             state=None if state == "any_non_normal" else state,
             top_k=int(args.get("top_k", 1)),
-            needs_recovery=tool_name in {"recommend_subcarrier_allocation", "check_allocation_feasibility"},
+            needs_recovery=tool_name in {"recommend_subcarrier_allocation",
+                                          "check_allocation_feasibility",
+                                            "analyze_subcarrier_scenario",},
             needs_diagnosis=tool_name == "diagnose_highest_risk",
             source="mistral-tool-call",
         )

@@ -2,6 +2,10 @@ from __future__ import annotations
 
 import pandas as pd
 
+from itertools import product
+
+
+
 
 class RecoveryAgent:
     """Evaluate the three allocations observed under priority_trf."""
@@ -26,6 +30,110 @@ class RecoveryAgent:
             "ran": 2,
         },
     }
+
+    def analyze_constraints(
+        self,
+        row: pd.Series,
+        fixed: dict[str, int] | None = None,
+        total_subcarriers: int = 4,
+    ) -> dict:
+        """
+        Evaluate operator constraints using only the three allocation
+        layouts observed under the NoF priority_trf configuration.
+        """
+        fixed = fixed or {}
+        services = ("enterprise", "pon", "ran")
+
+        if total_subcarriers != 4:
+            raise ValueError(
+                "The NoF demonstration assumes exactly four subcarriers."
+            )
+
+        loads = {
+            service: float(row[f"{service}_gbps"])
+            for service in services
+        }
+
+        candidates = []
+
+        for layout, allocation in self.LAYOUTS.items():
+
+            # Keep only NoF layouts that satisfy the operator constraint.
+            if any(
+                allocation[service] != count
+                for service, count in fixed.items()
+            ):
+                continue
+
+            overflow = {
+                service: max(
+                    0.0,
+                    loads[service]
+                    - allocation[service] * self.SC_CAPACITY_GBPS,
+                )
+                for service in services
+            }
+
+            candidates.append(
+                {
+                    "layout": layout,
+                    "allocation": dict(allocation),
+                    "overflow_gbps": overflow,
+                    "total_overflow_gbps": sum(
+                        overflow.values()
+                    ),
+                }
+            )
+
+        if not candidates:
+            return {
+                "observed_policy": "priority_trf",
+                "constraint_feasible": False,
+                "traffic_fully_served": False,
+                "operator_constraints": fixed,
+                "reason": (
+                    "No allocation in the NoF priority_trf layout "
+                    "catalogue satisfies the supplied constraints."
+                ),
+            }
+
+        best = min(
+            candidates,
+            key=lambda item: item["total_overflow_gbps"],
+        )
+
+        total_overflow = best["total_overflow_gbps"]
+
+        return {
+            "observed_policy": "priority_trf",
+            "layout": best["layout"],
+            "allocation": best["allocation"],
+            "capacity_gbps": {
+                service: (
+                    best["allocation"][service]
+                    * self.SC_CAPACITY_GBPS
+                )
+                for service in services
+            },
+            "overflow_gbps": best["overflow_gbps"],
+            "total_overflow_gbps": round(
+                total_overflow,
+                2,
+            ),
+            "constraint_feasible": True,
+            "traffic_fully_served": (
+                total_overflow <= 1e-9
+            ),
+            "operator_constraints": fixed,
+            "evaluated_candidates": len(candidates),
+        }
+
+
+
+
+
+
+           
 
     def recommend(self, frame: pd.DataFrame) -> pd.DataFrame:
         """Add allocation recommendations to every forecast interval."""

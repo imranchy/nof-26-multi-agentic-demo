@@ -71,3 +71,18 @@ def test_explanation_guardrails():
         "There is a 13.2% chance of degraded operation.",
         {"state_distribution_percent": {"degraded": 13.2}},
     )
+
+def test_constrained_subcarrier_allocation():
+    runtime = MultiAgentRuntime()
+
+    evidence = runtime._execute_tool(
+        "analyze_subcarrier_scenario",
+        {"ran_subcarriers": 2},
+        [],
+    )
+
+    allocation = evidence["scenario"]["allocation"]
+
+    assert allocation["ran"] == 2
+    assert sum(allocation.values()) == 4
+    assert evidence["scenario"]["total_overflow_gbps"] >= 0
