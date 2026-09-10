@@ -163,6 +163,13 @@ Compose one concise operator-facing answer, normally under 130 words.
                     hidden,
                 )
 
+            if category == "policy_comparison":
+                return cls._shape_policy_comparison(
+                    value,
+                    query,
+                    hidden,
+                )
+
             # ------------------------------------------------------
             # Operator-constrained SC allocation
             # ------------------------------------------------------
@@ -216,6 +223,49 @@ Compose one concise operator-facing answer, normally under 130 words.
             ]
 
         return value
+
+    @classmethod
+    def _shape_policy_comparison(
+        cls,
+        value: dict,
+        query: str,
+        hidden: set[str],
+    ) -> dict:
+        """Expose only operator-facing values needed for a policy comparison.
+
+        Raw policy-engine traffic/capacity values are intentionally hidden here.
+        The explainer receives rendered blocking values plus reconfiguration counts,
+        which prevents it from deriving or inventing unrelated traffic/SLA numbers.
+        """
+        shaped: dict = {
+            "category": "policy_comparison",
+        }
+
+        for key in (
+            "timestamp",
+            "objective",
+            "recommended_policy",
+            "recommendation_is_advisory",
+            "rendered_values",
+        ):
+            if key in value and key not in hidden:
+                shaped[key] = cls._operator_evidence(value[key], query)
+
+        results = value.get("policy_results")
+        if isinstance(results, dict):
+            compact: dict = {}
+            for policy, result in results.items():
+                if not isinstance(result, dict):
+                    continue
+                compact[policy] = {
+                    key: cls._operator_evidence(item, query)
+                    for key, item in result.items()
+                    if key in {"policy", "assignment_label", "reconfig_count"}
+                    and key not in hidden
+                }
+            shaped["policy_results"] = compact
+
+        return shaped
 
     @classmethod
     def _shape_policy_counterfactual(
@@ -360,58 +410,18 @@ Compose one concise operator-facing answer, normally under 130 words.
                     query,
                 )
 
-        # Keep compact endpoint state information.
-        for state_key in (
-            "state_a",
-            "state_b",
-        ):
+        # Endpoint values are deliberately restricted to categorical state labels.
+        # Numerical comparison should come from the already-calculated delta fields
+        # and rendered_values, not from asking the LLM to subtract endpoints.
+        for state_key in ("state_a", "state_b"):
             state = value.get(state_key)
-
             if not isinstance(state, dict):
                 continue
-
-            shaped_state: dict = {}
-
-            traffic = state.get("traffic")
-            if isinstance(traffic, dict):
-                shaped_state["traffic"] = {
-                    key: cls._operator_evidence(item, query)
-                    for key, item in traffic.items()
-                    if key in {
-                        "time",
-                        "enterprise_gbps",
-                        "ran_gbps",
-                        "pon_gbps",
-                        "total_gbps",
-                    }
-                }
-
             sla = state.get("sla")
-            if isinstance(sla, dict):
-                shaped_state["sla"] = {
-                    key: cls._operator_evidence(item, query)
-                    for key, item in sla.items()
-                    if key in {
-                        "time",
-                        "state",
-                        "failure_prone_probability",
-                    }
+            if isinstance(sla, dict) and "state" in sla:
+                shaped[state_key] = {
+                    "sla": {"state": cls._operator_evidence(sla["state"], query)}
                 }
-
-            policy = state.get("policy")
-            if isinstance(policy, dict):
-                shaped_state["policy"] = {
-                    key: cls._operator_evidence(item, query)
-                    for key, item in policy.items()
-                    if key in {
-                        "policy",
-                        "assignment_label",
-                        "overall_blocking_ratio_epoch",
-                        "reconfig_count",
-                    }
-                }
-
-            shaped[state_key] = shaped_state
 
         delta = value.get("delta_b_minus_a")
 
@@ -556,37 +566,16 @@ Compose one concise operator-facing answer, normally under 130 words.
             "mean_total_gbps",
             "peak_total_gbps",
             "peak_load_time",
-            "mean_failure_prone_probability",
-            "max_failure_prone_probability",
             "highest_risk_time",
             "state_counts",
             "recommendation_counts",
             "objective",
         }
 
-        # Only expose full per-policy behavior when the query
-        # explicitly asks about policy behavior or detailed policies.
-        policy_detail_requested = any(
-            term in q
-            for term in (
-                "policy behavior",
-                "policy behaviour",
-                "policy performance",
-                "policy summary",
-                "policies",
-                "blocking",
-                "reconfiguration",
-                "reconfig",
-                "churn",
-            )
-        )
-
+        # Keep range generation on aggregate, already-computed evidence only.
+        # Per-policy ratio tables are intentionally withheld because the normal
+        # range response does not require the LLM to convert or compare them.
         allowed_fields = set(core_fields)
-
-        if policy_detail_requested:
-            allowed_fields.add(
-                "policy_summaries"
-            )
 
         shaped_summary = {
             k: cls._operator_evidence(v, query)

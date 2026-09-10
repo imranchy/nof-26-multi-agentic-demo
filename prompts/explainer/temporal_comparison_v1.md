@@ -152,9 +152,11 @@ Do not add:
 unless explicit advisory evidence is supplied.
 
 Do not say that no reconfiguration or policy change is required.
+Do not say that no reconfiguration was recommended or that no
+reconfigurations were recommended.
 
 A reconfiguration count describes the simulated comparison; it is not an
-operational recommendation.
+operational recommendation. State only the supplied count or delta.
 
 ## Output discipline
 
@@ -167,3 +169,9 @@ Lead with the largest supplied comparison result.
 Do not expose internal tool names or implementation details.
 
 After reporting the supplied comparison, stop.
+## Strict delta-only numerical rule
+
+For numerical change statements, use only `delta_b_minus_a` fields and the explicitly
+supplied `rendered_values`. Do not quote endpoint traffic, endpoint probabilities, or
+endpoint blocking values and do not recompute a difference from them. If endpoint SLA
+state labels are supplied, they may be named without adding a numeric value.

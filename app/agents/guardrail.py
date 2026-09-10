@@ -7,9 +7,13 @@ from typing import Any
 import numpy as np
 import pandas as pd
 
+from app.utils.time_utils import normalize_time
+
 
 class GuardrailAgent:
     NUMBER_RE = re.compile(r"(?<![A-Za-z])[-+]?\d+(?:\.\d+)?")
+    TIME_24_RE = re.compile(r"\b(?:[01]?\d|2[0-3]):[0-5]\d\b", re.I)
+    TIME_12_RE = re.compile(r"\b(?:1[0-2]|0?[1-9]):[0-5]\d\s*(?:am|pm)\b", re.I)
 
     # Operator-facing advice that must not be invented merely because
     # a state, risk, blocking value, or ranked interval appears notable.
@@ -36,6 +40,8 @@ class GuardrailAgent:
         "no policy change is recommended",
         "no policy change recommended",
         "no reconfiguration is recommended",
+        "no reconfiguration was recommended",
+        "no reconfigurations were recommended",
         "maintain network stability",
         "ensure optimal performance",
         "no reconfiguration is required",
@@ -479,89 +485,92 @@ class GuardrailAgent:
 
         return []
 
+    @classmethod
+    def _extract_normalized_times(cls, text: str) -> list[str]:
+        """Extract explicit clock expressions and normalize them to HH:MM."""
+        values: list[str] = []
+
+        for match in cls.TIME_12_RE.finditer(text):
+            normalized = normalize_time(match.group(0))
+            if normalized is not None:
+                values.append(normalized)
+
+        masked = cls.TIME_12_RE.sub("", text)
+        for match in cls.TIME_24_RE.finditer(masked):
+            normalized = normalize_time(match.group(0))
+            if normalized is not None:
+                values.append(normalized)
+
+        return values
+
+    @classmethod
+    def _mask_clock_times(cls, text: str) -> str:
+        """Remove validated clock expressions before generic number grounding."""
+        masked = cls.TIME_12_RE.sub("", text)
+        return cls.TIME_24_RE.sub("", masked)
+
+    @classmethod
+    def _evidence_clock_times(cls, value: Any) -> set[str]:
+        """Collect normalized explicit clock times from deterministic evidence."""
+        out: set[str] = set()
+
+        if isinstance(value, dict):
+            for child in value.values():
+                out.update(cls._evidence_clock_times(child))
+            return out
+
+        if isinstance(value, (list, tuple)):
+            for child in value:
+                out.update(cls._evidence_clock_times(child))
+            return out
+
+        if isinstance(value, str):
+            out.update(cls._extract_normalized_times(value))
+
+        return out
+
+    @staticmethod
+    def _numeric_equivalent(
+        value: float,
+        candidate: float,
+    ) -> bool:
+        """
+        Return True when two numeric values are equivalent for grounding.
+
+        Allows exact matches plus very small floating-point differences.
+        """
+        return abs(value - candidate) <= 1e-6
+
     def _numbers_are_grounded(
         self,
         answer: str,
         evidence: dict[str, Any],
     ) -> bool:
-        """
-        Validate answer numbers against deterministic evidence.
+        """Validate numerical claims without confusing clock formats with metrics."""
+        answer_times = self._extract_normalized_times(answer)
+        evidence_times = self._evidence_clock_times(evidence)
 
-        Accept:
-        - exact raw evidence values;
-        - normal operator-facing rounding of evidence values;
-        - percentage renderings of known ratio/probability fields.
+        for answer_time in answer_times:
+            if evidence_times and answer_time not in evidence_times:
+                return False
 
-        Do not permit arbitrary arithmetic combinations.
-        """
-        allowed = self._numeric_values(
-            evidence
-        )
+        # A clock expression such as 9:30 PM is one semantic timestamp, not
+        # two independent numeric claims (9 and 30).
+        numeric_answer = self._mask_clock_times(answer)
 
-        display_allowed = (
-            self._operator_display_numeric_values(
-                evidence
-            )
-        )
+        allowed = self._numeric_values(evidence)
+        display_allowed = self._operator_display_numeric_values(evidence)
+        candidates = allowed + display_allowed
 
-        candidates = (
-            allowed
-            + display_allowed
-        )
-
-        for token in self.NUMBER_RE.findall(
-            answer
-        ):
+        for token in self.NUMBER_RE.findall(numeric_answer):
             value = float(token)
-
             if not any(
-                self._numeric_equivalent(
-                    value,
-                    candidate,
-                )
+                self._numeric_equivalent(value, candidate)
                 for candidate in candidates
             ):
                 return False
 
         return True
-
-    @staticmethod
-    def _numeric_equivalent(
-        observed: float,
-        candidate: float,
-    ) -> bool:
-        """
-        Accept exact values and ordinary deterministic display rounding.
-
-        Examples:
-        74.095... -> 74.10
-        0.16379083 -> 0.16 when represented as a raw ratio
-        """
-        if math.isclose(
-            observed,
-            candidate,
-            rel_tol=1e-6,
-            abs_tol=1e-6,
-        ):
-            return True
-
-        # Common operator-facing decimal precisions.
-        for decimals in (
-            0,
-            1,
-            2,
-            3,
-            4,
-        ):
-            if math.isclose(
-                observed,
-                round(candidate, decimals),
-                rel_tol=0.0,
-                abs_tol=10 ** (-(decimals + 1)),
-            ):
-                return True
-
-        return False
 
     @classmethod
     def _operator_display_numeric_values(

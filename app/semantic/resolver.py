@@ -3,6 +3,8 @@ from __future__ import annotations
 import re
 from typing import Any
 
+from app.utils.time_utils import normalize_time as normalize_clock_time
+
 
 class SemanticResolver:
     """Deterministic normalization/safety layer around Mistral semantics.
@@ -73,6 +75,13 @@ class SemanticResolver:
     ) -> str:
         q = query.lower()
 
+        if (
+            any(x in q for x in ("without favoring", "without favouring", "no preference for"))
+            and "blocking" in q
+            and any(x in q for x in ("stability", "reconfiguration", "churn"))
+        ):
+            return "balanced"
+
         if any(
             x in q
             for x in (
@@ -83,11 +92,20 @@ class SemanticResolver:
                 "absolute lowest blocking",
                 "minimize blocking",
                 "minimise blocking",
+                "minimizing blocking",
+                "minimising blocking",
+                "minimized blocking",
+                "minimised blocking",
                 "reduce blocking",
                 "lowest blocked",
                 "serve the most demand",
+                "serve as much demand as possible",
                 "maximize served",
                 "maximise served",
+                "maximize served demand",
+                "maximise served demand",
+                "maximize served traffic",
+                "maximise served traffic",
             )
         ):
             return "min_blocking"
@@ -102,13 +120,22 @@ class SemanticResolver:
                 "minimum churn",
                 "least churn",
                 "avoid reconfiguration",
+                "avoid unnecessary reconfiguration",
                 "avoid reconfig",
+                "avoid unnecessary sc changes",
+                "controller churn",
+                "control-plane changes",
+                "control plane changes",
+                "maximize stability",
+                "maximise stability",
                 "minimize reconfiguration",
                 "minimise reconfiguration",
                 "keep it stable",
                 "most stable",
                 "stability first",
                 "reduce controller changes",
+                "few controller changes",
+                "as few controller changes as possible",
                 "prioritize stability",
                 "prioritise stability",
                 "prioritizing stability",
@@ -130,6 +157,10 @@ class SemanticResolver:
                 "priority baseline",
                 "strict priority",
                 "service priority",
+                "service-class priority",
+                "service class priority",
+                "preserve service-class priority",
+                "preserve service class priority",
                 "prioritize sla",
                 "prioritise sla",
                 "prioritize service order",
@@ -164,24 +195,22 @@ class SemanticResolver:
 
     @classmethod
     def explicit_times(cls, query: str) -> list[str]:
+        """Extract explicit clock expressions and normalize them to HH:MM."""
         values: list[str] = []
 
         for match in cls.TIME_12.finditer(query):
-            hour = int(match.group(1)) % 12
+            normalized = normalize_clock_time(match.group(0))
+            if normalized is not None:
+                values.append(normalized)
 
-            if match.group(3).lower() == "pm":
-                hour += 12
-
-            values.append(
-                f"{hour:02d}:{int(match.group(2)):02d}"
-            )
-
+        # Remove 12-hour expressions before scanning for 24-hour times so
+        # the same clock value is not extracted twice.
         masked = cls.TIME_12.sub("", query)
 
         for match in cls.TIME_24.finditer(masked):
-            values.append(
-                f"{int(match.group(1)):02d}:{int(match.group(2)):02d}"
-            )
+            normalized = normalize_clock_time(match.group(0))
+            if normalized is not None:
+                values.append(normalized)
 
         return values
 
@@ -531,7 +560,9 @@ class SemanticResolver:
             "simulate",
             "counterfactual",
             "performance",
+            "perform",
             "outcome",
+            "would produce",
             "try ",
             " instead",
             "if we use",
@@ -805,12 +836,27 @@ class SemanticResolver:
                 "minimum churn",
                 "fewest reconfig",
                 "minimum reconfig",
+                "avoid unnecessary reconfiguration",
+                "avoid unnecessary sc changes",
+                "controller churn",
+                "most stable",
+                "maximize stability",
+                "maximise stability",
+                "strict service priority",
+                "service-class priority",
+                "service class priority",
                 "which policy",
                 "compare pca",
                 "recommend a policy",
                 "preferable policy",
                 "best policy",
+                "best compromise",
+                "makes the most sense overall",
+                "makes most sense overall",
             )
+        ) or (
+            sum(1 for policy in ("pca", "mba", "saa") if re.search(rf"\b{policy}\b", q)) >= 2
+            and any(x in q for x in ("choose", "compare", "between", "recommend"))
         ):
             return "compare_policies_at_time"
 
@@ -824,6 +870,8 @@ class SemanticResolver:
                 for x in (
                     "traffic",
                     "demand",
+                    "load",
+                    "busy",
                 )
             )
             and any(
@@ -834,10 +882,28 @@ class SemanticResolver:
                     "expect",
                     "expected",
                     "what traffic",
+                    "outlook",
+                )
+            )
+            and any(
+                x in q
+                for x in (
+                    "traffic",
+                    "demand",
+                    "load",
+                    "busy",
+                    "services",
                 )
             )
         ):
             return "get_traffic_forecast"
+
+        if (
+            any(x in q for x in ("traffic", "load"))
+            and any(x in q for x in ("sla", "risk"))
+            and any(x in q for x in ("sc", "subcarrier", "allocation", "policy state"))
+        ):
+            return "get_network_state_at_time"
 
         if any(
             x in q
@@ -853,6 +919,9 @@ class SemanticResolver:
                 "risk state",
                 "what is the sla risk",
                 "what's the sla risk",
+                "failure-prone",
+                "failure prone",
+                "how risky",
             )
         ):
             return "get_sla_prediction"
@@ -866,6 +935,10 @@ class SemanticResolver:
                 "what is happening",
                 "what's happening",
                 "how does the network look",
+                "operator snapshot",
+                "network snapshot",
+                "what's going on",
+                "what is going on",
             )
         ):
             return "get_network_state_at_time"
@@ -879,7 +952,11 @@ class SemanticResolver:
                 x in q
                 for x in (
                     "an hour later",
+                    "one hour later",
+                    "60 minutes later",
                     "an hour earlier",
+                    "one hour earlier",
+                    "60 minutes earlier",
                     "previous interval",
                     "next interval",
                     "that time",

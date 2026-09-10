@@ -3,24 +3,41 @@ from __future__ import annotations
 import argparse
 import csv
 import json
+import sys
 from collections import defaultdict
 from datetime import datetime
 from pathlib import Path
 from typing import Any
+
+ROOT = Path(__file__).resolve().parents[2]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
 
 import yaml
 
 from app import config
 from app.runtime import MultiAgentRuntime
 
-ROOT = Path(__file__).resolve().parents[2]
-GOLD = ROOT / "tests" / "llm" / "query_sets" / "operator_10_categories_v1.json"
+QUERY_SET_DIR = ROOT / "tests" / "llm" / "query_sets"
+DEFAULT_QUERY_SET = "operator_10_categories_v1.json"
 BENCHMARK_CFG = ROOT / "tests" / "llm" / "benchmark_config.yaml"
 RESULTS = ROOT / "tests" / "llm" / "results" / "v1"
 
 
-def load_cases() -> list[dict[str, Any]]:
-    data = json.loads(GOLD.read_text(encoding="utf-8"))
+def resolve_query_set(value: str) -> Path:
+    path = Path(value)
+    if not path.is_absolute():
+        path = QUERY_SET_DIR / path
+    path = path.resolve()
+    if not path.exists():
+        raise SystemExit(f"Query set not found: {path}")
+    return path
+
+
+def load_cases(query_set_path: Path) -> list[dict[str, Any]]:
+    data = json.loads(query_set_path.read_text(encoding="utf-8"))
+    if "cases" not in data or not isinstance(data["cases"], list):
+        raise SystemExit(f"Invalid query set (missing cases list): {query_set_path}")
     return data["cases"]
 
 
@@ -167,13 +184,16 @@ def save(rows: list[dict[str, Any]], label: str, thresholds: dict[str, float]) -
 
 def main() -> None:
     parser=argparse.ArgumentParser(description="Run NoF v1 Mistral operator benchmark without launching Streamlit.")
-    parser.add_argument("--category", help="Run one named category (10 prompts).")
-    parser.add_argument("--all", action="store_true", help="Run all 100 prompts.")
+    parser.add_argument("--query-set", default=DEFAULT_QUERY_SET,
+                        help=f"Query-set JSON filename in tests/llm/query_sets (default: {DEFAULT_QUERY_SET}).")
+    parser.add_argument("--category", help="Run one named category from the selected query set.")
+    parser.add_argument("--all", action="store_true", help="Run all cases in the selected query set.")
     parser.add_argument("--limit", type=int, default=None)
     args=parser.parse_args()
 
     benchmark_cfg=yaml.safe_load(BENCHMARK_CFG.read_text(encoding="utf-8"))["benchmark"]
-    cases=load_cases()
+    query_set_path=resolve_query_set(args.query_set)
+    cases=load_cases(query_set_path)
     categories=sorted({c["category"] for c in cases})
     if not args.all and not args.category:
         print("Choose --category NAME or --all. Available categories:")
@@ -184,9 +204,9 @@ def main() -> None:
         if args.category not in categories:
             raise SystemExit(f"Unknown category: {args.category}")
         cases=[c for c in cases if c["category"]==args.category]
-        label=f"category_{args.category}"
+        label=f"{query_set_path.stem}_{args.category}"
     else:
-        label="full_100_query_benchmark"
+        label=f"{query_set_path.stem}_all"
     if args.limit:
         cases=cases[:args.limit]
     rows=[]

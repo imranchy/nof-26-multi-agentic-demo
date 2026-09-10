@@ -126,6 +126,32 @@ class MultiAgentRuntime:
             "based on explicit operator language."
         )
 
+    @staticmethod
+    def _normalize_optional_policy(value):
+        if value is None:
+            return None
+
+        value = str(value).strip().upper()
+
+        if value in {
+            "",
+            "NONE",
+            "NULL",
+            "N/A",
+            "NA",
+            "UNSPECIFIED",
+            "ACTIVE",
+            "ACTIVE-POLICY",
+            "ACTIVE_POLICY",
+            "CURRENT",
+            "CURRENT-POLICY",
+            "CURRENT_POLICY",
+            "DEFAULT",
+        }:
+            return None
+
+        return value
+
     def _normalize_tool_arguments(self, query: str, tool_name: str, arguments: dict[str, Any]) -> dict[str, Any]:
         args = dict(arguments)
         default_objective = self.tools.recommendation_cfg["default_objective"]
@@ -169,10 +195,10 @@ class MultiAgentRuntime:
                 if time_b:
                     args["time_b"] = str(time_b)
 
-            args.setdefault(
-                "policy",
-                self.memory.get("recommended_policy")
-                or self.tools.controller["active_policy"],
+            args["policy"] = (
+                self._normalize_optional_policy(args.get("policy"))
+                or self._normalize_optional_policy(self.memory.get("recommended_policy"))
+                or str(self.tools.controller["active_policy"]).upper()
             )
 
         if tool_name == "summarize_time_range":
@@ -194,24 +220,52 @@ class MultiAgentRuntime:
             if explicit_policy:
                 args["policy"] = explicit_policy
             else:
-                args.setdefault("policy", self.memory.get("recommended_policy") or self.memory.get("last_policy") or self.tools.controller["active_policy"])
+                args["policy"] = (
+                    self._normalize_optional_policy(args.get("policy"))
+                    or self._normalize_optional_policy(self.memory.get("recommended_policy"))
+                    or self._normalize_optional_policy(self.memory.get("last_policy"))
+                    or str(self.tools.controller["active_policy"]).upper()
+                )
 
         if tool_name == "analyze_constrained_allocation":
             extracted = SemanticResolver.extract_constraints(query)
             constraint_keys = {"enterprise_subcarriers", "ran_subcarriers", "pon_subcarriers"}
-            proposed_constraints = {k: v for k, v in args.items() if k in constraint_keys and v is not None}
-            current = {**proposed_constraints, **extracted}
+            proposed_constraints = {
+                k: v for k, v in args.items()
+                if k in constraint_keys and v is not None
+            }
             q = query.lower()
-            if any(token in q for token in ("also", "in addition", "as well", "and keep", "and give")):
-                current = {**self.memory.get("last_constraints_raw", {}), **current}
+            additive_followup = any(
+                token in q
+                for token in ("also", "in addition", "as well", "and keep", "and give")
+            )
+
+            # Explicit constraints in the current utterance are authoritative.
+            # For additive follow-ups, preserve prior constraints and fill only
+            # genuinely missing services from the coordinator proposal. This
+            # prevents schema/default values from erasing remembered constraints.
+            current = dict(self.memory.get("last_constraints_raw", {})) if additive_followup else {}
+            for key, value in proposed_constraints.items():
+                if key not in current and key not in extracted:
+                    current[key] = value
+            current.update(extracted)
+
             for key in constraint_keys:
                 args.pop(key, None)
             args.update(current)
-            args.setdefault("reference_policy", self.memory.get("recommended_policy") or self.tools.controller["active_policy"])
+            args["reference_policy"] = (
+                self._normalize_optional_policy(args.get("reference_policy"))
+                or self._normalize_optional_policy(self.memory.get("recommended_policy"))
+                or str(self.tools.controller["active_policy"]).upper()
+            )
 
         if tool_name == "get_network_state_at_time":
             explicit_policy = SemanticResolver.extract_policy(query)
-            args["policy"] = explicit_policy or args.get("policy") or self.tools.controller["active_policy"]
+            args["policy"] = (
+                explicit_policy
+                or self._normalize_optional_policy(args.get("policy"))
+                or str(self.tools.controller["active_policy"]).upper()
+            )
 
         if tool_name == "find_risk_intervals":
             q = query.lower()

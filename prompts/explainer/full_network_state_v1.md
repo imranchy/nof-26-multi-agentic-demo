@@ -126,3 +126,10 @@ Correct:
 
 Incorrect:
 "At 20:00 under MBA ... Under the active SAA policy ..."
+
+## Ending rule
+
+End immediately after reporting the supplied network-state facts. Do not append a
+judgement, recommendation, reassurance, health assessment, or absence-of-action
+statement. A snapshot with low/zero blocking or a Normal SLA state does not by itself
+support "no action required", "healthy", "stable", or similar advisory conclusions.

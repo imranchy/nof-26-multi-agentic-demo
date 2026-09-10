@@ -27,6 +27,35 @@ class OperatorTools:
         self.model_cfg = config.load_yaml("model.yaml")
         self.forecast_mode = forecast_mode
 
+    @staticmethod
+    def _policy_or_default(value: Any, default: Any) -> str:
+        """Return a valid explicit policy or the supplied default."""
+        if value is None:
+            return str(default).upper()
+
+        normalized = str(value).strip().upper()
+
+        default_aliases = {
+            "",
+            "NONE",
+            "NULL",
+            "N/A",
+            "NA",
+            "UNSPECIFIED",
+            "ACTIVE",
+            "ACTIVE-POLICY",
+            "ACTIVE_POLICY",
+            "CURRENT",
+            "CURRENT-POLICY",
+            "CURRENT_POLICY",
+            "DEFAULT",
+        }
+
+        if normalized in default_aliases:
+            return str(default).strip().upper()
+
+        return normalized
+
     def execute(self, name: str, arguments: dict[str, Any], memory: dict[str, Any] | None = None) -> tuple[dict[str, Any], str]:
         memory = memory or {}
         dispatch = {
@@ -86,7 +115,7 @@ class OperatorTools:
 
     def get_network_state_at_time(self, args: dict[str, Any], memory: dict[str, Any]) -> tuple[dict[str, Any], str]:
         time_value = self._resolve_time(args, memory)
-        policy = str(args.get("policy") or self.controller["active_policy"]).upper()
+        policy = self._policy_or_default(args.get("policy"), self.controller["active_policy"])
         row = self._row_at(time_value)
         compact = self._compact_policy_result(self.simulator.at_time(policy, time_value))
         evidence = {
@@ -170,7 +199,7 @@ class OperatorTools:
 
     def simulate_policy_at_time(self, args: dict[str, Any], memory: dict[str, Any]) -> tuple[dict[str, Any], str]:
         time_value = self._resolve_time(args, memory)
-        policy = str(args.get("policy") or memory.get("recommended_policy") or self.controller["active_policy"]).upper()
+        policy = self._policy_or_default(args.get("policy"), memory.get("recommended_policy") or self.controller["active_policy"])
         result = self._compact_policy_result(self.simulator.at_time(policy, time_value))
         evidence = {
             "category": "policy_counterfactual",
@@ -200,7 +229,7 @@ class OperatorTools:
         if not fixed:
             raise ValueError("At least one SC-count constraint is required.")
         objective = str(args.get("objective") or self.recommendation_cfg["default_objective"])
-        reference_policy = str(args.get("reference_policy") or memory.get("recommended_policy") or self.controller["active_policy"]).upper()
+        reference_policy = self._policy_or_default(args.get("reference_policy"), memory.get("recommended_policy") or self.controller["active_policy"])
         tolerance = float(self.recommendation_cfg["objectives"]["balanced"].get("blocking_tolerance_ratio", 0.005))
         result = self.simulator.constrained(time_value, fixed, reference_policy, objective, tolerance)
         evidence = {"category": "operator_constraint", "timestamp": time_value, **result}
@@ -217,7 +246,7 @@ class OperatorTools:
 
     def compare_network_states(self, args: dict[str, Any], memory: dict[str, Any]) -> tuple[dict[str, Any], str]:
         time_a, time_b = self._resolve_pair(args, memory)
-        policy = str(args.get("policy") or memory.get("recommended_policy") or self.controller["active_policy"]).upper()
+        policy = self._policy_or_default(args.get("policy"), memory.get("recommended_policy") or self.controller["active_policy"])
         a, b = self._row_at(time_a), self._row_at(time_b)
         pa = self._compact_policy_result(self.simulator.at_time(policy, time_a))
         pb = self._compact_policy_result(self.simulator.at_time(policy, time_b))

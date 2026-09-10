@@ -1,0 +1,36 @@
+[
+  {
+    "id": "traffic_prediction_01",
+    "category": "traffic_prediction",
+    "query": "What traffic do you expect at 21:15?",
+    "setup_query": "",
+    "expected_tools": [
+      "get_traffic_forecast"
+    ],
+    "raw_tools": [
+      "get_traffic_forecast"
+    ],
+    "executed_tools": [
+      "get_traffic_forecast"
+    ],
+    "raw_tool_sequence_correct": true,
+    "executed_tool_sequence_correct": true,
+    "raw_arguments_correct": true,
+    "executed_arguments_correct": true,
+    "deterministic_correction": false,
+    "coordinator_parse_failure": false,
+    "coordinator_fallback_used": false,
+    "raw_explanation_accepted": false,
+    "guardrail_fallback": true,
+    "final_safe_answer": true,
+    "unsupported_numeric_claim": false,
+    "unsupported_categorical_claim": false,
+    "unsupported_causal_claim": false,
+    "implementation_detail_exposed": false,
+    "grounding_issues": [
+      "explanation_unavailable:AttributeError"
+    ],
+    "answer": "At 21:15, predicted traffic is 88.50 Gbps total: Enterprise 4.66 Gbps, RAN 45.17 Gbps, and PON 38.66 Gbps.",
+    "raw_llm_answer": ""
+  }
+]

@@ -146,3 +146,9 @@ Do not:
 - recommend monitoring or configuration actions
 
 Stop once the policy comparison has been explained.
+## Strict evidence boundary for generation
+
+Use only the operator-facing fields present in the supplied policy-comparison evidence.
+Do not introduce offered traffic, served traffic, SLA probability, capacity, or any other
+number that is not explicitly present in the shaped comparison evidence. If a metric is
+not supplied, omit it rather than estimating or reconstructing it.

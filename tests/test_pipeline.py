@@ -2,87 +2,134 @@ from __future__ import annotations
 
 import numpy as np
 
-from app.agents.coordinator import CoordinatorAgent
-from app.agents.explanation import ExplanationAgent
 from app.agents.forecast import ForecastAgent
 from app.agents.guardrail import GuardrailAgent
-from app.agents.recovery import RecoveryAgent
 from app.agents.sla import SLAAgent
 from app.runtime import MultiAgentRuntime
+from app.utils.time_utils import normalize_time
 
 
 def test_correct_clock_time():
-    frame = ForecastAgent().forecast()
-    assert frame.iloc[0].time == "00:00"
-    assert frame.iloc[-1].time == "23:55"
+    assert normalize_time("9:30 PM") == "21:30"
+    assert normalize_time("21:30") == "21:30"
+    assert normalize_time("5:55 AM") == "05:55"
 
 
 def test_specialist_pipeline_is_consistent():
-    frame = RecoveryAgent().recommend(SLAAgent().assess(ForecastAgent().forecast()))
-    assert np.allclose(frame[["enterprise_gbps", "ran_gbps", "pon_gbps"]].sum(axis=1), frame.total_gbps)
-    assert isinstance(GuardrailAgent().validate(frame), list)
-    assert set(frame.candidate_layout.unique()) <= {"EE|P|R", "E|PP|R", "E|P|RR"}
-    assert (frame.estimated_overflow_gbps >= 0).all()
+    """
+    Validate the current forecast -> SLA pipeline with the current
+    GuardrailAgent API.
+    """
+    frame = SLAAgent().assess(ForecastAgent().forecast())
+
+    assert np.allclose(
+        frame[["enterprise_gbps", "ran_gbps", "pon_gbps"]].sum(axis=1),
+        frame["total_gbps"],
+        atol=1e-6,
+    )
+
+    warnings = GuardrailAgent().validate_frame(frame)
+    assert isinstance(warnings, list)
 
 
-def test_native_tool_call_is_executed_and_answered(monkeypatch):
-    coordinator = CoordinatorAgent()
-    replies = iter([
+def test_runtime_initializes_current_components_without_llm_call():
+    """
+    Runtime construction should prepare deterministic tools and memory
+    without requiring a coordinator LLM call.
+    """
+    runtime = MultiAgentRuntime(use_llm=False)
+
+    assert runtime.tools is not None
+    assert runtime.guardrail is not None
+    assert isinstance(runtime.memory, dict)
+    assert len(runtime.frame) == 288
+
+
+def test_current_deterministic_tool_execution():
+    """
+    Test the current public deterministic tool dispatcher rather than the
+    removed MultiAgentRuntime._execute_tool() legacy helper.
+    """
+    runtime = MultiAgentRuntime(use_llm=False)
+
+    evidence, fallback = runtime.tools.execute(
+        "get_traffic_forecast",
+        {"time": "21:15"},
+        runtime.memory,
+    )
+
+    assert evidence["category"] == "traffic_forecast"
+    assert evidence["timestamp"] == "21:15"
+    assert evidence["traffic"]["time"] == "21:15"
+
+    traffic = evidence["traffic"]
+    assert np.isclose(
+        traffic["enterprise_gbps"]
+        + traffic["ran_gbps"]
+        + traffic["pon_gbps"],
+        traffic["total_gbps"],
+        atol=1e-6,
+    )
+
+    assert isinstance(fallback, str)
+    assert fallback
+
+
+def test_explanation_guardrail_uses_current_api():
+    """
+    Numeric grounding now belongs to GuardrailAgent.validate_answer(),
+    not ExplanationAgent._numbers_are_grounded().
+    """
+    guardrail = GuardrailAgent()
+
+    evidence = {
+        "category": "test_evidence",
+        "intervals": 288,
+        "normal_percent": 74.7,
+    }
+
+    passed, issues = guardrail.validate_answer(
+        "There are 288 intervals and the reported value is 74.7%.",
+        evidence,
+    )
+
+    assert passed
+    assert issues == []
+
+    passed, issues = guardrail.validate_answer(
+        "There are 999 intervals and the reported value is 74.7%.",
+        evidence,
+    )
+
+    assert not passed
+    assert "unsupported_numeric_claim" in issues
+
+
+def test_constrained_subcarrier_allocation_uses_current_tool():
+    """
+    Constrained allocation is now exposed as analyze_constrained_allocation
+    through OperatorTools.execute().
+    """
+    runtime = MultiAgentRuntime(use_llm=False)
+
+    evidence, fallback = runtime.tools.execute(
+        "analyze_constrained_allocation",
         {
-            "role": "assistant",
-            "content": "",
-            "tool_calls": [{"function": {"name": "find_service_peak", "arguments": {"service": "ran"}}}],
+            "time": "21:15",
+            "ran_subcarriers": 2,
+            "objective": "balanced",
         },
-        {"role": "assistant", "content": "RAN traffic peaks at 20:25 with 46.48 Gbps."},
-    ])
-    monkeypatch.setattr(coordinator, "_chat", lambda messages, include_tools: next(replies))
-    called = []
-
-    def execute(name, arguments):
-        called.append((name, arguments))
-        return {"service": "RAN", "intervals": [{"time": "20:25", "service_load_gbps": 46.48}]}
-
-    answer, name, arguments, evidence = coordinator.run("When does RAN peak?", execute)
-    assert called == [("find_service_peak", {"service": "ran"})]
-    assert name == "find_service_peak"
-    assert evidence["service"] == "RAN"
-    assert "20:25" in answer
-
-
-def test_runtime_demo_evidence():
-    runtime = MultiAgentRuntime()
-    cases = [
-        ("summarize_day_ahead", {}, lambda e: e["state_counts"] == {"normal": 215, "degraded": 38, "failure_prone": 35}),
-        ("find_next_sla_risk", {"state": "any_non_normal"}, lambda e: e["interval"]["time"] == "17:00"),
-        ("diagnose_highest_risk", {}, lambda e: e["diagnosis"]["dominant_service"] == "RAN"),
-        ("recommend_subcarrier_allocation", {}, lambda e: e["recommendation"]["estimated_overflow_gbps"] == 13.66),
-        ("check_allocation_feasibility", {}, lambda e: e["recommendation"]["allocation_feasible"] is False),
-        ("find_service_peak", {"service": "ran"}, lambda e: e["intervals"][0] == {"time": "20:25", "service_load_gbps": 46.48}),
-    ]
-    for name, arguments, assertion in cases:
-        assert assertion(runtime._execute_tool(name, arguments, []))
-
-
-def test_explanation_guardrails():
-    evidence = {"intervals": 288, "normal_percent": 74.7}
-    assert ExplanationAgent._numbers_are_grounded("There are 288 intervals and 74.7% are normal.", evidence)
-    assert not ExplanationAgent._numbers_are_grounded("This equals 212.16 hours.", evidence)
-    assert not ExplanationAgent._semantics_are_grounded(
-        "There is a 13.2% chance of degraded operation.",
-        {"state_distribution_percent": {"degraded": 13.2}},
+        runtime.memory,
     )
 
-def test_constrained_subcarrier_allocation():
-    runtime = MultiAgentRuntime()
+    assert evidence["category"] == "operator_constraint"
+    assert evidence["timestamp"] == "21:15"
+    assert evidence["operator_constraints"]["ran"] == 2
+    assert evidence["constraint_feasible"] is True
 
-    evidence = runtime._execute_tool(
-        "analyze_subcarrier_scenario",
-        {"ran_subcarriers": 2},
-        [],
-    )
+    result = evidence["result"]
+    assert result["allocation_counts"]["ran"] == 2
+    assert len(result["assignment"]) == 4
 
-    allocation = evidence["scenario"]["allocation"]
-
-    assert allocation["ran"] == 2
-    assert sum(allocation.values()) == 4
-    assert evidence["scenario"]["total_overflow_gbps"] >= 0
+    assert isinstance(fallback, str)
+    assert fallback

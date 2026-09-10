@@ -110,3 +110,10 @@ Do not tell the operator that the result is "based on deterministic evidence"
 unless they explicitly ask about validation or provenance.
 
 After answering the current follow-up, stop.
+
+## Resolved-time wording
+
+When a relative follow-up such as "one hour later" has already been resolved to an
+absolute timestamp, answer using the resolved timestamp directly. Do not repeat the
+numeric relative offset (for example, do not say "one hour later") unless that number is
+explicitly present in the current deterministic evidence.

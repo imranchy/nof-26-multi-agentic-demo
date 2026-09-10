@@ -49,3 +49,87 @@ def test_policy_is_extracted():
 
 def test_relative_followup_preserves_previous_capability():
     assert SemanticResolver.high_confidence_tool("What about an hour later?", {"last_tool": "get_network_state_at_time"}) == "get_network_state_at_time"
+
+
+def test_avoid_unnecessary_sc_changes_maps_to_min_reconfiguration():
+    assert SemanticResolver.normalize_objective(
+        "At 16:20, avoid unnecessary SC changes above everything else.",
+        "balanced",
+    ) == "min_reconfiguration"
+
+
+def test_strict_service_priority_routes_to_policy_comparison():
+    assert SemanticResolver.high_confidence_tool(
+        "At 23:10, preserve strict service priority when choosing the policy.",
+        {},
+    ) == "compare_policies_at_time"
+
+
+def test_traffic_outlook_routes_to_traffic_forecast():
+    assert SemanticResolver.high_confidence_tool(
+        "Traffic outlook, 05:55.",
+        {},
+    ) == "get_traffic_forecast"
+
+
+def test_busy_expected_services_routes_to_traffic_forecast():
+    assert SemanticResolver.high_confidence_tool(
+        "How busy do you expect Enterprise, RAN and PON to be at 12:35?",
+        {},
+    ) == "get_traffic_forecast"
+
+
+def test_operator_snapshot_routes_to_network_state():
+    assert SemanticResolver.high_confidence_tool(
+        "Operator snapshot, 12:35.",
+        {},
+    ) == "get_network_state_at_time"
+
+
+def test_multicomponent_snapshot_precedes_single_sla_route():
+    assert SemanticResolver.high_confidence_tool(
+        "At 07:45, show traffic, SLA risk and the SC allocation state.",
+        {},
+    ) == "get_network_state_at_time"
+
+
+def test_neutral_between_blocking_and_stability_maps_to_balanced():
+    assert SemanticResolver.normalize_objective(
+        "Choose between PCA, MBA and SAA without favoring blocking or stability.",
+        "min_blocking",
+    ) == "balanced"
+
+
+def test_multiple_named_policies_with_choose_routes_to_comparison():
+    assert SemanticResolver.high_confidence_tool(
+        "At 20:00, choose between PCA, MBA and SAA without favoring blocking or stability.",
+        {},
+    ) == "compare_policies_at_time"
+
+
+def test_few_controller_changes_maps_to_min_reconfiguration():
+    assert SemanticResolver.normalize_objective(
+        "I want the most stable policy with as few controller changes as possible.",
+        "balanced",
+    ) == "min_reconfiguration"
+
+
+def test_named_policy_perform_language_is_counterfactual():
+    assert SemanticResolver.high_confidence_tool(
+        "How would MBA perform at 18:10?",
+        {},
+    ) == "simulate_policy_at_time"
+
+
+def test_named_policy_would_produce_language_is_counterfactual():
+    assert SemanticResolver.high_confidence_tool(
+        "At 09:30, show me what SAA would produce.",
+        {},
+    ) == "simulate_policy_at_time"
+
+
+def test_one_hour_later_followup_preserves_previous_capability():
+    assert SemanticResolver.high_confidence_tool(
+        "And one hour later?",
+        {"last_tool": "get_traffic_forecast", "last_time": "09:00"},
+    ) == "get_traffic_forecast"

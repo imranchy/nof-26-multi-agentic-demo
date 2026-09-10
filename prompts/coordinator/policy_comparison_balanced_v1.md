@@ -1,6 +1,6 @@
 # Balanced policy comparison routing v1
 
-Use `compare_policies` with `objective = balanced` when the operator asks which policy is preferable, recommended, best overall, or gives the best trade-off.
+Use `compare_policies_at_time` with `objective = balanced` when the operator asks which policy is preferable, recommended, best overall, or gives the best trade-off.
 
 Examples:
 - "Which policy is preferable at 21:15?"

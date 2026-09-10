@@ -413,3 +413,10 @@ After reporting the supplied range or discovery result, stop.
 
 For a pure ranking or extrema request, do not discuss whether a policy is
 recommended unless the operator explicitly asks for recommendation information.
+## Strict aggregate rule
+
+For a time-range summary, use only the aggregate values explicitly present in the shaped
+summary. Do not derive percentages from probabilities or ratios and do not reconstruct
+per-policy KPIs. If the shaped evidence contains recommendation counts, it is acceptable
+to state which policy was recommended most often under the supplied objective; do not
+invent a reason beyond the supplied evidence.

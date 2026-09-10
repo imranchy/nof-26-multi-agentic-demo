@@ -1,0 +1,706 @@
+{
+  "benchmark": "NoF operator manual verification suite",
+  "version": "v1",
+  "prompt_versions": {
+    "coordinator": "v1",
+    "explainer": "v1",
+    "operator_style": "v1"
+  },
+  "categories": 10,
+  "queries_per_category": 5,
+  "total_queries": 50,
+  "cases": [
+    {
+      "id": "traffic_prediction_01",
+      "category": "traffic_prediction",
+      "query": "What traffic do you expect at 21:15?",
+      "expected_tools": [
+        "get_traffic_forecast"
+      ],
+      "expected_args_by_tool": {
+        "get_traffic_forecast": {
+          "time": "21:15"
+        }
+      }
+    },
+    {
+      "id": "traffic_prediction_02",
+      "category": "traffic_prediction",
+      "query": "How busy do you expect Enterprise, RAN and PON to be at 12:35?",
+      "expected_tools": [
+        "get_traffic_forecast"
+      ],
+      "expected_args_by_tool": {
+        "get_traffic_forecast": {
+          "time": "12:35"
+        }
+      }
+    },
+    {
+      "id": "traffic_prediction_03",
+      "category": "traffic_prediction",
+      "query": "At 14:05, give me the expected total and per-service load.",
+      "expected_tools": [
+        "get_traffic_forecast"
+      ],
+      "expected_args_by_tool": {
+        "get_traffic_forecast": {
+          "time": "14:05"
+        }
+      }
+    },
+    {
+      "id": "traffic_prediction_04",
+      "category": "traffic_prediction",
+      "query": "Traffic outlook, 05:55.",
+      "expected_tools": [
+        "get_traffic_forecast"
+      ],
+      "expected_args_by_tool": {
+        "get_traffic_forecast": {
+          "time": "05:55"
+        }
+      }
+    },
+    {
+      "id": "traffic_prediction_05",
+      "category": "traffic_prediction",
+      "query": "What load are we expecting at 9:30 PM?",
+      "expected_tools": [
+        "get_traffic_forecast"
+      ],
+      "expected_args_by_tool": {
+        "get_traffic_forecast": {
+          "time": "21:30"
+        }
+      }
+    },
+    {
+      "id": "sla_risk_state_01",
+      "category": "sla_risk_state",
+      "query": "What is the predicted SLA state at 21:15?",
+      "expected_tools": [
+        "get_sla_prediction"
+      ],
+      "expected_args_by_tool": {
+        "get_sla_prediction": {
+          "time": "21:15"
+        }
+      }
+    },
+    {
+      "id": "sla_risk_state_02",
+      "category": "sla_risk_state",
+      "query": "How likely is the network to be Failure-prone at 12:35?",
+      "expected_tools": [
+        "get_sla_prediction"
+      ],
+      "expected_args_by_tool": {
+        "get_sla_prediction": {
+          "time": "12:35"
+        }
+      }
+    },
+    {
+      "id": "sla_risk_state_03",
+      "category": "sla_risk_state",
+      "query": "At 14:05, how risky does the network look?",
+      "expected_tools": [
+        "get_sla_prediction"
+      ],
+      "expected_args_by_tool": {
+        "get_sla_prediction": {
+          "time": "14:05"
+        }
+      }
+    },
+    {
+      "id": "sla_risk_state_04",
+      "category": "sla_risk_state",
+      "query": "SLA risk at 16:20?",
+      "expected_tools": [
+        "get_sla_prediction"
+      ],
+      "expected_args_by_tool": {
+        "get_sla_prediction": {
+          "time": "16:20"
+        }
+      }
+    },
+    {
+      "id": "sla_risk_state_05",
+      "category": "sla_risk_state",
+      "query": "Why is 05:55 classified as failure-prone?",
+      "expected_tools": [
+        "explain_sla_risk"
+      ],
+      "expected_args_by_tool": {
+        "explain_sla_risk": {
+          "time": "05:55",
+          "claimed_state": "failure_prone"
+        }
+      }
+    },
+    {
+      "id": "full_network_state_01",
+      "category": "full_network_state",
+      "query": "Show me the complete network state at 16:20.",
+      "expected_tools": [
+        "get_network_state_at_time"
+      ],
+      "expected_args_by_tool": {
+        "get_network_state_at_time": {
+          "time": "16:20"
+        }
+      }
+    },
+    {
+      "id": "full_network_state_02",
+      "category": "full_network_state",
+      "query": "What's going on with the network at 23:10?",
+      "expected_tools": [
+        "get_network_state_at_time"
+      ],
+      "expected_args_by_tool": {
+        "get_network_state_at_time": {
+          "time": "23:10"
+        }
+      }
+    },
+    {
+      "id": "full_network_state_03",
+      "category": "full_network_state",
+      "query": "At 07:45, show traffic, SLA risk and the SC allocation state.",
+      "expected_tools": [
+        "get_network_state_at_time"
+      ],
+      "expected_args_by_tool": {
+        "get_network_state_at_time": {
+          "time": "07:45"
+        }
+      }
+    },
+    {
+      "id": "full_network_state_04",
+      "category": "full_network_state",
+      "query": "Operator snapshot, 12:35.",
+      "expected_tools": [
+        "get_network_state_at_time"
+      ],
+      "expected_args_by_tool": {
+        "get_network_state_at_time": {
+          "time": "12:35"
+        }
+      }
+    },
+    {
+      "id": "full_network_state_05",
+      "category": "full_network_state",
+      "query": "Show the network state under MBA at 20:00.",
+      "expected_tools": [
+        "get_network_state_at_time"
+      ],
+      "expected_args_by_tool": {
+        "get_network_state_at_time": {
+          "time": "20:00",
+          "policy": "MBA"
+        }
+      }
+    },
+    {
+      "id": "policy_comparison_balanced_01",
+      "category": "policy_comparison_balanced",
+      "query": "Compare PCA, MBA and SAA at 18:10 and recommend one.",
+      "expected_tools": [
+        "compare_policies_at_time"
+      ],
+      "expected_args_by_tool": {
+        "compare_policies_at_time": {
+          "time": "18:10",
+          "objective": "balanced"
+        }
+      }
+    },
+    {
+      "id": "policy_comparison_balanced_02",
+      "category": "policy_comparison_balanced",
+      "query": "Which allocation policy makes the most sense overall at 12:35?",
+      "expected_tools": [
+        "compare_policies_at_time"
+      ],
+      "expected_args_by_tool": {
+        "compare_policies_at_time": {
+          "time": "12:35",
+          "objective": "balanced"
+        }
+      }
+    },
+    {
+      "id": "policy_comparison_balanced_03",
+      "category": "policy_comparison_balanced",
+      "query": "At 16:20, which of the three strategies gives the best compromise?",
+      "expected_tools": [
+        "compare_policies_at_time"
+      ],
+      "expected_args_by_tool": {
+        "compare_policies_at_time": {
+          "time": "16:20",
+          "objective": "balanced"
+        }
+      }
+    },
+    {
+      "id": "policy_comparison_balanced_04",
+      "category": "policy_comparison_balanced",
+      "query": "Best policy at 09:30?",
+      "expected_tools": [
+        "compare_policies_at_time"
+      ],
+      "expected_args_by_tool": {
+        "compare_policies_at_time": {
+          "time": "09:30",
+          "objective": "balanced"
+        }
+      }
+    },
+    {
+      "id": "policy_comparison_balanced_05",
+      "category": "policy_comparison_balanced",
+      "query": "For 20:00, choose between PCA, MBA and SAA without favoring blocking or stability.",
+      "expected_tools": [
+        "compare_policies_at_time"
+      ],
+      "expected_args_by_tool": {
+        "compare_policies_at_time": {
+          "time": "20:00",
+          "objective": "balanced"
+        }
+      }
+    },
+    {
+      "id": "objective_aware_policy_01",
+      "category": "objective_aware_policy",
+      "query": "Which policy gives the lowest blocking at 18:10?",
+      "expected_tools": [
+        "compare_policies_at_time"
+      ],
+      "expected_args_by_tool": {
+        "compare_policies_at_time": {
+          "time": "18:10",
+          "objective": "min_blocking"
+        }
+      }
+    },
+    {
+      "id": "objective_aware_policy_02",
+      "category": "objective_aware_policy",
+      "query": "At 14:05, I want the most stable policy with as few controller changes as possible.",
+      "expected_tools": [
+        "compare_policies_at_time"
+      ],
+      "expected_args_by_tool": {
+        "compare_policies_at_time": {
+          "time": "14:05",
+          "objective": "min_reconfiguration"
+        }
+      }
+    },
+    {
+      "id": "objective_aware_policy_03",
+      "category": "objective_aware_policy",
+      "query": "At 23:10, preserve strict service priority when choosing the policy.",
+      "expected_tools": [
+        "compare_policies_at_time"
+      ],
+      "expected_args_by_tool": {
+        "compare_policies_at_time": {
+          "time": "23:10",
+          "objective": "sla_priority"
+        }
+      }
+    },
+    {
+      "id": "objective_aware_policy_04",
+      "category": "objective_aware_policy",
+      "query": "20:00 — minimize blocking.",
+      "expected_tools": [
+        "compare_policies_at_time"
+      ],
+      "expected_args_by_tool": {
+        "compare_policies_at_time": {
+          "time": "20:00",
+          "objective": "min_blocking"
+        }
+      }
+    },
+    {
+      "id": "objective_aware_policy_05",
+      "category": "objective_aware_policy",
+      "query": "At 16:20, avoid unnecessary SC changes above everything else.",
+      "expected_tools": [
+        "compare_policies_at_time"
+      ],
+      "expected_args_by_tool": {
+        "compare_policies_at_time": {
+          "time": "16:20",
+          "objective": "min_reconfiguration"
+        }
+      }
+    },
+    {
+      "id": "policy_counterfactual_01",
+      "category": "policy_counterfactual",
+      "query": "What happens if we use PCA at 21:15?",
+      "expected_tools": [
+        "simulate_policy_at_time"
+      ],
+      "expected_args_by_tool": {
+        "simulate_policy_at_time": {
+          "time": "21:15",
+          "policy": "PCA"
+        }
+      }
+    },
+    {
+      "id": "policy_counterfactual_02",
+      "category": "policy_counterfactual",
+      "query": "How would MBA perform at 18:10?",
+      "expected_tools": [
+        "simulate_policy_at_time"
+      ],
+      "expected_args_by_tool": {
+        "simulate_policy_at_time": {
+          "time": "18:10",
+          "policy": "MBA"
+        }
+      }
+    },
+    {
+      "id": "policy_counterfactual_03",
+      "category": "policy_counterfactual",
+      "query": "At 09:30, show me what SAA would produce.",
+      "expected_tools": [
+        "simulate_policy_at_time"
+      ],
+      "expected_args_by_tool": {
+        "simulate_policy_at_time": {
+          "time": "09:30",
+          "policy": "SAA"
+        }
+      }
+    },
+    {
+      "id": "policy_counterfactual_04",
+      "category": "policy_counterfactual",
+      "query": "Simulate PCA at 14:05.",
+      "expected_tools": [
+        "simulate_policy_at_time"
+      ],
+      "expected_args_by_tool": {
+        "simulate_policy_at_time": {
+          "time": "14:05",
+          "policy": "PCA"
+        }
+      }
+    },
+    {
+      "id": "policy_counterfactual_05",
+      "category": "policy_counterfactual",
+      "query": "If the controller were using SAA at 20:00, what outcome would we get?",
+      "expected_tools": [
+        "simulate_policy_at_time"
+      ],
+      "expected_args_by_tool": {
+        "simulate_policy_at_time": {
+          "time": "20:00",
+          "policy": "SAA"
+        }
+      }
+    },
+    {
+      "id": "sc_constraints_01",
+      "category": "sc_constraints",
+      "query": "Keep RAN on 2 subcarriers at 21:15 and allocate the remaining two.",
+      "expected_tools": [
+        "analyze_constrained_allocation"
+      ],
+      "expected_args_by_tool": {
+        "analyze_constrained_allocation": {
+          "time": "21:15",
+          "ran_subcarriers": 2
+        }
+      }
+    },
+    {
+      "id": "sc_constraints_02",
+      "category": "sc_constraints",
+      "query": "At 09:30, give Enterprise one SC and optimize whatever capacity is left.",
+      "expected_tools": [
+        "analyze_constrained_allocation"
+      ],
+      "expected_args_by_tool": {
+        "analyze_constrained_allocation": {
+          "time": "09:30",
+          "enterprise_subcarriers": 1
+        }
+      }
+    },
+    {
+      "id": "sc_constraints_03",
+      "category": "sc_constraints",
+      "query": "For 07:45, allocate 1 SC to Enterprise and exactly 2 to RAN.",
+      "expected_tools": [
+        "analyze_constrained_allocation"
+      ],
+      "expected_args_by_tool": {
+        "analyze_constrained_allocation": {
+          "time": "07:45",
+          "enterprise_subcarriers": 1,
+          "ran_subcarriers": 2
+        }
+      }
+    },
+    {
+      "id": "sc_constraints_04",
+      "category": "sc_constraints",
+      "query": "14:05 — PON on two SCs.",
+      "expected_tools": [
+        "analyze_constrained_allocation"
+      ],
+      "expected_args_by_tool": {
+        "analyze_constrained_allocation": {
+          "time": "14:05",
+          "pon_subcarriers": 2
+        }
+      }
+    },
+    {
+      "id": "sc_constraints_05",
+      "category": "sc_constraints",
+      "query": "At 16:20 reserve one SC for PON and minimize blocking with the rest.",
+      "expected_tools": [
+        "analyze_constrained_allocation"
+      ],
+      "expected_args_by_tool": {
+        "analyze_constrained_allocation": {
+          "time": "16:20",
+          "pon_subcarriers": 1,
+          "objective": "min_blocking"
+        }
+      }
+    },
+    {
+      "id": "temporal_comparison_01",
+      "category": "temporal_comparison",
+      "query": "Compare the network at 18:10 and 21:15.",
+      "expected_tools": [
+        "compare_network_states"
+      ],
+      "expected_args_by_tool": {
+        "compare_network_states": {
+          "time_a": "18:10",
+          "time_b": "21:15"
+        }
+      }
+    },
+    {
+      "id": "temporal_comparison_02",
+      "category": "temporal_comparison",
+      "query": "What changed between 09:30 and 14:05?",
+      "expected_tools": [
+        "compare_network_states"
+      ],
+      "expected_args_by_tool": {
+        "compare_network_states": {
+          "time_a": "09:30",
+          "time_b": "14:05"
+        }
+      }
+    },
+    {
+      "id": "temporal_comparison_03",
+      "category": "temporal_comparison",
+      "query": "At 15:15 versus 19:45, how did traffic and SLA risk change?",
+      "expected_tools": [
+        "compare_network_states"
+      ],
+      "expected_args_by_tool": {
+        "compare_network_states": {
+          "time_a": "15:15",
+          "time_b": "19:45"
+        }
+      }
+    },
+    {
+      "id": "temporal_comparison_04",
+      "category": "temporal_comparison",
+      "query": "20:00 vs 05:55 — which looks worse?",
+      "expected_tools": [
+        "compare_network_states"
+      ],
+      "expected_args_by_tool": {
+        "compare_network_states": {
+          "time_a": "20:00",
+          "time_b": "05:55"
+        }
+      }
+    },
+    {
+      "id": "temporal_comparison_05",
+      "category": "temporal_comparison",
+      "query": "Between the two snapshots at 23:10 and 12:35, which network state looks healthier?",
+      "expected_tools": [
+        "compare_network_states"
+      ],
+      "expected_args_by_tool": {
+        "compare_network_states": {
+          "time_a": "23:10",
+          "time_b": "12:35"
+        }
+      }
+    },
+    {
+      "id": "range_risk_discovery_01",
+      "category": "range_risk_discovery",
+      "query": "Find the three highest-risk intervals today.",
+      "expected_tools": [
+        "find_risk_intervals"
+      ],
+      "expected_args_by_tool": {
+        "find_risk_intervals": {
+          "metric": "failure_probability",
+          "top_k": 3
+        }
+      }
+    },
+    {
+      "id": "range_risk_discovery_02",
+      "category": "range_risk_discovery",
+      "query": "Where does blocking peak during the day-ahead period?",
+      "expected_tools": [
+        "find_risk_intervals"
+      ],
+      "expected_args_by_tool": {
+        "find_risk_intervals": {
+          "metric": "blocking"
+        }
+      }
+    },
+    {
+      "id": "range_risk_discovery_03",
+      "category": "range_risk_discovery",
+      "query": "Across today's intervals, where do we see the most SC reconfiguration?",
+      "expected_tools": [
+        "find_risk_intervals"
+      ],
+      "expected_args_by_tool": {
+        "find_risk_intervals": {
+          "metric": "reconfiguration"
+        }
+      }
+    },
+    {
+      "id": "range_risk_discovery_04",
+      "category": "range_risk_discovery",
+      "query": "Network summary, 18:00–22:00.",
+      "expected_tools": [
+        "summarize_time_range"
+      ],
+      "expected_args_by_tool": {
+        "summarize_time_range": {
+          "start_time": "18:00",
+          "end_time": "22:00",
+          "objective": "balanced"
+        }
+      }
+    },
+    {
+      "id": "range_risk_discovery_05",
+      "category": "range_risk_discovery",
+      "query": "From 19:00 to 23:00, summarize load, risk and policy behavior while minimizing blocking.",
+      "expected_tools": [
+        "summarize_time_range"
+      ],
+      "expected_args_by_tool": {
+        "summarize_time_range": {
+          "start_time": "19:00",
+          "end_time": "23:00",
+          "objective": "min_blocking"
+        }
+      }
+    },
+    {
+      "id": "conversational_context_01",
+      "category": "conversational_context",
+      "setup_query": "Show me the network state at 18:10.",
+      "query": "What about an hour later?",
+      "expected_tools": [
+        "get_network_state_at_time"
+      ],
+      "expected_args_by_tool": {
+        "get_network_state_at_time": {
+          "time": "19:10"
+        }
+      }
+    },
+    {
+      "id": "conversational_context_02",
+      "category": "conversational_context",
+      "setup_query": "What traffic do you expect at 09:00?",
+      "query": "And one hour later?",
+      "expected_tools": [
+        "get_traffic_forecast"
+      ],
+      "expected_args_by_tool": {
+        "get_traffic_forecast": {
+          "time": "10:00"
+        }
+      }
+    },
+    {
+      "id": "conversational_context_03",
+      "category": "conversational_context",
+      "setup_query": "What traffic do you expect at 08:15?",
+      "query": "At that time, what is the SLA risk?",
+      "expected_tools": [
+        "get_sla_prediction"
+      ],
+      "expected_args_by_tool": {
+        "get_sla_prediction": {
+          "time": "08:15"
+        }
+      }
+    },
+    {
+      "id": "conversational_context_04",
+      "category": "conversational_context",
+      "setup_query": "Which policy would you use at 18:30?",
+      "query": "Use PCA instead. Show the outcome.",
+      "expected_tools": [
+        "simulate_policy_at_time"
+      ],
+      "expected_args_by_tool": {
+        "simulate_policy_at_time": {
+          "time": "18:30",
+          "policy": "PCA"
+        }
+      }
+    },
+    {
+      "id": "conversational_context_05",
+      "category": "conversational_context",
+      "setup_query": "Keep RAN on 2 subcarriers at 19:00.",
+      "query": "Also reserve one SC for PON.",
+      "expected_tools": [
+        "analyze_constrained_allocation"
+      ],
+      "expected_args_by_tool": {
+        "analyze_constrained_allocation": {
+          "time": "19:00",
+          "ran_subcarriers": 2,
+          "pon_subcarriers": 1
+        }
+      }
+    }
+  ]
+}
