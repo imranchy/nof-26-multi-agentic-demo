@@ -1,0 +1,21 @@
+forecast:
+  name: XGBoost day-ahead multi-output forecaster
+  version: xgb-v1
+  mode: live
+  evaluation: held-out final scenario day
+
+sla_classifier:
+  name: Random Forest SLA-state surrogate
+  version: rf-v1
+  labels: [normal, degraded, failure_prone]
+  limitation: Simulator-derived surrogate evaluated with a random interval split from one scenario day; not evidence of production generalization.
+
+llm:
+  role: coordinator_and_explainer
+  source_of_truth: false
+  numeric_network_values_must_come_from_tools: true
+
+prompt_versions:
+  coordinator: v1
+  explainer: v1
+  operator_style: v1

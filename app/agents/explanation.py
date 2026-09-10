@@ -1,72 +1,600 @@
 from __future__ import annotations
 
 import json
-import re
-from typing import Any
+from dataclasses import dataclass
 from urllib.request import Request, urlopen
 
 from app import config
+from app.agents.guardrail import GuardrailAgent
+
+
+@dataclass
+class ExplanationResult:
+    accepted_answer: str
+    raw_answer: str | None
+    grounding_passed: bool
+    issues: list[str]
 
 
 class ExplanationAgent:
+    def __init__(
+        self,
+        guardrail: GuardrailAgent | None = None,
+    ) -> None:
+        self.guardrail = guardrail or GuardrailAgent()
+
     def explain(
         self,
         query: str,
-        evidence: dict[str, Any],
+        evidence: dict,
         fallback: str,
-        strict_operational: bool = True,
-    ) -> str:
-        # Conference mode: the LLM coordinates tools, but technical evidence is
-        # rendered deterministically so fields cannot be relabelled or truncated.
-        if strict_operational:
-            return fallback
-        prompt = f"""You are the explanation agent for a coherent P2MP SLA digital twin.
-Answer the operator in at most 120 words using only the validated evidence.
-Preserve numbers and times exactly. Recommendations are advisory and require operator approval.
-If evidence contains uncertainty or warnings, state them. Do not claim an action was executed.
-Use Gbps exactly; never write GBps. A state distribution is a percentage of forecast
-intervals, not the probability or chance of a state. For a service-peak or ranking
-question, discuss only the requested service and the returned times and loads.
-Question: {query}
-Validated evidence: {json.dumps(evidence, ensure_ascii=False)}"""
+    ) -> ExplanationResult:
+        evidence_category = evidence.get("category")
+
+        operator_evidence = self._operator_evidence(
+            evidence,
+            query,
+        )
+
+        prompt = f"""{config.explainer_prompt(evidence_category)}
+
+Operator question:
+{query}
+
+Validated deterministic evidence:
+{json.dumps(operator_evidence, ensure_ascii=False)}
+
+Compose one concise operator-facing answer, normally under 130 words.
+"""
+
         try:
-            payload = {"model": config.OLLAMA_MODEL, "prompt": prompt, "stream": False,
-                       "options": {"temperature": 0.1, "num_predict": 180}}
-            request = Request(f"{config.OLLAMA_URL}/api/generate", data=json.dumps(payload).encode(), headers={"Content-Type": "application/json"})
-            with urlopen(request, timeout=60) as response:
-                candidate = json.loads(response.read())["response"].strip()
-            valid = self._numbers_are_grounded(candidate, evidence)
-            valid = valid and self._semantics_are_grounded(candidate, evidence)
-            return candidate if valid else fallback
-        except Exception:
-            return fallback
+            payload = {
+                "model": config.OLLAMA_MODEL,
+                "prompt": prompt,
+                "stream": False,
+                "options": {
+                    "temperature": 0,
+                    "num_predict": 220,
+                },
+            }
 
-    @staticmethod
-    def _numbers_are_grounded(answer: str, evidence: dict[str, Any]) -> bool:
-        """Reject an explanation that introduces unsupported numeric claims."""
-        answer_numbers = [float(x) for x in re.findall(r"(?<![A-Za-z])\d+(?:\.\d+)?", answer)]
-        evidence_numbers = [
-            float(x) for x in re.findall(
-                r"(?<![A-Za-z])\d+(?:\.\d+)?", json.dumps(evidence, ensure_ascii=False)
+            request = Request(
+                f"{config.OLLAMA_URL}/api/generate",
+                data=json.dumps(payload).encode("utf-8"),
+                headers={
+                    "Content-Type": "application/json",
+                },
             )
-        ]
-        return all(any(abs(value - allowed) < 1e-6 for allowed in evidence_numbers) for value in answer_numbers)
 
-    @staticmethod
-    def _semantics_are_grounded(answer: str, evidence: dict[str, Any]) -> bool:
-        lower = answer.lower()
-        if "gbps" in lower and "GBps" in answer:
-            return False
-        if "state_distribution_percent" in evidence:
-            bad = re.search(
-                r"(?:chance|probability)\s+(?:of\s+)?(?:normal|degraded|failure[-_ ]?prone)",
-                lower,
+            with urlopen(
+                request,
+                timeout=60,
+            ) as response:
+                body = json.loads(response.read())
+
+            raw = str(
+                body.get("response", "")
+            ).strip()
+
+            passed, issues = self.guardrail.validate_answer(
+                raw,
+                evidence,
+                query=query,
             )
-            if bad:
-                return False
-        requested = evidence.get("service")
-        if requested and "service_load_gbps" in json.dumps(evidence):
-            other_services = {"ENTERPRISE", "RAN", "PON"} - {str(requested).upper()}
-            if any(re.search(rf"\b{name}\b", answer.upper()) for name in other_services):
-                return False
-        return True
+
+            if passed:
+                return ExplanationResult(
+                    raw,
+                    raw,
+                    True,
+                    [],
+                )
+
+            return ExplanationResult(
+                fallback,
+                raw,
+                False,
+                issues,
+            )
+
+        except Exception as exc:
+            # After deterministic tool execution, explanation failure
+            # must never discard the grounded result. The UI receives
+            # the deterministic fallback.
+            tag = (
+                "explanation_unavailable"
+                if config.REQUIRE_LLM
+                else "llm_disabled_or_unavailable"
+            )
+
+            return ExplanationResult(
+                fallback,
+                None,
+                False,
+                [f"{tag}:{type(exc).__name__}"],
+            )
+
+    @classmethod
+    def _operator_evidence(
+        cls,
+        value,
+        query: str,
+    ):
+        """Hide implementation details and shape category-specific evidence."""
+        provenance_requested = any(
+            term in query.lower()
+            for term in (
+                "which model",
+                "what model",
+                "algorithm",
+                "implementation",
+                "provenance",
+                "how is the prediction produced",
+            )
+        )
+
+        hidden = {
+            "prediction_confidence",
+            "severity_score",
+            "internal_probabilities",
+        }
+
+        if not provenance_requested:
+            hidden |= {
+                "provenance",
+                "model",
+                "version",
+                "execution_mode",
+                "saved_model_inference",
+                "source_of_truth",
+            }
+
+        if isinstance(value, dict):
+            category = value.get("category")
+
+            # ------------------------------------------------------
+            # Policy counterfactual
+            # ------------------------------------------------------
+
+            if category == "policy_counterfactual":
+                return cls._shape_policy_counterfactual(
+                    value,
+                    query,
+                    hidden,
+                )
+
+            # ------------------------------------------------------
+            # Operator-constrained SC allocation
+            # ------------------------------------------------------
+
+            if category == "operator_constraint":
+                return cls._shape_operator_constraint(
+                    value,
+                    query,
+                    hidden,
+                )
+
+            if category == "cross_time_comparison":
+                return cls._shape_cross_time_comparison(
+                    value,
+                    query,
+                    hidden,
+                )
+
+            # ------------------------------------------------------
+            # Ranked risk/load/blocking/reconfiguration intervals
+            # ------------------------------------------------------
+
+            if category == "risk_intervals":
+                return cls._shape_risk_intervals(
+                    value,
+                    query,
+                    hidden,
+                )
+
+            # ------------------------------------------------------
+            # Continuous time-range summary
+            # ------------------------------------------------------
+
+            if category == "time_range_summary":
+                return cls._shape_time_range_summary(
+                    value,
+                    query,
+                    hidden,
+                )
+
+            return {
+                k: cls._operator_evidence(v, query)
+                for k, v in value.items()
+                if k not in hidden
+            }
+
+        if isinstance(value, list):
+            return [
+                cls._operator_evidence(v, query)
+                for v in value
+            ]
+
+        return value
+
+    @classmethod
+    def _shape_policy_counterfactual(
+        cls,
+        value: dict,
+        query: str,
+        hidden: set[str],
+    ) -> dict:
+        """Expose only policy-counterfactual evidence relevant to generation."""
+        allowed_top_level = {
+            "category",
+            "timestamp",
+            "policy",
+            "simulated_result",
+            "counterfactual",
+            "advisory",
+            "rendered_values",
+        }
+
+        shaped = {
+            k: cls._operator_evidence(v, query)
+            for k, v in value.items()
+            if k in allowed_top_level and k not in hidden
+        }
+
+        result = shaped.get("simulated_result")
+
+        if isinstance(result, dict):
+            allowed_result_fields = {
+                "policy",
+                "assignment",
+                "assignment_label",
+                "allocation_counts",
+                "active_subcarriers",
+                "idle_subcarriers",
+                "demand_gbps",
+                "capacity_gbps",
+                "served_new_gbps",
+                "blocked_new_gbps",
+                "overall_blocking_ratio_epoch",
+                "blocking_event",
+                "per_class_blocking_ratio",
+                "fresh_service_ratio",
+                "reconfig_event",
+                "reconfig_count",
+                "weighted_reconfig_cost",
+            }
+
+            shaped["simulated_result"] = {
+                k: cls._operator_evidence(v, query)
+                for k, v in result.items()
+                if k in allowed_result_fields
+                and k not in hidden
+            }
+
+        return shaped
+
+    @classmethod
+    def _shape_operator_constraint(
+        cls,
+        value: dict,
+        query: str,
+        hidden: set[str],
+    ) -> dict:
+        """Expose only evidence needed to explain a constrained SC allocation."""
+        shaped: dict = {
+            "category": "operator_constraint",
+        }
+
+        # Keep only the high-level deterministic facts needed for a concise
+        # operator-facing constrained-allocation explanation.
+        for key in (
+            "timestamp",
+            "operator_constraints",
+            "constraint_feasible",
+            "reason",
+            "objective",
+            "reference_policy",
+            "rendered_values",
+        ):
+            if key in value and key not in hidden:
+                shaped[key] = cls._operator_evidence(
+                    value[key],
+                    query,
+                )
+
+        # For infeasible constraints there is no valid allocation result
+        # to explain. Return the reason without exposing unrelated fields.
+        if value.get("constraint_feasible") is False:
+            return shaped
+
+        result = value.get("result")
+
+        if not isinstance(result, dict):
+            return shaped
+
+        # Closed evidence scope for a normal constrained-allocation answer.
+        # Deliberately exclude traffic/capacity/served-demand details because
+        # those values are not needed to answer the allocation question and
+        # previously encouraged over-generation.
+        allowed_result_fields = {
+            "policy",
+            "assignment",
+            "assignment_label",
+            "overall_blocking_ratio_epoch",
+            "fresh_service_ratio",
+            "reconfig_event",
+            "reconfig_count",
+        }
+
+        shaped["result"] = {
+            key: cls._operator_evidence(item, query)
+            for key, item in result.items()
+            if key in allowed_result_fields
+            and key not in hidden
+        }
+
+        return shaped
+
+    @classmethod
+    def _shape_cross_time_comparison(
+        cls,
+        value: dict,
+        query: str,
+        hidden: set[str],
+    ) -> dict:
+        """Expose only deterministic fields needed for a two-time comparison."""
+
+        shaped: dict = {
+            "category": "cross_time_comparison",
+        }
+
+        for key in (
+            "time_a",
+            "time_b",
+            "policy",
+            "rendered_values",
+        ):
+            if key in value and key not in hidden:
+                shaped[key] = cls._operator_evidence(
+                    value[key],
+                    query,
+                )
+
+        # Keep compact endpoint state information.
+        for state_key in (
+            "state_a",
+            "state_b",
+        ):
+            state = value.get(state_key)
+
+            if not isinstance(state, dict):
+                continue
+
+            shaped_state: dict = {}
+
+            traffic = state.get("traffic")
+            if isinstance(traffic, dict):
+                shaped_state["traffic"] = {
+                    key: cls._operator_evidence(item, query)
+                    for key, item in traffic.items()
+                    if key in {
+                        "time",
+                        "enterprise_gbps",
+                        "ran_gbps",
+                        "pon_gbps",
+                        "total_gbps",
+                    }
+                }
+
+            sla = state.get("sla")
+            if isinstance(sla, dict):
+                shaped_state["sla"] = {
+                    key: cls._operator_evidence(item, query)
+                    for key, item in sla.items()
+                    if key in {
+                        "time",
+                        "state",
+                        "failure_prone_probability",
+                    }
+                }
+
+            policy = state.get("policy")
+            if isinstance(policy, dict):
+                shaped_state["policy"] = {
+                    key: cls._operator_evidence(item, query)
+                    for key, item in policy.items()
+                    if key in {
+                        "policy",
+                        "assignment_label",
+                        "overall_blocking_ratio_epoch",
+                        "reconfig_count",
+                    }
+                }
+
+            shaped[state_key] = shaped_state
+
+        delta = value.get("delta_b_minus_a")
+
+        if isinstance(delta, dict):
+            allowed_delta_fields = {
+                "total_gbps",
+                "enterprise_gbps",
+                "ran_gbps",
+                "pon_gbps",
+                "reconfig_count",
+            }
+
+            shaped["delta_b_minus_a"] = {
+                key: cls._operator_evidence(item, query)
+                for key, item in delta.items()
+                if key in allowed_delta_fields
+                and key not in hidden
+            }
+
+        return shaped
+
+    @classmethod
+    def _shape_risk_intervals(
+        cls,
+        value: dict,
+        query: str,
+        hidden: set[str],
+    ) -> dict:
+        """Expose only fields relevant to the requested discovery metric."""
+        metric = str(
+            value.get("metric")
+            or "failure_probability"
+        )
+
+        shaped: dict = {
+            "category": "risk_intervals",
+            "metric": metric,
+        }
+
+        if "top_k" in value:
+            shaped["top_k"] = value["top_k"]
+
+        if "policy" in value:
+            shaped["policy"] = value["policy"]
+
+        intervals = value.get("intervals", [])
+
+        if not isinstance(intervals, list):
+            return shaped
+
+        shaped_intervals = []
+
+        for item in intervals:
+            if not isinstance(item, dict):
+                continue
+
+            # Failure-prone risk discovery:
+            # expose only ranking time + risk.
+            if metric == "failure_probability":
+                allowed = {
+                    "time",
+                    "failure_prone_probability",
+                }
+
+            # Peak/busiest traffic discovery:
+            # expose only ranking time + total traffic.
+            elif metric == "total_gbps":
+                allowed = {
+                    "time",
+                    "total_gbps",
+                }
+
+            # Blocking discovery:
+            # expose only ranking time + policy + blocking.
+            elif metric == "blocking":
+                allowed = {
+                    "time",
+                    "policy",
+                    "blocking_ratio",
+                }
+
+            # Reconfiguration discovery:
+            # expose only ranking time + policy +
+            # reconfiguration count.
+            elif metric == "reconfiguration":
+                allowed = {
+                    "time",
+                    "policy",
+                    "reconfig_count",
+                }
+
+            else:
+                # Conservative fallback for any future metric.
+                allowed = {
+                    "time",
+                }
+
+            shaped_item = {
+                k: cls._operator_evidence(v, query)
+                for k, v in item.items()
+                if k in allowed
+                and k not in hidden
+            }
+
+            shaped_intervals.append(
+                shaped_item
+            )
+
+        shaped["intervals"] = shaped_intervals
+
+        return shaped
+
+    @classmethod
+    def _shape_time_range_summary(
+        cls,
+        value: dict,
+        query: str,
+        hidden: set[str],
+    ) -> dict:
+        """Expose bounded range evidence based on the operator's requested scope."""
+        q = query.lower()
+
+        shaped: dict = {
+            "category": "time_range_summary",
+        }
+
+        for key in (
+            "start_time",
+            "end_time",
+        ):
+            if key in value:
+                shaped[key] = value[key]
+
+        summary = value.get("summary")
+
+        if not isinstance(summary, dict):
+            return shaped
+
+        # Core range fields useful for a normal summary.
+        core_fields = {
+            "interval_count",
+            "mean_total_gbps",
+            "peak_total_gbps",
+            "peak_load_time",
+            "mean_failure_prone_probability",
+            "max_failure_prone_probability",
+            "highest_risk_time",
+            "state_counts",
+            "recommendation_counts",
+            "objective",
+        }
+
+        # Only expose full per-policy behavior when the query
+        # explicitly asks about policy behavior or detailed policies.
+        policy_detail_requested = any(
+            term in q
+            for term in (
+                "policy behavior",
+                "policy behaviour",
+                "policy performance",
+                "policy summary",
+                "policies",
+                "blocking",
+                "reconfiguration",
+                "reconfig",
+                "churn",
+            )
+        )
+
+        allowed_fields = set(core_fields)
+
+        if policy_detail_requested:
+            allowed_fields.add(
+                "policy_summaries"
+            )
+
+        shaped_summary = {
+            k: cls._operator_evidence(v, query)
+            for k, v in summary.items()
+            if k in allowed_fields
+            and k not in hidden
+        }
+
+        shaped["summary"] = shaped_summary
+
+        return shaped

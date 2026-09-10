@@ -1,0 +1,35 @@
+prompts:
+
+  coordinator:
+    version: v1
+    base: coordinator/base_v1.md
+    modules:
+      - coordinator/traffic_prediction_v1.md
+      - coordinator/sla_risk_state_v1.md
+      - coordinator/full_network_state_v1.md
+      - coordinator/policy_comparison_balanced_v1.md
+      - coordinator/objective_aware_policy_v1.md
+      - coordinator/policy_counterfactual_v1.md
+      - coordinator/sc_constraints_v1.md
+      - coordinator/temporal_comparison_v1.md
+      - coordinator/range_risk_discovery_v1.md
+      - coordinator/conversational_context_v1.md
+
+  explainer:
+    version: v1
+    base: explainer/base_v1.md
+    modules:
+      traffic_prediction: explainer/traffic_prediction_v1.md
+      sla_risk_state: explainer/sla_risk_state_v1.md
+      full_network_state: explainer/full_network_state_v1.md
+      policy_comparison_balanced: explainer/policy_comparison_balanced_v1.md
+      objective_aware_policy: explainer/objective_aware_policy_v1.md
+      policy_counterfactual: explainer/policy_counterfactual_v1.md
+      sc_constraints: explainer/sc_constraints_v1.md
+      temporal_comparison: explainer/temporal_comparison_v1.md
+      range_risk_discovery: explainer/range_risk_discovery_v1.md
+      conversational_context: explainer/conversational_context_v1.md
+
+  operator_style:
+    version: v1
+    file: operator_style_v1.md

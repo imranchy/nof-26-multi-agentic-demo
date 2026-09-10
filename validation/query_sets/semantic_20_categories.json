@@ -1,0 +1,2472 @@
+[
+  {
+    "id": "traffic_forecast_01",
+    "category": "traffic_forecast",
+    "query": "What traffic do you predict at 21:15?",
+    "expected_tools": [
+      "get_traffic_forecast"
+    ],
+    "expected_args_by_tool": {
+      "get_traffic_forecast": {
+        "time": "21:15"
+      }
+    }
+  },
+  {
+    "id": "traffic_forecast_02",
+    "category": "traffic_forecast",
+    "query": "Give me the traffic forecast for 21:15.",
+    "expected_tools": [
+      "get_traffic_forecast"
+    ],
+    "expected_args_by_tool": {
+      "get_traffic_forecast": {
+        "time": "21:15"
+      }
+    }
+  },
+  {
+    "id": "traffic_forecast_03",
+    "category": "traffic_forecast",
+    "query": "How much traffic is expected at 9:15 PM?",
+    "expected_tools": [
+      "get_traffic_forecast"
+    ],
+    "expected_args_by_tool": {
+      "get_traffic_forecast": {
+        "time": "21:15"
+      }
+    }
+  },
+  {
+    "id": "traffic_forecast_04",
+    "category": "traffic_forecast",
+    "query": "Forecast Enterprise, RAN and PON at 21:15.",
+    "expected_tools": [
+      "get_traffic_forecast"
+    ],
+    "expected_args_by_tool": {
+      "get_traffic_forecast": {
+        "time": "21:15"
+      }
+    }
+  },
+  {
+    "id": "traffic_forecast_05",
+    "category": "traffic_forecast",
+    "query": "What is the predicted load at 21:15?",
+    "expected_tools": [
+      "get_traffic_forecast"
+    ],
+    "expected_args_by_tool": {
+      "get_traffic_forecast": {
+        "time": "21:15"
+      }
+    }
+  },
+  {
+    "id": "traffic_forecast_06",
+    "category": "traffic_forecast",
+    "query": "Run the traffic prediction for 21:15.",
+    "expected_tools": [
+      "get_traffic_forecast"
+    ],
+    "expected_args_by_tool": {
+      "get_traffic_forecast": {
+        "time": "21:15"
+      }
+    }
+  },
+  {
+    "id": "traffic_forecast_07",
+    "category": "traffic_forecast",
+    "query": "Show the day-ahead traffic estimate at 21:15.",
+    "expected_tools": [
+      "get_traffic_forecast"
+    ],
+    "expected_args_by_tool": {
+      "get_traffic_forecast": {
+        "time": "21:15"
+      }
+    }
+  },
+  {
+    "id": "traffic_forecast_08",
+    "category": "traffic_forecast",
+    "query": "How busy do we expect the network to be at 21:15?",
+    "expected_tools": [
+      "get_traffic_forecast"
+    ],
+    "expected_args_by_tool": {
+      "get_traffic_forecast": {
+        "time": "21:15"
+      }
+    }
+  },
+  {
+    "id": "traffic_forecast_09",
+    "category": "traffic_forecast",
+    "query": "Retrieve the XGBoost traffic values for 21:15.",
+    "expected_tools": [
+      "get_traffic_forecast"
+    ],
+    "expected_args_by_tool": {
+      "get_traffic_forecast": {
+        "time": "21:15"
+      }
+    }
+  },
+  {
+    "id": "traffic_forecast_10",
+    "category": "traffic_forecast",
+    "query": "What's the forecasted aggregate load at 21:15?",
+    "expected_tools": [
+      "get_traffic_forecast"
+    ],
+    "expected_args_by_tool": {
+      "get_traffic_forecast": {
+        "time": "21:15"
+      }
+    }
+  },
+  {
+    "id": "sla_prediction_01",
+    "category": "sla_prediction",
+    "query": "What SLA state is predicted at 21:15?",
+    "expected_tools": [
+      "get_sla_prediction"
+    ],
+    "expected_args_by_tool": {
+      "get_sla_prediction": {
+        "time": "21:15"
+      }
+    }
+  },
+  {
+    "id": "sla_prediction_02",
+    "category": "sla_prediction",
+    "query": "Classify the network SLA state at 21:15.",
+    "expected_tools": [
+      "get_sla_prediction"
+    ],
+    "expected_args_by_tool": {
+      "get_sla_prediction": {
+        "time": "21:15"
+      }
+    }
+  },
+  {
+    "id": "sla_prediction_03",
+    "category": "sla_prediction",
+    "query": "What is the failure-prone probability at 21:15?",
+    "expected_tools": [
+      "get_sla_prediction"
+    ],
+    "expected_args_by_tool": {
+      "get_sla_prediction": {
+        "time": "21:15"
+      }
+    }
+  },
+  {
+    "id": "sla_prediction_04",
+    "category": "sla_prediction",
+    "query": "Classify the network state at 9:15 PM.",
+    "expected_tools": [
+      "get_sla_prediction"
+    ],
+    "expected_args_by_tool": {
+      "get_sla_prediction": {
+        "time": "21:15"
+      }
+    }
+  },
+  {
+    "id": "sla_prediction_05",
+    "category": "sla_prediction",
+    "query": "Give me the RF probabilities for 21:15.",
+    "expected_tools": [
+      "get_sla_prediction"
+    ],
+    "expected_args_by_tool": {
+      "get_sla_prediction": {
+        "time": "21:15"
+      }
+    }
+  },
+  {
+    "id": "sla_prediction_06",
+    "category": "sla_prediction",
+    "query": "Is 21:15 normal, degraded or failure-prone according to the classifier?",
+    "expected_tools": [
+      "get_sla_prediction"
+    ],
+    "expected_args_by_tool": {
+      "get_sla_prediction": {
+        "time": "21:15"
+      }
+    }
+  },
+  {
+    "id": "sla_prediction_07",
+    "category": "sla_prediction",
+    "query": "What does the SLA classifier say at 21:15?",
+    "expected_tools": [
+      "get_sla_prediction"
+    ],
+    "expected_args_by_tool": {
+      "get_sla_prediction": {
+        "time": "21:15"
+      }
+    }
+  },
+  {
+    "id": "sla_prediction_08",
+    "category": "sla_prediction",
+    "query": "Show the Random Forest output at 21:15.",
+    "expected_tools": [
+      "get_sla_prediction"
+    ],
+    "expected_args_by_tool": {
+      "get_sla_prediction": {
+        "time": "21:15"
+      }
+    }
+  },
+  {
+    "id": "sla_prediction_09",
+    "category": "sla_prediction",
+    "query": "How confident is the RF classification at 21:15?",
+    "expected_tools": [
+      "get_sla_prediction"
+    ],
+    "expected_args_by_tool": {
+      "get_sla_prediction": {
+        "time": "21:15"
+      }
+    }
+  },
+  {
+    "id": "sla_prediction_10",
+    "category": "sla_prediction",
+    "query": "Retrieve the predicted SLA class at 21:15.",
+    "expected_tools": [
+      "get_sla_prediction"
+    ],
+    "expected_args_by_tool": {
+      "get_sla_prediction": {
+        "time": "21:15"
+      }
+    }
+  },
+  {
+    "id": "network_state_01",
+    "category": "network_state",
+    "query": "What is happening on the network at 21:15?",
+    "expected_tools": [
+      "get_network_state_at_time"
+    ],
+    "expected_args_by_tool": {
+      "get_network_state_at_time": {
+        "time": "21:15"
+      }
+    }
+  },
+  {
+    "id": "network_state_02",
+    "category": "network_state",
+    "query": "Show me the network and SC status at 21:15.",
+    "expected_tools": [
+      "get_network_state_at_time"
+    ],
+    "expected_args_by_tool": {
+      "get_network_state_at_time": {
+        "time": "21:15"
+      }
+    }
+  },
+  {
+    "id": "network_state_03",
+    "category": "network_state",
+    "query": "Give me the digital-twin state for 21:15.",
+    "expected_tools": [
+      "get_network_state_at_time"
+    ],
+    "expected_args_by_tool": {
+      "get_network_state_at_time": {
+        "time": "21:15"
+      }
+    }
+  },
+  {
+    "id": "network_state_04",
+    "category": "network_state",
+    "query": "What does the network look like at 9:15 PM?",
+    "expected_tools": [
+      "get_network_state_at_time"
+    ],
+    "expected_args_by_tool": {
+      "get_network_state_at_time": {
+        "time": "21:15"
+      }
+    }
+  },
+  {
+    "id": "network_state_05",
+    "category": "network_state",
+    "query": "Show traffic, SLA state and current SC allocation at 21:15.",
+    "expected_tools": [
+      "get_network_state_at_time"
+    ],
+    "expected_args_by_tool": {
+      "get_network_state_at_time": {
+        "time": "21:15"
+      }
+    }
+  },
+  {
+    "id": "network_state_06",
+    "category": "network_state",
+    "query": "What's the operator state at 21:15?",
+    "expected_tools": [
+      "get_network_state_at_time"
+    ],
+    "expected_args_by_tool": {
+      "get_network_state_at_time": {
+        "time": "21:15"
+      }
+    }
+  },
+  {
+    "id": "network_state_07",
+    "category": "network_state",
+    "query": "Inspect the network state at 21:15.",
+    "expected_tools": [
+      "get_network_state_at_time"
+    ],
+    "expected_args_by_tool": {
+      "get_network_state_at_time": {
+        "time": "21:15"
+      }
+    }
+  },
+  {
+    "id": "network_state_08",
+    "category": "network_state",
+    "query": "Give me the full network status for 21:15.",
+    "expected_tools": [
+      "get_network_state_at_time"
+    ],
+    "expected_args_by_tool": {
+      "get_network_state_at_time": {
+        "time": "21:15"
+      }
+    }
+  },
+  {
+    "id": "network_state_09",
+    "category": "network_state",
+    "query": "What is the active allocation and SLA state at 21:15?",
+    "expected_tools": [
+      "get_network_state_at_time"
+    ],
+    "expected_args_by_tool": {
+      "get_network_state_at_time": {
+        "time": "21:15"
+      }
+    }
+  },
+  {
+    "id": "network_state_10",
+    "category": "network_state",
+    "query": "Show the controller view at 21:15.",
+    "expected_tools": [
+      "get_network_state_at_time"
+    ],
+    "expected_args_by_tool": {
+      "get_network_state_at_time": {
+        "time": "21:15"
+      }
+    }
+  },
+  {
+    "id": "sla_explanation_01",
+    "category": "sla_explanation",
+    "query": "Why is 21:15 classified as failure-prone?",
+    "expected_tools": [
+      "explain_sla_risk"
+    ],
+    "expected_args_by_tool": {
+      "explain_sla_risk": {
+        "time": "21:15"
+      }
+    }
+  },
+  {
+    "id": "sla_explanation_02",
+    "category": "sla_explanation",
+    "query": "Explain the SLA risk at 21:15.",
+    "expected_tools": [
+      "explain_sla_risk"
+    ],
+    "expected_args_by_tool": {
+      "explain_sla_risk": {
+        "time": "21:15"
+      }
+    }
+  },
+  {
+    "id": "sla_explanation_03",
+    "category": "sla_explanation",
+    "query": "Why is the SLA state at 21:15 considered risky?",
+    "expected_tools": [
+      "explain_sla_risk"
+    ],
+    "expected_args_by_tool": {
+      "explain_sla_risk": {
+        "time": "21:15"
+      }
+    }
+  },
+  {
+    "id": "sla_explanation_04",
+    "category": "sla_explanation",
+    "query": "Explain the classifier result for 9:15 PM.",
+    "expected_tools": [
+      "explain_sla_risk"
+    ],
+    "expected_args_by_tool": {
+      "explain_sla_risk": {
+        "time": "21:15"
+      }
+    }
+  },
+  {
+    "id": "sla_explanation_05",
+    "category": "sla_explanation",
+    "query": "What evidence accompanies the failure-prone prediction at 21:15?",
+    "expected_tools": [
+      "explain_sla_risk"
+    ],
+    "expected_args_by_tool": {
+      "explain_sla_risk": {
+        "time": "21:15"
+      }
+    }
+  },
+  {
+    "id": "sla_explanation_06",
+    "category": "sla_explanation",
+    "query": "Help me understand the SLA classification at 21:15.",
+    "expected_tools": [
+      "explain_sla_risk"
+    ],
+    "expected_args_by_tool": {
+      "explain_sla_risk": {
+        "time": "21:15"
+      }
+    }
+  },
+  {
+    "id": "sla_explanation_07",
+    "category": "sla_explanation",
+    "query": "Why is the predicted SLA state bad at 21:15?",
+    "expected_tools": [
+      "explain_sla_risk"
+    ],
+    "expected_args_by_tool": {
+      "explain_sla_risk": {
+        "time": "21:15"
+      }
+    }
+  },
+  {
+    "id": "sla_explanation_08",
+    "category": "sla_explanation",
+    "query": "Explain the RF risk score at 21:15 without guessing causes.",
+    "expected_tools": [
+      "explain_sla_risk"
+    ],
+    "expected_args_by_tool": {
+      "explain_sla_risk": {
+        "time": "21:15"
+      }
+    }
+  },
+  {
+    "id": "sla_explanation_09",
+    "category": "sla_explanation",
+    "query": "What network conditions coincide with the RF result at 21:15?",
+    "expected_tools": [
+      "explain_sla_risk"
+    ],
+    "expected_args_by_tool": {
+      "explain_sla_risk": {
+        "time": "21:15"
+      }
+    }
+  },
+  {
+    "id": "sla_explanation_10",
+    "category": "sla_explanation",
+    "query": "Why is 00:00 classified as failure-prone?",
+    "expected_tools": [
+      "explain_sla_risk"
+    ],
+    "expected_args_by_tool": {
+      "explain_sla_risk": {
+        "time": "00:00"
+      }
+    }
+  },
+  {
+    "id": "policy_balanced_01",
+    "category": "policy_balanced",
+    "query": "Which policy is preferable at 21:15?",
+    "expected_tools": [
+      "compare_policies_at_time"
+    ],
+    "expected_args_by_tool": {
+      "compare_policies_at_time": {
+        "time": "21:15",
+        "objective": "balanced"
+      }
+    }
+  },
+  {
+    "id": "policy_balanced_02",
+    "category": "policy_balanced",
+    "query": "Compare PCA, MBA and SAA at 21:15 and recommend one.",
+    "expected_tools": [
+      "compare_policies_at_time"
+    ],
+    "expected_args_by_tool": {
+      "compare_policies_at_time": {
+        "time": "21:15",
+        "objective": "balanced"
+      }
+    }
+  },
+  {
+    "id": "policy_balanced_03",
+    "category": "policy_balanced",
+    "query": "What is the best policy at 21:15?",
+    "expected_tools": [
+      "compare_policies_at_time"
+    ],
+    "expected_args_by_tool": {
+      "compare_policies_at_time": {
+        "time": "21:15",
+        "objective": "balanced"
+      }
+    }
+  },
+  {
+    "id": "policy_balanced_04",
+    "category": "policy_balanced",
+    "query": "Which allocation strategy would you use at 9:15 PM?",
+    "expected_tools": [
+      "compare_policies_at_time"
+    ],
+    "expected_args_by_tool": {
+      "compare_policies_at_time": {
+        "time": "21:15",
+        "objective": "balanced"
+      }
+    }
+  },
+  {
+    "id": "policy_balanced_05",
+    "category": "policy_balanced",
+    "query": "Give me a balanced policy recommendation at 21:15.",
+    "expected_tools": [
+      "compare_policies_at_time"
+    ],
+    "expected_args_by_tool": {
+      "compare_policies_at_time": {
+        "time": "21:15",
+        "objective": "balanced"
+      }
+    }
+  },
+  {
+    "id": "policy_balanced_06",
+    "category": "policy_balanced",
+    "query": "Which of the three policies gives the best trade-off at 21:15?",
+    "expected_tools": [
+      "compare_policies_at_time"
+    ],
+    "expected_args_by_tool": {
+      "compare_policies_at_time": {
+        "time": "21:15",
+        "objective": "balanced"
+      }
+    }
+  },
+  {
+    "id": "policy_balanced_07",
+    "category": "policy_balanced",
+    "query": "Compare the controller policies at 21:15.",
+    "expected_tools": [
+      "compare_policies_at_time"
+    ],
+    "expected_args_by_tool": {
+      "compare_policies_at_time": {
+        "time": "21:15",
+        "objective": "balanced"
+      }
+    }
+  },
+  {
+    "id": "policy_balanced_08",
+    "category": "policy_balanced",
+    "query": "What policy makes most sense at 21:15?",
+    "expected_tools": [
+      "compare_policies_at_time"
+    ],
+    "expected_args_by_tool": {
+      "compare_policies_at_time": {
+        "time": "21:15",
+        "objective": "balanced"
+      }
+    }
+  },
+  {
+    "id": "policy_balanced_09",
+    "category": "policy_balanced",
+    "query": "Recommend PCA, MBA or SAA for 21:15.",
+    "expected_tools": [
+      "compare_policies_at_time"
+    ],
+    "expected_args_by_tool": {
+      "compare_policies_at_time": {
+        "time": "21:15",
+        "objective": "balanced"
+      }
+    }
+  },
+  {
+    "id": "policy_balanced_10",
+    "category": "policy_balanced",
+    "query": "Which policy is operationally preferable at 21:15?",
+    "expected_tools": [
+      "compare_policies_at_time"
+    ],
+    "expected_args_by_tool": {
+      "compare_policies_at_time": {
+        "time": "21:15",
+        "objective": "balanced"
+      }
+    }
+  },
+  {
+    "id": "objective_min_blocking_01",
+    "category": "objective_min_blocking",
+    "query": "Which policy has the lowest blocking at 21:15?",
+    "expected_tools": [
+      "compare_policies_at_time"
+    ],
+    "expected_args_by_tool": {
+      "compare_policies_at_time": {
+        "time": "21:15",
+        "objective": "min_blocking"
+      }
+    }
+  },
+  {
+    "id": "objective_min_blocking_02",
+    "category": "objective_min_blocking",
+    "query": "Minimize blocking at 21:15.",
+    "expected_tools": [
+      "compare_policies_at_time"
+    ],
+    "expected_args_by_tool": {
+      "compare_policies_at_time": {
+        "time": "21:15",
+        "objective": "min_blocking"
+      }
+    }
+  },
+  {
+    "id": "objective_min_blocking_03",
+    "category": "objective_min_blocking",
+    "query": "Give me the minimum-blocking policy for 21:15.",
+    "expected_tools": [
+      "compare_policies_at_time"
+    ],
+    "expected_args_by_tool": {
+      "compare_policies_at_time": {
+        "time": "21:15",
+        "objective": "min_blocking"
+      }
+    }
+  },
+  {
+    "id": "objective_min_blocking_04",
+    "category": "objective_min_blocking",
+    "query": "I only care about the least blocking at 9:15 PM.",
+    "expected_tools": [
+      "compare_policies_at_time"
+    ],
+    "expected_args_by_tool": {
+      "compare_policies_at_time": {
+        "time": "21:15",
+        "objective": "min_blocking"
+      }
+    }
+  },
+  {
+    "id": "objective_min_blocking_05",
+    "category": "objective_min_blocking",
+    "query": "Which controller produces the smallest blocking ratio at 21:15?",
+    "expected_tools": [
+      "compare_policies_at_time"
+    ],
+    "expected_args_by_tool": {
+      "compare_policies_at_time": {
+        "time": "21:15",
+        "objective": "min_blocking"
+      }
+    }
+  },
+  {
+    "id": "objective_min_blocking_06",
+    "category": "objective_min_blocking",
+    "query": "Choose strictly by minimum blocking at 21:15.",
+    "expected_tools": [
+      "compare_policies_at_time"
+    ],
+    "expected_args_by_tool": {
+      "compare_policies_at_time": {
+        "time": "21:15",
+        "objective": "min_blocking"
+      }
+    }
+  },
+  {
+    "id": "objective_min_blocking_07",
+    "category": "objective_min_blocking",
+    "query": "What is the absolute lowest-blocking option at 21:15?",
+    "expected_tools": [
+      "compare_policies_at_time"
+    ],
+    "expected_args_by_tool": {
+      "compare_policies_at_time": {
+        "time": "21:15",
+        "objective": "min_blocking"
+      }
+    }
+  },
+  {
+    "id": "objective_min_blocking_08",
+    "category": "objective_min_blocking",
+    "query": "Ignore churn and minimize blocking at 21:15.",
+    "expected_tools": [
+      "compare_policies_at_time"
+    ],
+    "expected_args_by_tool": {
+      "compare_policies_at_time": {
+        "time": "21:15",
+        "objective": "min_blocking"
+      }
+    }
+  },
+  {
+    "id": "objective_min_blocking_09",
+    "category": "objective_min_blocking",
+    "query": "Rank policies for least blocking at 21:15.",
+    "expected_tools": [
+      "compare_policies_at_time"
+    ],
+    "expected_args_by_tool": {
+      "compare_policies_at_time": {
+        "time": "21:15",
+        "objective": "min_blocking"
+      }
+    }
+  },
+  {
+    "id": "objective_min_blocking_10",
+    "category": "objective_min_blocking",
+    "query": "Which PSC policy wins on blocking alone at 21:15?",
+    "expected_tools": [
+      "compare_policies_at_time"
+    ],
+    "expected_args_by_tool": {
+      "compare_policies_at_time": {
+        "time": "21:15",
+        "objective": "min_blocking"
+      }
+    }
+  },
+  {
+    "id": "objective_min_reconfiguration_01",
+    "category": "objective_min_reconfiguration",
+    "query": "Which policy causes the fewest reconfigurations at 21:15?",
+    "expected_tools": [
+      "compare_policies_at_time"
+    ],
+    "expected_args_by_tool": {
+      "compare_policies_at_time": {
+        "time": "21:15",
+        "objective": "min_reconfiguration"
+      }
+    }
+  },
+  {
+    "id": "objective_min_reconfiguration_02",
+    "category": "objective_min_reconfiguration",
+    "query": "Minimize reconfiguration at 21:15.",
+    "expected_tools": [
+      "compare_policies_at_time"
+    ],
+    "expected_args_by_tool": {
+      "compare_policies_at_time": {
+        "time": "21:15",
+        "objective": "min_reconfiguration"
+      }
+    }
+  },
+  {
+    "id": "objective_min_reconfiguration_03",
+    "category": "objective_min_reconfiguration",
+    "query": "I want minimum churn at 9:15 PM.",
+    "expected_tools": [
+      "compare_policies_at_time"
+    ],
+    "expected_args_by_tool": {
+      "compare_policies_at_time": {
+        "time": "21:15",
+        "objective": "min_reconfiguration"
+      }
+    }
+  },
+  {
+    "id": "objective_min_reconfiguration_04",
+    "category": "objective_min_reconfiguration",
+    "query": "Which policy is most stable at 21:15 if I want the least reconfiguration?",
+    "expected_tools": [
+      "compare_policies_at_time"
+    ],
+    "expected_args_by_tool": {
+      "compare_policies_at_time": {
+        "time": "21:15",
+        "objective": "min_reconfiguration"
+      }
+    }
+  },
+  {
+    "id": "objective_min_reconfiguration_05",
+    "category": "objective_min_reconfiguration",
+    "query": "Choose the policy with the least SC changes at 21:15.",
+    "expected_tools": [
+      "compare_policies_at_time"
+    ],
+    "expected_args_by_tool": {
+      "compare_policies_at_time": {
+        "time": "21:15",
+        "objective": "min_reconfiguration"
+      }
+    }
+  },
+  {
+    "id": "objective_min_reconfiguration_06",
+    "category": "objective_min_reconfiguration",
+    "query": "Avoid reconfiguration as much as possible at 21:15.",
+    "expected_tools": [
+      "compare_policies_at_time"
+    ],
+    "expected_args_by_tool": {
+      "compare_policies_at_time": {
+        "time": "21:15",
+        "objective": "min_reconfiguration"
+      }
+    }
+  },
+  {
+    "id": "objective_min_reconfiguration_07",
+    "category": "objective_min_reconfiguration",
+    "query": "Which policy minimizes controller churn at 21:15?",
+    "expected_tools": [
+      "compare_policies_at_time"
+    ],
+    "expected_args_by_tool": {
+      "compare_policies_at_time": {
+        "time": "21:15",
+        "objective": "min_reconfiguration"
+      }
+    }
+  },
+  {
+    "id": "objective_min_reconfiguration_08",
+    "category": "objective_min_reconfiguration",
+    "query": "Rank the policies by minimum reconfiguration at 21:15.",
+    "expected_tools": [
+      "compare_policies_at_time"
+    ],
+    "expected_args_by_tool": {
+      "compare_policies_at_time": {
+        "time": "21:15",
+        "objective": "min_reconfiguration"
+      }
+    }
+  },
+  {
+    "id": "objective_min_reconfiguration_09",
+    "category": "objective_min_reconfiguration",
+    "query": "I care most about stability and fewest SC changes at 21:15.",
+    "expected_tools": [
+      "compare_policies_at_time"
+    ],
+    "expected_args_by_tool": {
+      "compare_policies_at_time": {
+        "time": "21:15",
+        "objective": "min_reconfiguration"
+      }
+    }
+  },
+  {
+    "id": "objective_min_reconfiguration_10",
+    "category": "objective_min_reconfiguration",
+    "query": "Which allocation gives me the least reconfiguration at 21:15?",
+    "expected_tools": [
+      "compare_policies_at_time"
+    ],
+    "expected_args_by_tool": {
+      "compare_policies_at_time": {
+        "time": "21:15",
+        "objective": "min_reconfiguration"
+      }
+    }
+  },
+  {
+    "id": "counterfactual_policy_01",
+    "category": "counterfactual_policy",
+    "query": "What happens if I use SAA at 21:15?",
+    "expected_tools": [
+      "simulate_policy_at_time"
+    ]
+  },
+  {
+    "id": "counterfactual_policy_02",
+    "category": "counterfactual_policy",
+    "query": "Simulate MBA at 21:15.",
+    "expected_tools": [
+      "simulate_policy_at_time"
+    ]
+  },
+  {
+    "id": "counterfactual_policy_03",
+    "category": "counterfactual_policy",
+    "query": "Show the counterfactual performance of PCA at 21:15.",
+    "expected_tools": [
+      "simulate_policy_at_time"
+    ]
+  },
+  {
+    "id": "counterfactual_policy_04",
+    "category": "counterfactual_policy",
+    "query": "If we switch to SAA at 9:15 PM, what happens?",
+    "expected_tools": [
+      "simulate_policy_at_time"
+    ]
+  },
+  {
+    "id": "counterfactual_policy_05",
+    "category": "counterfactual_policy",
+    "query": "Predict the policy KPIs for MBA at 21:15.",
+    "expected_tools": [
+      "simulate_policy_at_time"
+    ]
+  },
+  {
+    "id": "counterfactual_policy_06",
+    "category": "counterfactual_policy",
+    "query": "How would PCA perform at 21:15?",
+    "expected_tools": [
+      "simulate_policy_at_time"
+    ]
+  },
+  {
+    "id": "counterfactual_policy_07",
+    "category": "counterfactual_policy",
+    "query": "Replay SAA at 21:15.",
+    "expected_tools": [
+      "simulate_policy_at_time"
+    ]
+  },
+  {
+    "id": "counterfactual_policy_08",
+    "category": "counterfactual_policy",
+    "query": "Give me the simulated outcome for MBA at 21:15.",
+    "expected_tools": [
+      "simulate_policy_at_time"
+    ]
+  },
+  {
+    "id": "counterfactual_policy_09",
+    "category": "counterfactual_policy",
+    "query": "What blocking and reconfiguration would SAA give at 21:15?",
+    "expected_tools": [
+      "simulate_policy_at_time"
+    ]
+  },
+  {
+    "id": "counterfactual_policy_10",
+    "category": "counterfactual_policy",
+    "query": "Evaluate PCA counterfactually at 21:15.",
+    "expected_tools": [
+      "simulate_policy_at_time"
+    ]
+  },
+  {
+    "id": "operator_constraint_01",
+    "category": "operator_constraint",
+    "query": "Keep RAN on 2 subcarriers at 21:15. Allocate the remaining two.",
+    "expected_tools": [
+      "analyze_constrained_allocation"
+    ],
+    "expected_args_by_tool": {
+      "analyze_constrained_allocation": {
+        "time": "21:15",
+        "ran_subcarriers": 2,
+        "objective": "balanced"
+      }
+    }
+  },
+  {
+    "id": "operator_constraint_02",
+    "category": "operator_constraint",
+    "query": "Reserve 2 SCs for RAN at 21:15 and find the best allocation.",
+    "expected_tools": [
+      "analyze_constrained_allocation"
+    ],
+    "expected_args_by_tool": {
+      "analyze_constrained_allocation": {
+        "time": "21:15",
+        "ran_subcarriers": 2,
+        "objective": "balanced"
+      }
+    }
+  },
+  {
+    "id": "operator_constraint_03",
+    "category": "operator_constraint",
+    "query": "At 21:15, give RAN exactly 2 subcarriers.",
+    "expected_tools": [
+      "analyze_constrained_allocation"
+    ],
+    "expected_args_by_tool": {
+      "analyze_constrained_allocation": {
+        "time": "21:15",
+        "ran_subcarriers": 2,
+        "objective": "balanced"
+      }
+    }
+  },
+  {
+    "id": "operator_constraint_04",
+    "category": "operator_constraint",
+    "query": "Hold RAN at 2 SCs at 9:15 PM; how should the others be assigned?",
+    "expected_tools": [
+      "analyze_constrained_allocation"
+    ],
+    "expected_args_by_tool": {
+      "analyze_constrained_allocation": {
+        "time": "21:15",
+        "ran_subcarriers": 2,
+        "objective": "balanced"
+      }
+    }
+  },
+  {
+    "id": "operator_constraint_05",
+    "category": "operator_constraint",
+    "query": "Constrain RAN to two subcarriers at 21:15.",
+    "expected_tools": [
+      "analyze_constrained_allocation"
+    ],
+    "expected_args_by_tool": {
+      "analyze_constrained_allocation": {
+        "time": "21:15",
+        "ran_subcarriers": 2,
+        "objective": "balanced"
+      }
+    }
+  },
+  {
+    "id": "operator_constraint_06",
+    "category": "operator_constraint",
+    "query": "I require 2 SCs for RAN at 21:15. Optimize the rest.",
+    "expected_tools": [
+      "analyze_constrained_allocation"
+    ],
+    "expected_args_by_tool": {
+      "analyze_constrained_allocation": {
+        "time": "21:15",
+        "ran_subcarriers": 2,
+        "objective": "balanced"
+      }
+    }
+  },
+  {
+    "id": "operator_constraint_07",
+    "category": "operator_constraint",
+    "query": "Keep two subcarriers on RAN at 21:15 and minimize the trade-off.",
+    "expected_tools": [
+      "analyze_constrained_allocation"
+    ],
+    "expected_args_by_tool": {
+      "analyze_constrained_allocation": {
+        "time": "21:15",
+        "ran_subcarriers": 2,
+        "objective": "balanced"
+      }
+    }
+  },
+  {
+    "id": "operator_constraint_08",
+    "category": "operator_constraint",
+    "query": "At 21:15 RAN must stay on 2 SCs. What is feasible?",
+    "expected_tools": [
+      "analyze_constrained_allocation"
+    ],
+    "expected_args_by_tool": {
+      "analyze_constrained_allocation": {
+        "time": "21:15",
+        "ran_subcarriers": 2,
+        "objective": "balanced"
+      }
+    }
+  },
+  {
+    "id": "operator_constraint_09",
+    "category": "operator_constraint",
+    "query": "Give 2 SCs to RAN at 21:15 and choose the remaining assignment.",
+    "expected_tools": [
+      "analyze_constrained_allocation"
+    ],
+    "expected_args_by_tool": {
+      "analyze_constrained_allocation": {
+        "time": "21:15",
+        "ran_subcarriers": 2,
+        "objective": "balanced"
+      }
+    }
+  },
+  {
+    "id": "operator_constraint_10",
+    "category": "operator_constraint",
+    "query": "For 21:15, lock RAN to 2 subcarriers and analyze it.",
+    "expected_tools": [
+      "analyze_constrained_allocation"
+    ],
+    "expected_args_by_tool": {
+      "analyze_constrained_allocation": {
+        "time": "21:15",
+        "ran_subcarriers": 2,
+        "objective": "balanced"
+      }
+    }
+  },
+  {
+    "id": "cross_time_comparison_01",
+    "category": "cross_time_comparison",
+    "query": "Compare the network at 18:10 and 21:15.",
+    "expected_tools": [
+      "compare_network_states"
+    ],
+    "expected_args_by_tool": {
+      "compare_network_states": {
+        "time_a": "18:10",
+        "time_b": "21:15"
+      }
+    }
+  },
+  {
+    "id": "cross_time_comparison_02",
+    "category": "cross_time_comparison",
+    "query": "Was 18:10 healthier than 21:15?",
+    "expected_tools": [
+      "compare_network_states"
+    ],
+    "expected_args_by_tool": {
+      "compare_network_states": {
+        "time_a": "18:10",
+        "time_b": "21:15"
+      }
+    }
+  },
+  {
+    "id": "cross_time_comparison_03",
+    "category": "cross_time_comparison",
+    "query": "What changed from 18:10 to 21:15?",
+    "expected_tools": [
+      "compare_network_states"
+    ],
+    "expected_args_by_tool": {
+      "compare_network_states": {
+        "time_a": "18:10",
+        "time_b": "21:15"
+      }
+    }
+  },
+  {
+    "id": "cross_time_comparison_04",
+    "category": "cross_time_comparison",
+    "query": "Compare 6:10 PM with 9:15 PM.",
+    "expected_tools": [
+      "compare_network_states"
+    ],
+    "expected_args_by_tool": {
+      "compare_network_states": {
+        "time_a": "18:10",
+        "time_b": "21:15"
+      }
+    }
+  },
+  {
+    "id": "cross_time_comparison_05",
+    "category": "cross_time_comparison",
+    "query": "Show me the traffic and SLA differences between 18:10 and 21:15.",
+    "expected_tools": [
+      "compare_network_states"
+    ],
+    "expected_args_by_tool": {
+      "compare_network_states": {
+        "time_a": "18:10",
+        "time_b": "21:15"
+      }
+    }
+  },
+  {
+    "id": "cross_time_comparison_06",
+    "category": "cross_time_comparison",
+    "query": "How did the network evolve between 18:10 and 21:15?",
+    "expected_tools": [
+      "compare_network_states"
+    ],
+    "expected_args_by_tool": {
+      "compare_network_states": {
+        "time_a": "18:10",
+        "time_b": "21:15"
+      }
+    }
+  },
+  {
+    "id": "cross_time_comparison_07",
+    "category": "cross_time_comparison",
+    "query": "Contrast the digital-twin state at 18:10 versus 21:15.",
+    "expected_tools": [
+      "compare_network_states"
+    ],
+    "expected_args_by_tool": {
+      "compare_network_states": {
+        "time_a": "18:10",
+        "time_b": "21:15"
+      }
+    }
+  },
+  {
+    "id": "cross_time_comparison_08",
+    "category": "cross_time_comparison",
+    "query": "Which of 18:10 and 21:15 is riskier?",
+    "expected_tools": [
+      "compare_network_states"
+    ],
+    "expected_args_by_tool": {
+      "compare_network_states": {
+        "time_a": "18:10",
+        "time_b": "21:15"
+      }
+    }
+  },
+  {
+    "id": "cross_time_comparison_09",
+    "category": "cross_time_comparison",
+    "query": "Compare policy performance at 18:10 with 21:15.",
+    "expected_tools": [
+      "compare_network_states"
+    ],
+    "expected_args_by_tool": {
+      "compare_network_states": {
+        "time_a": "18:10",
+        "time_b": "21:15"
+      }
+    }
+  },
+  {
+    "id": "cross_time_comparison_10",
+    "category": "cross_time_comparison",
+    "query": "Give me a two-timestamp comparison: 18:10 and 21:15.",
+    "expected_tools": [
+      "compare_network_states"
+    ],
+    "expected_args_by_tool": {
+      "compare_network_states": {
+        "time_a": "18:10",
+        "time_b": "21:15"
+      }
+    }
+  },
+  {
+    "id": "risk_discovery_01",
+    "category": "risk_discovery",
+    "query": "Find the three highest-risk intervals today.",
+    "expected_tools": [
+      "find_risk_intervals"
+    ]
+  },
+  {
+    "id": "risk_discovery_02",
+    "category": "risk_discovery",
+    "query": "When is the network most failure-prone?",
+    "expected_tools": [
+      "find_risk_intervals"
+    ]
+  },
+  {
+    "id": "risk_discovery_03",
+    "category": "risk_discovery",
+    "query": "Show me the top 3 risky timestamps.",
+    "expected_tools": [
+      "find_risk_intervals"
+    ]
+  },
+  {
+    "id": "risk_discovery_04",
+    "category": "risk_discovery",
+    "query": "Which intervals have the highest RF failure probability?",
+    "expected_tools": [
+      "find_risk_intervals"
+    ]
+  },
+  {
+    "id": "risk_discovery_05",
+    "category": "risk_discovery",
+    "query": "Find today's worst three SLA-risk periods.",
+    "expected_tools": [
+      "find_risk_intervals"
+    ]
+  },
+  {
+    "id": "risk_discovery_06",
+    "category": "risk_discovery",
+    "query": "What is the highest-risk interval?",
+    "expected_tools": [
+      "find_risk_intervals"
+    ]
+  },
+  {
+    "id": "risk_discovery_07",
+    "category": "risk_discovery",
+    "query": "List the 3 most critical intervals by failure probability.",
+    "expected_tools": [
+      "find_risk_intervals"
+    ]
+  },
+  {
+    "id": "risk_discovery_08",
+    "category": "risk_discovery",
+    "query": "When should the operator pay the most attention today?",
+    "expected_tools": [
+      "find_risk_intervals"
+    ]
+  },
+  {
+    "id": "risk_discovery_09",
+    "category": "risk_discovery",
+    "query": "Locate the top three failure-prone periods.",
+    "expected_tools": [
+      "find_risk_intervals"
+    ]
+  },
+  {
+    "id": "risk_discovery_10",
+    "category": "risk_discovery",
+    "query": "Find the most risky points in the day-ahead forecast.",
+    "expected_tools": [
+      "find_risk_intervals"
+    ]
+  },
+  {
+    "id": "range_summary_01",
+    "category": "range_summary",
+    "query": "Summarize the network from 18:00 to 22:00.",
+    "expected_tools": [
+      "summarize_time_range"
+    ],
+    "expected_args_by_tool": {
+      "summarize_time_range": {
+        "start_time": "18:00",
+        "end_time": "22:00"
+      }
+    }
+  },
+  {
+    "id": "range_summary_02",
+    "category": "range_summary",
+    "query": "How does the network behave between 18:00 and 22:00?",
+    "expected_tools": [
+      "summarize_time_range"
+    ],
+    "expected_args_by_tool": {
+      "summarize_time_range": {
+        "start_time": "18:00",
+        "end_time": "22:00"
+      }
+    }
+  },
+  {
+    "id": "range_summary_03",
+    "category": "range_summary",
+    "query": "Give me an evening summary from 18:00 through 22:00.",
+    "expected_tools": [
+      "summarize_time_range"
+    ],
+    "expected_args_by_tool": {
+      "summarize_time_range": {
+        "start_time": "18:00",
+        "end_time": "22:00"
+      }
+    }
+  },
+  {
+    "id": "range_summary_04",
+    "category": "range_summary",
+    "query": "Summarize traffic, SLA and policy KPIs between 18:00 and 22:00.",
+    "expected_tools": [
+      "summarize_time_range"
+    ],
+    "expected_args_by_tool": {
+      "summarize_time_range": {
+        "start_time": "18:00",
+        "end_time": "22:00"
+      }
+    }
+  },
+  {
+    "id": "range_summary_05",
+    "category": "range_summary",
+    "query": "What happened across the 18:00-22:00 window?",
+    "expected_tools": [
+      "summarize_time_range"
+    ],
+    "expected_args_by_tool": {
+      "summarize_time_range": {
+        "start_time": "18:00",
+        "end_time": "22:00"
+      }
+    }
+  },
+  {
+    "id": "range_summary_06",
+    "category": "range_summary",
+    "query": "Analyze the period from 18:00 to 22:00.",
+    "expected_tools": [
+      "summarize_time_range"
+    ],
+    "expected_args_by_tool": {
+      "summarize_time_range": {
+        "start_time": "18:00",
+        "end_time": "22:00"
+      }
+    }
+  },
+  {
+    "id": "range_summary_07",
+    "category": "range_summary",
+    "query": "Give me aggregate network behavior for 18:00 to 22:00.",
+    "expected_tools": [
+      "summarize_time_range"
+    ],
+    "expected_args_by_tool": {
+      "summarize_time_range": {
+        "start_time": "18:00",
+        "end_time": "22:00"
+      }
+    }
+  },
+  {
+    "id": "range_summary_08",
+    "category": "range_summary",
+    "query": "How risky is the 18:00 to 22:00 range?",
+    "expected_tools": [
+      "summarize_time_range"
+    ],
+    "expected_args_by_tool": {
+      "summarize_time_range": {
+        "start_time": "18:00",
+        "end_time": "22:00"
+      }
+    }
+  },
+  {
+    "id": "range_summary_09",
+    "category": "range_summary",
+    "query": "Show a time-range summary from 18:00 until 22:00.",
+    "expected_tools": [
+      "summarize_time_range"
+    ],
+    "expected_args_by_tool": {
+      "summarize_time_range": {
+        "start_time": "18:00",
+        "end_time": "22:00"
+      }
+    }
+  },
+  {
+    "id": "range_summary_10",
+    "category": "range_summary",
+    "query": "Summarize SAA behavior between 18:00 and 22:00.",
+    "expected_tools": [
+      "summarize_time_range"
+    ],
+    "expected_args_by_tool": {
+      "summarize_time_range": {
+        "start_time": "18:00",
+        "end_time": "22:00"
+      }
+    }
+  },
+  {
+    "id": "recommendation_change_01",
+    "category": "recommendation_change",
+    "query": "Why would the recommended policy differ between 18:10 and 21:15?",
+    "expected_tools": [
+      "explain_recommendation_change"
+    ],
+    "expected_args_by_tool": {
+      "explain_recommendation_change": {
+        "time_a": "18:10",
+        "time_b": "21:15",
+        "objective": "balanced"
+      }
+    }
+  },
+  {
+    "id": "recommendation_change_02",
+    "category": "recommendation_change",
+    "query": "Explain any recommendation change from 18:10 to 21:15.",
+    "expected_tools": [
+      "explain_recommendation_change"
+    ],
+    "expected_args_by_tool": {
+      "explain_recommendation_change": {
+        "time_a": "18:10",
+        "time_b": "21:15",
+        "objective": "balanced"
+      }
+    }
+  },
+  {
+    "id": "recommendation_change_03",
+    "category": "recommendation_change",
+    "query": "Does the preferred policy change between 18:10 and 21:15, and why?",
+    "expected_tools": [
+      "explain_recommendation_change"
+    ],
+    "expected_args_by_tool": {
+      "explain_recommendation_change": {
+        "time_a": "18:10",
+        "time_b": "21:15",
+        "objective": "balanced"
+      }
+    }
+  },
+  {
+    "id": "recommendation_change_04",
+    "category": "recommendation_change",
+    "query": "Compare the policy recommendation at 6:10 PM and 9:15 PM.",
+    "expected_tools": [
+      "explain_recommendation_change"
+    ],
+    "expected_args_by_tool": {
+      "explain_recommendation_change": {
+        "time_a": "18:10",
+        "time_b": "21:15",
+        "objective": "balanced"
+      }
+    }
+  },
+  {
+    "id": "recommendation_change_05",
+    "category": "recommendation_change",
+    "query": "Why is the policy choice different at 18:10 versus 21:15?",
+    "expected_tools": [
+      "explain_recommendation_change"
+    ],
+    "expected_args_by_tool": {
+      "explain_recommendation_change": {
+        "time_a": "18:10",
+        "time_b": "21:15",
+        "objective": "balanced"
+      }
+    }
+  },
+  {
+    "id": "recommendation_change_06",
+    "category": "recommendation_change",
+    "query": "Explain the recommendation transition between 18:10 and 21:15.",
+    "expected_tools": [
+      "explain_recommendation_change"
+    ],
+    "expected_args_by_tool": {
+      "explain_recommendation_change": {
+        "time_a": "18:10",
+        "time_b": "21:15",
+        "objective": "balanced"
+      }
+    }
+  },
+  {
+    "id": "recommendation_change_07",
+    "category": "recommendation_change",
+    "query": "What causes the deterministic recommendation to change from 18:10 to 21:15?",
+    "expected_tools": [
+      "explain_recommendation_change"
+    ],
+    "expected_args_by_tool": {
+      "explain_recommendation_change": {
+        "time_a": "18:10",
+        "time_b": "21:15",
+        "objective": "balanced"
+      }
+    }
+  },
+  {
+    "id": "recommendation_change_08",
+    "category": "recommendation_change",
+    "query": "Did the balanced policy recommendation change between 18:10 and 21:15?",
+    "expected_tools": [
+      "explain_recommendation_change"
+    ],
+    "expected_args_by_tool": {
+      "explain_recommendation_change": {
+        "time_a": "18:10",
+        "time_b": "21:15",
+        "objective": "balanced"
+      }
+    }
+  },
+  {
+    "id": "recommendation_change_09",
+    "category": "recommendation_change",
+    "query": "Explain policy-choice differences across 18:10 and 21:15.",
+    "expected_tools": [
+      "explain_recommendation_change"
+    ],
+    "expected_args_by_tool": {
+      "explain_recommendation_change": {
+        "time_a": "18:10",
+        "time_b": "21:15",
+        "objective": "balanced"
+      }
+    }
+  },
+  {
+    "id": "recommendation_change_10",
+    "category": "recommendation_change",
+    "query": "Why might I choose a different policy at 21:15 than at 18:10?",
+    "expected_tools": [
+      "explain_recommendation_change"
+    ],
+    "expected_args_by_tool": {
+      "explain_recommendation_change": {
+        "time_a": "18:10",
+        "time_b": "21:15",
+        "objective": "balanced"
+      }
+    }
+  },
+  {
+    "id": "policy_history_01",
+    "category": "policy_history",
+    "query": "How does the recommended policy change across the day?",
+    "expected_tools": [
+      "summarize_policy_history"
+    ],
+    "expected_args_by_tool": {
+      "summarize_policy_history": {
+        "objective": "balanced"
+      }
+    }
+  },
+  {
+    "id": "policy_history_02",
+    "category": "policy_history",
+    "query": "Show the balanced policy recommendation history.",
+    "expected_tools": [
+      "summarize_policy_history"
+    ],
+    "expected_args_by_tool": {
+      "summarize_policy_history": {
+        "objective": "balanced"
+      }
+    }
+  },
+  {
+    "id": "policy_history_03",
+    "category": "policy_history",
+    "query": "When does the preferred policy switch today?",
+    "expected_tools": [
+      "summarize_policy_history"
+    ],
+    "expected_args_by_tool": {
+      "summarize_policy_history": {
+        "objective": "balanced"
+      }
+    }
+  },
+  {
+    "id": "policy_history_04",
+    "category": "policy_history",
+    "query": "How often would the recommendation change?",
+    "expected_tools": [
+      "summarize_policy_history"
+    ],
+    "expected_args_by_tool": {
+      "summarize_policy_history": {
+        "objective": "balanced"
+      }
+    }
+  },
+  {
+    "id": "policy_history_05",
+    "category": "policy_history",
+    "query": "Give me the day-ahead policy recommendation timeline.",
+    "expected_tools": [
+      "summarize_policy_history"
+    ],
+    "expected_args_by_tool": {
+      "summarize_policy_history": {
+        "objective": "balanced"
+      }
+    }
+  },
+  {
+    "id": "policy_history_06",
+    "category": "policy_history",
+    "query": "Which policy is recommended most often today?",
+    "expected_tools": [
+      "summarize_policy_history"
+    ],
+    "expected_args_by_tool": {
+      "summarize_policy_history": {
+        "objective": "balanced"
+      }
+    }
+  },
+  {
+    "id": "policy_history_07",
+    "category": "policy_history",
+    "query": "Show recommendation change points across the day.",
+    "expected_tools": [
+      "summarize_policy_history"
+    ],
+    "expected_args_by_tool": {
+      "summarize_policy_history": {
+        "objective": "balanced"
+      }
+    }
+  },
+  {
+    "id": "policy_history_08",
+    "category": "policy_history",
+    "query": "Track the preferred policy over all timestamps.",
+    "expected_tools": [
+      "summarize_policy_history"
+    ],
+    "expected_args_by_tool": {
+      "summarize_policy_history": {
+        "objective": "balanced"
+      }
+    }
+  },
+  {
+    "id": "policy_history_09",
+    "category": "policy_history",
+    "query": "How stable is the balanced policy recommendation throughout the day?",
+    "expected_tools": [
+      "summarize_policy_history"
+    ],
+    "expected_args_by_tool": {
+      "summarize_policy_history": {
+        "objective": "balanced"
+      }
+    }
+  },
+  {
+    "id": "policy_history_10",
+    "category": "policy_history",
+    "query": "Summarize policy recommendation history.",
+    "expected_tools": [
+      "summarize_policy_history"
+    ],
+    "expected_args_by_tool": {
+      "summarize_policy_history": {
+        "objective": "balanced"
+      }
+    }
+  },
+  {
+    "id": "evidence_confidence_01",
+    "category": "evidence_confidence",
+    "query": "How confident should I be in the recommendation at 21:15?",
+    "expected_tools": [
+      "get_evidence_confidence"
+    ],
+    "expected_args_by_tool": {
+      "get_evidence_confidence": {
+        "time": "21:15"
+      }
+    }
+  },
+  {
+    "id": "evidence_confidence_02",
+    "category": "evidence_confidence",
+    "query": "What evidence supports the recommendation at 21:15?",
+    "expected_tools": [
+      "get_evidence_confidence"
+    ],
+    "expected_args_by_tool": {
+      "get_evidence_confidence": {
+        "time": "21:15"
+      }
+    }
+  },
+  {
+    "id": "evidence_confidence_03",
+    "category": "evidence_confidence",
+    "query": "Give me an evidence coverage summary for 21:15.",
+    "expected_tools": [
+      "get_evidence_confidence"
+    ],
+    "expected_args_by_tool": {
+      "get_evidence_confidence": {
+        "time": "21:15"
+      }
+    }
+  },
+  {
+    "id": "evidence_confidence_04",
+    "category": "evidence_confidence",
+    "query": "What trust signals are available at 9:15 PM?",
+    "expected_tools": [
+      "get_evidence_confidence"
+    ],
+    "expected_args_by_tool": {
+      "get_evidence_confidence": {
+        "time": "21:15"
+      }
+    }
+  },
+  {
+    "id": "evidence_confidence_05",
+    "category": "evidence_confidence",
+    "query": "How well supported is this analysis at 21:15?",
+    "expected_tools": [
+      "get_evidence_confidence"
+    ],
+    "expected_args_by_tool": {
+      "get_evidence_confidence": {
+        "time": "21:15"
+      }
+    }
+  },
+  {
+    "id": "evidence_confidence_06",
+    "category": "evidence_confidence",
+    "query": "Show the evidence layers for 21:15.",
+    "expected_tools": [
+      "get_evidence_confidence"
+    ],
+    "expected_args_by_tool": {
+      "get_evidence_confidence": {
+        "time": "21:15"
+      }
+    }
+  },
+  {
+    "id": "evidence_confidence_07",
+    "category": "evidence_confidence",
+    "query": "What is available and missing from the recommendation evidence at 21:15?",
+    "expected_tools": [
+      "get_evidence_confidence"
+    ],
+    "expected_args_by_tool": {
+      "get_evidence_confidence": {
+        "time": "21:15"
+      }
+    }
+  },
+  {
+    "id": "evidence_confidence_08",
+    "category": "evidence_confidence",
+    "query": "Can I trust the result at 21:15 and what are the limitations?",
+    "expected_tools": [
+      "get_evidence_confidence"
+    ],
+    "expected_args_by_tool": {
+      "get_evidence_confidence": {
+        "time": "21:15"
+      }
+    }
+  },
+  {
+    "id": "evidence_confidence_09",
+    "category": "evidence_confidence",
+    "query": "Summarize the trust boundary at 21:15.",
+    "expected_tools": [
+      "get_evidence_confidence"
+    ],
+    "expected_args_by_tool": {
+      "get_evidence_confidence": {
+        "time": "21:15"
+      }
+    }
+  },
+  {
+    "id": "evidence_confidence_10",
+    "category": "evidence_confidence",
+    "query": "What evidence do we have for the 21:15 recommendation?",
+    "expected_tools": [
+      "get_evidence_confidence"
+    ],
+    "expected_args_by_tool": {
+      "get_evidence_confidence": {
+        "time": "21:15"
+      }
+    }
+  },
+  {
+    "id": "validation_01",
+    "category": "validation",
+    "query": "Validate the SAA result at 21:15.",
+    "expected_tools": [
+      "validate_recommendation"
+    ],
+    "expected_args_by_tool": {
+      "validate_recommendation": {
+        "time": "21:15"
+      }
+    }
+  },
+  {
+    "id": "validation_02",
+    "category": "validation",
+    "query": "Recompute SAA at 21:15 and verify it.",
+    "expected_tools": [
+      "validate_recommendation"
+    ],
+    "expected_args_by_tool": {
+      "validate_recommendation": {
+        "time": "21:15"
+      }
+    }
+  },
+  {
+    "id": "validation_03",
+    "category": "validation",
+    "query": "Can you independently validate the recommendation at 21:15?",
+    "expected_tools": [
+      "validate_recommendation"
+    ],
+    "expected_args_by_tool": {
+      "validate_recommendation": {
+        "time": "21:15"
+      }
+    }
+  },
+  {
+    "id": "validation_04",
+    "category": "validation",
+    "query": "Check the policy result at 9:15 PM.",
+    "expected_tools": [
+      "validate_recommendation"
+    ],
+    "expected_args_by_tool": {
+      "validate_recommendation": {
+        "time": "21:15"
+      }
+    }
+  },
+  {
+    "id": "validation_05",
+    "category": "validation",
+    "query": "Verify traffic conservation and SC budget for SAA at 21:15.",
+    "expected_tools": [
+      "validate_recommendation"
+    ],
+    "expected_args_by_tool": {
+      "validate_recommendation": {
+        "time": "21:15"
+      }
+    }
+  },
+  {
+    "id": "validation_06",
+    "category": "validation",
+    "query": "Run deterministic validation for SAA at 21:15.",
+    "expected_tools": [
+      "validate_recommendation"
+    ],
+    "expected_args_by_tool": {
+      "validate_recommendation": {
+        "time": "21:15"
+      }
+    }
+  },
+  {
+    "id": "validation_07",
+    "category": "validation",
+    "query": "Prove the SAA recommendation is internally consistent at 21:15.",
+    "expected_tools": [
+      "validate_recommendation"
+    ],
+    "expected_args_by_tool": {
+      "validate_recommendation": {
+        "time": "21:15"
+      }
+    }
+  },
+  {
+    "id": "validation_08",
+    "category": "validation",
+    "query": "Validate the calculated KPIs at 21:15.",
+    "expected_tools": [
+      "validate_recommendation"
+    ],
+    "expected_args_by_tool": {
+      "validate_recommendation": {
+        "time": "21:15"
+      }
+    }
+  },
+  {
+    "id": "validation_09",
+    "category": "validation",
+    "query": "Check whether the SAA result at 21:15 passes the deterministic tests.",
+    "expected_tools": [
+      "validate_recommendation"
+    ],
+    "expected_args_by_tool": {
+      "validate_recommendation": {
+        "time": "21:15"
+      }
+    }
+  },
+  {
+    "id": "validation_10",
+    "category": "validation",
+    "query": "Why should I trust the SAA numbers at 21:15? Validate them.",
+    "expected_tools": [
+      "validate_recommendation"
+    ],
+    "expected_args_by_tool": {
+      "validate_recommendation": {
+        "time": "21:15"
+      }
+    }
+  },
+  {
+    "id": "followup_time_01",
+    "category": "followup_time",
+    "query": "What about an hour later?",
+    "expected_tools": [
+      "get_network_state_at_time"
+    ],
+    "expected_args_by_tool": {
+      "get_network_state_at_time": {
+        "time": "19:10"
+      }
+    },
+    "setup_query": "Show me the network state at 18:10."
+  },
+  {
+    "id": "followup_time_02",
+    "category": "followup_time",
+    "query": "And one hour later?",
+    "expected_tools": [
+      "get_network_state_at_time"
+    ],
+    "expected_args_by_tool": {
+      "get_network_state_at_time": {
+        "time": "19:10"
+      }
+    },
+    "setup_query": "Show me the network state at 18:10."
+  },
+  {
+    "id": "followup_time_03",
+    "category": "followup_time",
+    "query": "Show me the state an hour later.",
+    "expected_tools": [
+      "get_network_state_at_time"
+    ],
+    "expected_args_by_tool": {
+      "get_network_state_at_time": {
+        "time": "19:10"
+      }
+    },
+    "setup_query": "Show me the network state at 18:10."
+  },
+  {
+    "id": "followup_time_04",
+    "category": "followup_time",
+    "query": "How does it look one hour later?",
+    "expected_tools": [
+      "get_network_state_at_time"
+    ],
+    "expected_args_by_tool": {
+      "get_network_state_at_time": {
+        "time": "19:10"
+      }
+    },
+    "setup_query": "Show me the network state at 18:10."
+  },
+  {
+    "id": "followup_time_05",
+    "category": "followup_time",
+    "query": "Now inspect an hour later.",
+    "expected_tools": [
+      "get_network_state_at_time"
+    ],
+    "expected_args_by_tool": {
+      "get_network_state_at_time": {
+        "time": "19:10"
+      }
+    },
+    "setup_query": "Show me the network state at 18:10."
+  },
+  {
+    "id": "followup_time_06",
+    "category": "followup_time",
+    "query": "What is happening sixty minutes later?",
+    "expected_tools": [
+      "get_network_state_at_time"
+    ],
+    "expected_args_by_tool": {
+      "get_network_state_at_time": {
+        "time": "19:10"
+      }
+    },
+    "setup_query": "Show me the network state at 18:10."
+  },
+  {
+    "id": "followup_time_07",
+    "category": "followup_time",
+    "query": "Move forward one hour and show the network.",
+    "expected_tools": [
+      "get_network_state_at_time"
+    ],
+    "expected_args_by_tool": {
+      "get_network_state_at_time": {
+        "time": "19:10"
+      }
+    },
+    "setup_query": "Show me the network state at 18:10."
+  },
+  {
+    "id": "followup_time_08",
+    "category": "followup_time",
+    "query": "Give me the state one hour after that.",
+    "expected_tools": [
+      "get_network_state_at_time"
+    ],
+    "expected_args_by_tool": {
+      "get_network_state_at_time": {
+        "time": "19:10"
+      }
+    },
+    "setup_query": "Show me the network state at 18:10."
+  },
+  {
+    "id": "followup_time_09",
+    "category": "followup_time",
+    "query": "How about the network an hour after that time?",
+    "expected_tools": [
+      "get_network_state_at_time"
+    ],
+    "expected_args_by_tool": {
+      "get_network_state_at_time": {
+        "time": "19:10"
+      }
+    },
+    "setup_query": "Show me the network state at 18:10."
+  },
+  {
+    "id": "followup_time_10",
+    "category": "followup_time",
+    "query": "Check the same network view one hour later.",
+    "expected_tools": [
+      "get_network_state_at_time"
+    ],
+    "expected_args_by_tool": {
+      "get_network_state_at_time": {
+        "time": "19:10"
+      }
+    },
+    "setup_query": "Show me the network state at 18:10."
+  },
+  {
+    "id": "followup_policy_01",
+    "category": "followup_policy",
+    "query": "Simulate that policy.",
+    "expected_tools": [
+      "simulate_policy_at_time"
+    ],
+    "setup_query": "Compare PCA, MBA and SAA at 21:15 and recommend the best trade-off."
+  },
+  {
+    "id": "followup_policy_02",
+    "category": "followup_policy",
+    "query": "What performance does that policy give?",
+    "expected_tools": [
+      "simulate_policy_at_time"
+    ],
+    "setup_query": "Compare PCA, MBA and SAA at 21:15 and recommend the best trade-off."
+  },
+  {
+    "id": "followup_policy_03",
+    "category": "followup_policy",
+    "query": "Show me the counterfactual for the recommended one.",
+    "expected_tools": [
+      "simulate_policy_at_time"
+    ],
+    "setup_query": "Compare PCA, MBA and SAA at 21:15 and recommend the best trade-off."
+  },
+  {
+    "id": "followup_policy_04",
+    "category": "followup_policy",
+    "query": "How would that recommendation perform?",
+    "expected_tools": [
+      "simulate_policy_at_time"
+    ],
+    "setup_query": "Compare PCA, MBA and SAA at 21:15 and recommend the best trade-off."
+  },
+  {
+    "id": "followup_policy_05",
+    "category": "followup_policy",
+    "query": "Use that policy and give me the predicted KPIs.",
+    "expected_tools": [
+      "simulate_policy_at_time"
+    ],
+    "setup_query": "Compare PCA, MBA and SAA at 21:15 and recommend the best trade-off."
+  },
+  {
+    "id": "followup_policy_06",
+    "category": "followup_policy",
+    "query": "What happens under that recommended policy?",
+    "expected_tools": [
+      "simulate_policy_at_time"
+    ],
+    "setup_query": "Compare PCA, MBA and SAA at 21:15 and recommend the best trade-off."
+  },
+  {
+    "id": "followup_policy_07",
+    "category": "followup_policy",
+    "query": "Replay the policy you just recommended.",
+    "expected_tools": [
+      "simulate_policy_at_time"
+    ],
+    "setup_query": "Compare PCA, MBA and SAA at 21:15 and recommend the best trade-off."
+  },
+  {
+    "id": "followup_policy_08",
+    "category": "followup_policy",
+    "query": "Give me the outcome if we use that one.",
+    "expected_tools": [
+      "simulate_policy_at_time"
+    ],
+    "setup_query": "Compare PCA, MBA and SAA at 21:15 and recommend the best trade-off."
+  },
+  {
+    "id": "followup_policy_09",
+    "category": "followup_policy",
+    "query": "Now simulate the preferred policy.",
+    "expected_tools": [
+      "simulate_policy_at_time"
+    ],
+    "setup_query": "Compare PCA, MBA and SAA at 21:15 and recommend the best trade-off."
+  },
+  {
+    "id": "followup_policy_10",
+    "category": "followup_policy",
+    "query": "What blocking and reconfiguration does that policy produce?",
+    "expected_tools": [
+      "simulate_policy_at_time"
+    ],
+    "setup_query": "Compare PCA, MBA and SAA at 21:15 and recommend the best trade-off."
+  },
+  {
+    "id": "multi_tool_ml_01",
+    "category": "multi_tool_ml",
+    "query": "Give me both the traffic forecast and SLA classification at 21:15.",
+    "expected_tools": [
+      "get_traffic_forecast",
+      "get_sla_prediction"
+    ]
+  },
+  {
+    "id": "multi_tool_ml_02",
+    "category": "multi_tool_ml",
+    "query": "Give me the traffic prediction and network SLA state at 21:15.",
+    "expected_tools": [
+      "get_traffic_forecast",
+      "get_sla_prediction"
+    ]
+  },
+  {
+    "id": "multi_tool_ml_03",
+    "category": "multi_tool_ml",
+    "query": "At 9:15 PM, show me the expected traffic and predicted SLA state.",
+    "expected_tools": [
+      "get_traffic_forecast",
+      "get_sla_prediction"
+    ]
+  },
+  {
+    "id": "multi_tool_ml_04",
+    "category": "multi_tool_ml",
+    "query": "Show XGBoost demand and Random Forest state at 21:15.",
+    "expected_tools": [
+      "get_traffic_forecast",
+      "get_sla_prediction"
+    ]
+  },
+  {
+    "id": "multi_tool_ml_05",
+    "category": "multi_tool_ml",
+    "query": "Execute both trained ML models for 21:15 and report their outputs.",
+    "expected_tools": [
+      "get_traffic_forecast",
+      "get_sla_prediction"
+    ]
+  },
+  {
+    "id": "multi_tool_ml_06",
+    "category": "multi_tool_ml",
+    "query": "What do the forecaster and classifier each say at 21:15?",
+    "expected_tools": [
+      "get_traffic_forecast",
+      "get_sla_prediction"
+    ]
+  },
+  {
+    "id": "multi_tool_ml_07",
+    "category": "multi_tool_ml",
+    "query": "Give me traffic prediction plus SLA probabilities at 21:15.",
+    "expected_tools": [
+      "get_traffic_forecast",
+      "get_sla_prediction"
+    ]
+  },
+  {
+    "id": "multi_tool_ml_08",
+    "category": "multi_tool_ml",
+    "query": "Run both ML inference tools at 21:15.",
+    "expected_tools": [
+      "get_traffic_forecast",
+      "get_sla_prediction"
+    ]
+  },
+  {
+    "id": "multi_tool_ml_09",
+    "category": "multi_tool_ml",
+    "query": "Retrieve the forecast and classification together for 21:15.",
+    "expected_tools": [
+      "get_traffic_forecast",
+      "get_sla_prediction"
+    ]
+  },
+  {
+    "id": "multi_tool_ml_10",
+    "category": "multi_tool_ml",
+    "query": "Show me both model outputs for 21:15.",
+    "expected_tools": [
+      "get_traffic_forecast",
+      "get_sla_prediction"
+    ]
+  },
+  {
+    "id": "domain_boundaries_01",
+    "category": "domain_boundaries",
+    "query": "Make me a cup of coffee.",
+    "expected_tools": [
+      "decline_out_of_scope"
+    ]
+  },
+  {
+    "id": "domain_boundaries_02",
+    "category": "domain_boundaries",
+    "query": "Book me a flight to Rome.",
+    "expected_tools": [
+      "decline_out_of_scope"
+    ]
+  },
+  {
+    "id": "domain_boundaries_03",
+    "category": "domain_boundaries",
+    "query": "What's the weather tomorrow?",
+    "expected_tools": [
+      "decline_out_of_scope"
+    ]
+  },
+  {
+    "id": "domain_boundaries_04",
+    "category": "domain_boundaries",
+    "query": "Write me a birthday poem.",
+    "expected_tools": [
+      "decline_out_of_scope"
+    ]
+  },
+  {
+    "id": "domain_boundaries_05",
+    "category": "domain_boundaries",
+    "query": "Order a pizza for me.",
+    "expected_tools": [
+      "decline_out_of_scope"
+    ]
+  },
+  {
+    "id": "domain_boundaries_06",
+    "category": "domain_boundaries",
+    "query": "What is the OSNR at A3?",
+    "expected_tools": [
+      "decline_physical_layer"
+    ]
+  },
+  {
+    "id": "domain_boundaries_07",
+    "category": "domain_boundaries",
+    "query": "Did a fiber cut cause this?",
+    "expected_tools": [
+      "decline_physical_layer"
+    ]
+  },
+  {
+    "id": "domain_boundaries_08",
+    "category": "domain_boundaries",
+    "query": "What is the BER at 21:15?",
+    "expected_tools": [
+      "decline_physical_layer"
+    ]
+  },
+  {
+    "id": "domain_boundaries_09",
+    "category": "domain_boundaries",
+    "query": "Run GNPy for this path.",
+    "expected_tools": [
+      "decline_physical_layer"
+    ]
+  },
+  {
+    "id": "domain_boundaries_10",
+    "category": "domain_boundaries",
+    "query": "Is the Q-factor too low?",
+    "expected_tools": [
+      "decline_physical_layer"
+    ]
+  }
+]

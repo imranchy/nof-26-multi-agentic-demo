@@ -50,5 +50,7 @@ if errorlevel 1 (
 )
 ollama pull mistral:7b
 echo.
-echo Setup finished. Run train_models.bat, then launch_demo.bat.
+echo Setup finished. The included ML models are already frozen for the demo.
+echo Run validate_demo.bat once, then launch_demo.bat.
+echo Only run train_models.bat if you intentionally want to regenerate the models.
 pause

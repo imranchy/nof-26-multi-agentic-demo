@@ -1,0 +1,14 @@
+id: MBA
+name: Minimum-Blocking Allocation
+type: memoryless
+objective: weighted residual-demand allocation
+paper_role: blocking-optimal reference
+parameters:
+  weights_from: config/sla.yaml
+requires_previous_state: false
+outputs:
+  - sc_assignment
+  - overall_blocking_ratio_epoch
+  - per_class_blocking_ratio
+  - fresh_service_ratio
+  - reconfig_count

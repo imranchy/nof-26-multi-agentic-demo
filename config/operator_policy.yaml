@@ -1,0 +1,23 @@
+operator_policy:
+  version: "1.0"
+  advisory_only: true
+  default_objective: balanced
+  principles:
+    - id: preserve_sla
+      description: Prefer allocations that protect SLA-sensitive traffic when feasible.
+    - id: minimize_blocking
+      description: Prefer lower fresh-traffic blocking.
+    - id: minimize_instability
+      description: When blocking is near-equivalent, prefer fewer SC reconfigurations.
+    - id: operator_approval
+      description: Recommendations are advisory and require operator approval before actuation.
+    - id: evidence_only
+      description: Numerical and causal claims must be supported by deterministic tool evidence.
+    - id: physical_scope
+      description: Do not infer physical-layer faults because physical-layer telemetry is not available in this demonstrator.
+  validation:
+    require_sc_budget: true
+    require_traffic_conservation: true
+    require_kpi_bounds: true
+    require_independent_recompute: true
+    require_numeric_grounding: true

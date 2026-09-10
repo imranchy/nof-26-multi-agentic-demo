@@ -1,0 +1,13 @@
+service_weights:
+  enterprise: 1.3
+  ran: 1.1
+  pon: 0.7
+
+service_priority:
+  - enterprise
+  - ran
+  - pon
+
+# SAA uses beta = 0.15 * B from the PSC paper. With B=25 Gbps, beta=3.75.
+saa:
+  beta_fraction_of_sc_capacity: 0.15

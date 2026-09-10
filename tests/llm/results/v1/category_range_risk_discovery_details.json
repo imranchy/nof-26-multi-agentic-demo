@@ -1,0 +1,331 @@
+[
+  {
+    "id": "range_risk_discovery_01",
+    "category": "range_risk_discovery",
+    "query": "Find the three highest-risk intervals today.",
+    "setup_query": "",
+    "expected_tools": [
+      "find_risk_intervals"
+    ],
+    "raw_tools": [
+      "find_risk_intervals"
+    ],
+    "executed_tools": [
+      "find_risk_intervals"
+    ],
+    "raw_tool_sequence_correct": true,
+    "executed_tool_sequence_correct": true,
+    "raw_arguments_correct": true,
+    "executed_arguments_correct": true,
+    "deterministic_correction": false,
+    "coordinator_parse_failure": false,
+    "coordinator_fallback_used": false,
+    "raw_explanation_accepted": true,
+    "guardrail_fallback": false,
+    "final_safe_answer": true,
+    "unsupported_numeric_claim": false,
+    "unsupported_categorical_claim": false,
+    "unsupported_causal_claim": false,
+    "implementation_detail_exposed": false,
+    "grounding_issues": [],
+    "answer": "The three highest-risk intervals today, according to the deterministic analysis, are at 21:15, 21:20, and 21:25, each with a Failure-prone risk of 0.88. No additional operational advice is provided.",
+    "raw_llm_answer": "The three highest-risk intervals today, according to the deterministic analysis, are at 21:15, 21:20, and 21:25, each with a Failure-prone risk of 0.88. No additional operational advice is provided."
+  },
+  {
+    "id": "range_risk_discovery_02",
+    "category": "range_risk_discovery",
+    "query": "Show me the riskiest periods in the day-ahead view.",
+    "setup_query": "",
+    "expected_tools": [
+      "find_risk_intervals"
+    ],
+    "raw_tools": [
+      "find_risk_intervals"
+    ],
+    "executed_tools": [
+      "find_risk_intervals"
+    ],
+    "raw_tool_sequence_correct": true,
+    "executed_tool_sequence_correct": true,
+    "raw_arguments_correct": true,
+    "executed_arguments_correct": true,
+    "deterministic_correction": false,
+    "coordinator_parse_failure": false,
+    "coordinator_fallback_used": false,
+    "raw_explanation_accepted": true,
+    "guardrail_fallback": false,
+    "final_safe_answer": true,
+    "unsupported_numeric_claim": false,
+    "unsupported_categorical_claim": false,
+    "unsupported_causal_claim": false,
+    "implementation_detail_exposed": false,
+    "grounding_issues": [],
+    "answer": "The riskiest periods in the day-ahead view are at 21:15, 21:20, 21:25, 21:35, and 21:40, each with a Failure-prone risk of 0.88. These intervals have the highest Failure-prone risk according to the deterministic evidence. No additional operational advice is provided unless explicitly requested.",
+    "raw_llm_answer": "The riskiest periods in the day-ahead view are at 21:15, 21:20, 21:25, 21:35, and 21:40, each with a Failure-prone risk of 0.88. These intervals have the highest Failure-prone risk according to the deterministic evidence. No additional operational advice is provided unless explicitly requested."
+  },
+  {
+    "id": "range_risk_discovery_03",
+    "category": "range_risk_discovery",
+    "query": "Which are the busiest intervals today?",
+    "setup_query": "",
+    "expected_tools": [
+      "find_risk_intervals"
+    ],
+    "raw_tools": [
+      "find_risk_intervals"
+    ],
+    "executed_tools": [
+      "find_risk_intervals"
+    ],
+    "raw_tool_sequence_correct": true,
+    "executed_tool_sequence_correct": true,
+    "raw_arguments_correct": true,
+    "executed_arguments_correct": true,
+    "deterministic_correction": false,
+    "coordinator_parse_failure": false,
+    "coordinator_fallback_used": false,
+    "raw_explanation_accepted": false,
+    "guardrail_fallback": true,
+    "final_safe_answer": true,
+    "unsupported_numeric_claim": true,
+    "unsupported_categorical_claim": false,
+    "unsupported_causal_claim": false,
+    "implementation_detail_exposed": false,
+    "grounding_issues": [
+      "unsupported_numeric_claim"
+    ],
+    "answer": "The highest-ranked interval by total gbps is 19:05; 10 interval(s) are returned for comparison.",
+    "raw_llm_answer": "The busiest intervals today, ranked by predicted offered traffic, are as follows:\n\n1. 19:05 with 95.69 Gbps\n2. 19:10 with 95.17 Gbps\n3. 19:55 with 94.97 Gbps\n4. 19:50 with 94.74 Gbps\n5. 19:15 with 94.56 Gbps\n6. 19:00 with 94.43 Gbps\n7. 19:35 with 94.25 Gbps\n8. 19:25 with 93.59 Gbps\n9. 19:30 with 93.35 Gbps\n10. 19:40 with 93.29 Gbps\n\nThese values are based on deterministic evidence. No"
+  },
+  {
+    "id": "range_risk_discovery_04",
+    "category": "range_risk_discovery",
+    "query": "Find the intervals with the highest blocking.",
+    "setup_query": "",
+    "expected_tools": [
+      "find_risk_intervals"
+    ],
+    "raw_tools": [
+      "find_risk_intervals"
+    ],
+    "executed_tools": [
+      "find_risk_intervals"
+    ],
+    "raw_tool_sequence_correct": true,
+    "executed_tool_sequence_correct": true,
+    "raw_arguments_correct": true,
+    "executed_arguments_correct": true,
+    "deterministic_correction": false,
+    "coordinator_parse_failure": false,
+    "coordinator_fallback_used": false,
+    "raw_explanation_accepted": true,
+    "guardrail_fallback": false,
+    "final_safe_answer": true,
+    "unsupported_numeric_claim": false,
+    "unsupported_categorical_claim": false,
+    "unsupported_causal_claim": false,
+    "implementation_detail_exposed": false,
+    "grounding_issues": [],
+    "answer": "The three highest-ranked blocking intervals, under the SAA policy, are:\n\n- 20:00 with a blocking ratio of 0.16379083\n- 20:15 with a blocking ratio of 0.16348814\n- 21:05 with a blocking ratio of 0.15610853\n\nNo additional operational advice is provided.",
+    "raw_llm_answer": "The three highest-ranked blocking intervals, under the SAA policy, are:\n\n- 20:00 with a blocking ratio of 0.16379083\n- 20:15 with a blocking ratio of 0.16348814\n- 21:05 with a blocking ratio of 0.15610853\n\nNo additional operational advice is provided."
+  },
+  {
+    "id": "range_risk_discovery_05",
+    "category": "range_risk_discovery",
+    "query": "Where do we see the most SC reconfiguration?",
+    "setup_query": "",
+    "expected_tools": [
+      "find_risk_intervals"
+    ],
+    "raw_tools": [
+      "compare_network_states"
+    ],
+    "executed_tools": [
+      "find_risk_intervals"
+    ],
+    "raw_tool_sequence_correct": false,
+    "executed_tool_sequence_correct": true,
+    "raw_arguments_correct": false,
+    "executed_arguments_correct": true,
+    "deterministic_correction": true,
+    "coordinator_parse_failure": false,
+    "coordinator_fallback_used": false,
+    "raw_explanation_accepted": true,
+    "guardrail_fallback": false,
+    "final_safe_answer": true,
+    "unsupported_numeric_claim": false,
+    "unsupported_categorical_claim": false,
+    "unsupported_causal_claim": false,
+    "implementation_detail_exposed": false,
+    "grounding_issues": [],
+    "answer": "The deterministic analysis has identified the top 3 intervals with the highest SC reconfiguration count under the SAA policy:\n\n1. 17:00 with 3 reconfigurations\n2. 19:00 with 3 reconfigurations\n3. 06:00 with 2 reconfigurations\n\nNo additional operational advice is provided unless explicitly supported by the deterministic evidence.",
+    "raw_llm_answer": "The deterministic analysis has identified the top 3 intervals with the highest SC reconfiguration count under the SAA policy:\n\n1. 17:00 with 3 reconfigurations\n2. 19:00 with 3 reconfigurations\n3. 06:00 with 2 reconfigurations\n\nNo additional operational advice is provided unless explicitly supported by the deterministic evidence."
+  },
+  {
+    "id": "range_risk_discovery_06",
+    "category": "range_risk_discovery",
+    "query": "Summarize the network from 18:00 to 22:00.",
+    "setup_query": "",
+    "expected_tools": [
+      "summarize_time_range"
+    ],
+    "raw_tools": [
+      "get_network_state_at_time",
+      "get_network_state_at_time",
+      "summarize_time_range"
+    ],
+    "executed_tools": [
+      "summarize_time_range"
+    ],
+    "raw_tool_sequence_correct": false,
+    "executed_tool_sequence_correct": true,
+    "raw_arguments_correct": false,
+    "executed_arguments_correct": true,
+    "deterministic_correction": true,
+    "coordinator_parse_failure": false,
+    "coordinator_fallback_used": false,
+    "raw_explanation_accepted": true,
+    "guardrail_fallback": false,
+    "final_safe_answer": true,
+    "unsupported_numeric_claim": false,
+    "unsupported_categorical_claim": false,
+    "unsupported_causal_claim": false,
+    "implementation_detail_exposed": false,
+    "grounding_issues": [],
+    "answer": "From 18:00 to 22:00, 49 five-minute intervals were analyzed. Mean predicted traffic was 88.57 Gbps, with a peak of 95.69 Gbps at 19:05. The highest Failure-prone risk occurred at 21:15, with a value of 0.88. Under the balanced objective, SAA was recommended most often in the range.",
+    "raw_llm_answer": "From 18:00 to 22:00, 49 five-minute intervals were analyzed. Mean predicted traffic was 88.57 Gbps, with a peak of 95.69 Gbps at 19:05. The highest Failure-prone risk occurred at 21:15, with a value of 0.88. Under the balanced objective, SAA was recommended most often in the range."
+  },
+  {
+    "id": "range_risk_discovery_07",
+    "category": "range_risk_discovery",
+    "query": "Give me a network summary between 08:00 and 12:00.",
+    "setup_query": "",
+    "expected_tools": [
+      "summarize_time_range"
+    ],
+    "raw_tools": [
+      "get_network_state_at_time",
+      "get_network_state_at_time"
+    ],
+    "executed_tools": [
+      "summarize_time_range"
+    ],
+    "raw_tool_sequence_correct": false,
+    "executed_tool_sequence_correct": true,
+    "raw_arguments_correct": false,
+    "executed_arguments_correct": true,
+    "deterministic_correction": true,
+    "coordinator_parse_failure": false,
+    "coordinator_fallback_used": false,
+    "raw_explanation_accepted": true,
+    "guardrail_fallback": false,
+    "final_safe_answer": true,
+    "unsupported_numeric_claim": false,
+    "unsupported_categorical_claim": false,
+    "unsupported_causal_claim": false,
+    "implementation_detail_exposed": false,
+    "grounding_issues": [],
+    "answer": "Between 08:00 and 12:00, the network experienced 49 five-minute intervals. The mean predicted traffic was 70.67 Gbps, with a peak of 74.09 Gbps at 11:45. The highest Failure-prone risk was 0.02% at 11:05. Under the balanced objective, SAA was recommended most often in the range. No explicit policy change is recommended.",
+    "raw_llm_answer": "Between 08:00 and 12:00, the network experienced 49 five-minute intervals. The mean predicted traffic was 70.67 Gbps, with a peak of 74.09 Gbps at 11:45. The highest Failure-prone risk was 0.02% at 11:05. Under the balanced objective, SAA was recommended most often in the range. No explicit policy change is recommended."
+  },
+  {
+    "id": "range_risk_discovery_08",
+    "category": "range_risk_discovery",
+    "query": "From 13:00 to 17:00, summarize load, risk and policy behavior.",
+    "setup_query": "",
+    "expected_tools": [
+      "summarize_time_range"
+    ],
+    "raw_tools": [
+      "summarize_time_range"
+    ],
+    "executed_tools": [
+      "summarize_time_range"
+    ],
+    "raw_tool_sequence_correct": true,
+    "executed_tool_sequence_correct": true,
+    "raw_arguments_correct": true,
+    "executed_arguments_correct": true,
+    "deterministic_correction": false,
+    "coordinator_parse_failure": false,
+    "coordinator_fallback_used": false,
+    "raw_explanation_accepted": false,
+    "guardrail_fallback": true,
+    "final_safe_answer": true,
+    "unsupported_numeric_claim": true,
+    "unsupported_categorical_claim": false,
+    "unsupported_causal_claim": false,
+    "implementation_detail_exposed": false,
+    "grounding_issues": [
+      "unsupported_numeric_claim"
+    ],
+    "answer": "From 13:00 to 17:00, 49 five-minute intervals were analysed. Mean load is 75.12 Gbps; peak load is 82.93 Gbps at 17:00. The highest Failure-prone risk occurs at 17:00. Under the balanced objective, SAA is recommended most often in this range.",
+    "raw_llm_answer": "From 13:00 to 17:00, the network experienced 49 five-minute intervals. The mean predicted traffic was 75.11 Gbps, with a peak of 82.93 Gbps at 17:00. The highest Failure-prone risk was 0.16 at 17:00. The network remained Normal throughout. Under the balanced objective, SAA was recommended most often in the range.\n\nFor policy behavior:\n- PCA had a mean blocking ratio of 0.18 and a maximum of 0.28, with 1 reconfiguration.\n- MBA had a mean blocking ratio of 0.02 and a maximum of 0.06, with 13 reconfigurations.\n- SAA had a mean blocking ratio of 0.02 and a maximum of 0.06, with 5 reconfigurations."
+  },
+  {
+    "id": "range_risk_discovery_09",
+    "category": "range_risk_discovery",
+    "query": "Summarize 19:00 to 23:00 with minimum blocking as the objective.",
+    "setup_query": "",
+    "expected_tools": [
+      "summarize_time_range"
+    ],
+    "raw_tools": [
+      "compare_policies_at_time"
+    ],
+    "executed_tools": [
+      "summarize_time_range"
+    ],
+    "raw_tool_sequence_correct": false,
+    "executed_tool_sequence_correct": true,
+    "raw_arguments_correct": false,
+    "executed_arguments_correct": true,
+    "deterministic_correction": true,
+    "coordinator_parse_failure": false,
+    "coordinator_fallback_used": false,
+    "raw_explanation_accepted": true,
+    "guardrail_fallback": false,
+    "final_safe_answer": true,
+    "unsupported_numeric_claim": false,
+    "unsupported_categorical_claim": false,
+    "unsupported_causal_claim": false,
+    "implementation_detail_exposed": false,
+    "grounding_issues": [],
+    "answer": "From 19:00 to 23:00, 49 five-minute intervals were analyzed. Mean predicted traffic was 85.29 Gbps, with a peak of 95.69 Gbps at 19:05. The highest Failure-prone risk occurred at 21:15. Under the minimum-blocking objective, SAA was recommended most often in the range.",
+    "raw_llm_answer": "From 19:00 to 23:00, 49 five-minute intervals were analyzed. Mean predicted traffic was 85.29 Gbps, with a peak of 95.69 Gbps at 19:05. The highest Failure-prone risk occurred at 21:15. Under the minimum-blocking objective, SAA was recommended most often in the range."
+  },
+  {
+    "id": "range_risk_discovery_10",
+    "category": "range_risk_discovery",
+    "query": "Between 00:00 and 06:00, summarize the network while prioritizing stability.",
+    "setup_query": "",
+    "expected_tools": [
+      "summarize_time_range"
+    ],
+    "raw_tools": [
+      "compare_policies_at_time"
+    ],
+    "executed_tools": [
+      "summarize_time_range"
+    ],
+    "raw_tool_sequence_correct": false,
+    "executed_tool_sequence_correct": true,
+    "raw_arguments_correct": false,
+    "executed_arguments_correct": true,
+    "deterministic_correction": true,
+    "coordinator_parse_failure": false,
+    "coordinator_fallback_used": false,
+    "raw_explanation_accepted": false,
+    "guardrail_fallback": true,
+    "final_safe_answer": true,
+    "unsupported_numeric_claim": false,
+    "unsupported_categorical_claim": false,
+    "unsupported_causal_claim": false,
+    "implementation_detail_exposed": false,
+    "grounding_issues": [
+      "unsupported_advisory_claim"
+    ],
+    "answer": "From 00:00 to 06:00, 73 five-minute intervals were analysed. Mean load is 43.13 Gbps; peak load is 51.49 Gbps at 06:00. The highest Failure-prone risk occurs at 00:00. Under the min reconfiguration objective, SAA is recommended most often in this range.",
+    "raw_llm_answer": "Between 00:00 and 06:00, the network maintained stability with a mean predicted traffic of 43.13 Gbps and a peak of 51.49 Gbps at 06:00. The stability objective was executed, and SAA was recommended most often in the range. No action is required."
+  }
+]

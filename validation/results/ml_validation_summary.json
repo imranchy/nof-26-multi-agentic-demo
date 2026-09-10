@@ -1,0 +1,70 @@
+{
+  "target_scenario_id": 200365,
+  "frozen_model_replay_max_abs_diff_gbps": {
+    "enterprise": 1.8542480475502998e-06,
+    "ran": 1.8847656235720933e-06,
+    "pon": 1.6149902322126763e-06
+  },
+  "frozen_model_replay_matches_prepared_at_1e_5_gbps": true,
+  "persistence_baseline_scenario_id": 200364,
+  "comparison": "XGBoost day-ahead forecast and same-time previous-day persistence baseline, both evaluated against target-day actual traffic.",
+  "services": {
+    "enterprise": {
+      "xgboost": {
+        "mae_gbps": 1.9227231475451392,
+        "rmse_gbps": 2.345008377212149,
+        "r2": 0.9598242815582032
+      },
+      "previous_day_baseline": {
+        "mae_gbps": 9.865133333336805,
+        "rmse_gbps": 11.213734609039705,
+        "r2": 0.08129643430579836
+      }
+    },
+    "ran": {
+      "xgboost": {
+        "mae_gbps": 3.4271340618055555,
+        "rmse_gbps": 3.8631315796185004,
+        "r2": 0.7586839987174055
+      },
+      "previous_day_baseline": {
+        "mae_gbps": 8.673583332847222,
+        "rmse_gbps": 9.249920978539091,
+        "r2": -0.38351274492337084
+      }
+    },
+    "pon": {
+      "xgboost": {
+        "mae_gbps": 1.5179107718541667,
+        "rmse_gbps": 2.1419722734651176,
+        "r2": 0.9488245852859577
+      },
+      "previous_day_baseline": {
+        "mae_gbps": 4.911326922458334,
+        "rmse_gbps": 7.092379566386274,
+        "r2": 0.438929259790213
+      }
+    }
+  },
+  "xgboost_average_mae_gbps": 2.289255993734954,
+  "xgboost_macro_mean_service_rmse_gbps": 2.7833707434319224,
+  "xgboost_average_r2": 0.8891109551871889,
+  "persistence_average_mae_gbps": 7.8166811962141205,
+  "persistence_macro_mean_service_rmse_gbps": 9.18534505132169,
+  "persistence_average_r2": 0.045570983057546845,
+  "xgboost_reported_average_row": {
+    "mae_gbps": 2.289255989618034,
+    "rmse_gbps": 2.887380295978151,
+    "r2": 0.8891109824180603,
+    "note": "Values already stored by the original training/evaluation pipeline."
+  },
+  "random_forest": {
+    "accuracy": 0.9722222222222222,
+    "macro_f1": 0.8863636363636364,
+    "weighted_f1": 0.9700126262626263,
+    "failure_prone_precision": 1.0,
+    "failure_prone_recall": 0.6,
+    "failure_prone_f1": 0.75,
+    "limitation": "Simulator-derived surrogate evaluated with a random interval split from one scenario day."
+  }
+}

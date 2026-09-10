@@ -1,95 +1,197 @@
-# NoF 2026 Multi-Agentic Demo
+# NoF 2026 Multi-Agent Digital Twin Demo
 
-Local demonstrator for **Multi-Agent Digital Twin for SLA Management in Coherent P2MP Metro-Access Networks**.
+Local demonstrator for semantic operator interaction with predictive traffic/SLA state and deterministic PSC subcarrier-allocation policies in a coherent P2MP metro-access network.
 
-The application combines an XGBoost traffic forecaster, Random Forest SLA-state classifier, deterministic recovery catalogue, validation guardrails, a schema-constrained Mistral tool-calling coordinator, conversation state, and a Streamlit dashboard. RAG is intentionally excluded because no authoritative operational document corpus is available.
+## v1 scope
 
-## Agents
+The application combines the frozen prediction models already shipped with the original repository, deterministic PCA/MBA/SAA policy replay, operator SC constraints, temporal analysis, Mistral semantic orchestration, conversational memory, and deterministic grounding guardrails.
 
-1. Coordinator Agent: uses Mistral structured output to select a specialist capability and arguments from the operator's natural-language request.
-2. Forecast Agent: runs or loads the day-ahead XGBoost forecast.
-3. SLA Agent: predicts Normal, Degraded, and Failure-prone states.
-4. Diagnosis Agent: identifies dominant services and interval changes.
-5. Recovery Agent: selects an approved advisory action.
-6. Guardrail Agent: validates traffic, timestamps, probabilities, and schemas.
-7. Operator Response Agent: asks Mistral to express returned tool evidence in concise operator language; deterministic checks reject invented numeric claims, incorrect units, or misleading probability wording.
+Physical-layer analysis, GNPy, RAG, and physical network actuation are intentionally out of scope until calibrated physical-layer parameters and authoritative operational documents are available.
 
-Mistral performs both tool selection and grounded answer composition. It cannot modify ML predictions or create recovery actions: specialist Python agents execute every tool, and the Guardrail Agent validates the generated answer. Agent Evidence records `selected_tool`, tool arguments, returned evidence, and `source=mistral-tool-call`. The application fails closed if Ollama is unavailable, making LLM use verifiable rather than silently falling back.
+## Operator-facing design
 
-## Native tools
+Operators ask natural questions such as:
 
-- `summarize_day_ahead`
-- `find_next_sla_risk`
-- `find_highest_risk`
-- `find_service_peak`
-- `rank_service_intervals`
-- `diagnose_highest_risk`
-- `recommend_subcarrier_allocation`
-- `check_allocation_feasibility`
-- `compare_service_loads`
-- `get_state_distribution`
-- `validate_forecast`
-- `decline_out_of_scope`
+- `What traffic do you expect at 21:15?`
+- `What is the predicted SLA state at 21:15?`
+- `What is happening on the network at 21:15?`
+- `Which allocation policy would you use at 21:15?`
+- `Minimize blocking at 21:15.`
+- `What happens if we use PCA instead?`
+- `Keep RAN on 2 subcarriers and allocate the remaining two.`
+- `Was 18:10 healthier than 21:15?`
+- `Summarize the network from 18:00 to 22:00.`
+- follow-up: `What about an hour later?`
 
-Tool definitions are the system's capability contract, not a list of hardcoded demo questions. This lets Mistral interpret paraphrases and conversational follow-ups such as “Do the same for PON.” Private chain-of-thought is not displayed; native tool calls and validated evidence provide the auditable execution record.
+Normal operator answers do not require or expose ML implementation names. The UI reports **predicted SLA state + Failure-prone risk** rather than a separate classifier-confidence score.
 
-## Windows quick start
+## Architecture
 
-Install standard 64-bit Python 3.12 (recommended) or 3.11 and Ollama first. Do not use the experimental free-threaded Python build. Then double-click:
+Mistral is the semantic interface, not the numerical source of truth.
 
-1. `setup_windows.bat`
-2. `train_models.bat`
-3. `launch_demo.bat`
+1. Traffic/SLA prediction capabilities provide the predicted state.
+2. The deterministic PSC engine executes PCA, MBA, and SAA.
+3. Mistral interprets natural language, extracts timestamps/objectives/constraints, and produces a bounded tool plan.
+4. Deterministic argument normalization catches explicit routing mistakes.
+5. Mistral explains the returned evidence.
+6. Grounding guardrails reject unsupported numeric, categorical, causal, physical-layer, or implementation-detail claims and fall back to deterministic text.
 
-The application opens locally in the default browser in a fixed conference configuration: prepared XGBoost forecast data, Mistral native tool selection and answer composition, deterministic specialist execution, and no development controls.
+Policy algorithms remain Python source-of-truth implementations. YAML files contain declarative policy and operator-policy metadata.
 
-## Equivalent commands
+## Prompt versioning
+
+NoF v1 keeps prompts outside application code:
+
+- `prompts/coordinator_v1.md`
+- `prompts/explainer_v1.md`
+- `prompts/operator_style_v1.md`
+- `config/prompts.yaml`
+
+This allows prompt changes to be evaluated independently of the model and network logic. All v1 prompt versions are `v1`.
+
+## Failure-prone risk
+
+The Failure-prone risk shown in the dashboard is the probability assigned to the simulator-derived `failure_prone` SLA state by the frozen SLA-state surrogate. Training labels are derived from simulator blocking ratio; the frozen threshold and model limitations are recorded in `models/sla_random_forest.metadata.json`.
+
+See `docs/RISK_SCORE.md` for the exact interpretation. It is not a physical-layer fault probability and is not presented as generic model confidence.
+
+## Windows setup
+
+From the repository root:
 
 ```powershell
-cd "nof-26-multi-agentic-demo"
-py -3.11 -m venv .venv
-.venv\Scripts\Activate.ps1
-python -m pip install --upgrade pip
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
 python -m pip install -r requirements.txt
-ollama pull mistral:7b
-python -m scripts.train_forecaster
-python -m scripts.train_classifier
-python -m scripts.verify_install
-python launcher.py
 ```
 
-Run tests:
+Ollama must be installed and the local model available:
+
+```powershell
+ollama pull mistral:7b
+```
+
+Or use:
+
+```powershell
+.\setup_windows.bat
+```
+
+Do not run `train_models.bat` unless you intentionally want to regenerate the original frozen models.
+
+## Deterministic validation
+
+Before testing Mistral:
 
 ```powershell
 python -m pytest -q
+python -m tests.llm.validate_gold
 ```
 
-Build the Windows application folder:
+`validate_demo.bat` runs the deterministic tests, validates the v1 gold query set, rebuilds ML/policy validation artifacts, and verifies the local installation.
+
+## Mistral evaluation without running the app
+
+The benchmark is under `tests/llm/`; Streamlit does not need to be running.
+
+### v1 operator benchmark
+
+`tests/llm/query_sets/operator_10_categories_v1.json`
+
+- 10 categories
+- 10 natural-language variants per category
+- 100 queries total
+
+Recommended workflow:
 
 ```powershell
-build_executable.bat
+python -m tests.llm.validate_gold
+python -m tests.llm.evaluate --category traffic_prediction
+python -m tests.llm.evaluate --category sla_risk_state
+# ...continue category by category...
+python -m tests.llm.evaluate --all
 ```
 
-The executable is written to `dist\NoF2026MultiAgentDemo\`. Ollama and `mistral:7b` remain separately installed because bundling multi-gigabyte LLM weights inside the executable is unreliable.
-
-## Create the GitHub repository
-
-After testing locally, install GitHub CLI, authenticate with `gh auth login`, and run:
+Windows shortcuts:
 
 ```powershell
-git init
-git add .
-git commit -m "Build NoF 2026 multi-agentic SLA demo"
-gh repo create nof-26-multi-agentic-demo --private --source=. --remote=origin --push
+.\test_llm_category.bat traffic_prediction
+.\test_llm_all.bat
+.\test_llm_adversarial.bat
 ```
 
-Change `--private` to `--public` only when the authors are ready to release the data and code.
+Results are written to:
 
-## Research limitations
+`tests/llm/results/v1/`
 
-- The included data are simulated rather than live telemetry.
-- The SLA classifier is a surrogate trained from one allocation scenario day. Its interval-level random split does not demonstrate generalization across unseen days.
-- Recovery actions are advisory; the application performs no closed-loop network actuation.
-- Prepared mode uses the paper's fixed last-day XGBoost results. Live mode re-executes the saved forecaster for that held-out day.
+The application does **not** display benchmark scores. These files are intended for analysis and poster figures/tables.
 
-These limitations are displayed honestly while the demonstration focuses on multi-agent coordination, validation, explanation, and proactive decision support.
+### Adversarial/hallucination tests
+
+A separate 20-query set tests out-of-domain routing, physical-layer scope, false premises, instruction attempts to invent values, and grounded execution:
+
+```powershell
+python -m tests.llm.evaluate_adversarial
+```
+
+## Future fine-tuning
+
+No fine-tuning is used in v1. If Mistral is fine-tuned later, preserve the base model and train a separate LoRA/QLoRA adapter on a **different training set**. Do not train on the 100-query v1 benchmark; it should remain held out for before/after comparison.
+
+See `tests/llm/future_training/README.md`.
+
+## Run the application
+
+```powershell
+.\launch_demo.bat
+```
+
+The UI is a single operator page with:
+
+- active simulated policy / SC configuration
+- day-ahead traffic forecast
+- Failure-prone risk timeline
+- free-form operator assistant
+- optional technical trace (off by default)
+
+## Repository map
+
+```text
+app/
+  agents/              Mistral coordinator/explainer + guardrails + prediction wrappers
+  policy_engine/       deterministic PCA/MBA/SAA and metrics
+  semantic/            deterministic semantic normalization/safety
+  tools/               operator analytical capabilities
+  runtime.py           orchestration/memory
+  ui.py                Streamlit application
+
+config/
+  network.yaml
+  sla.yaml
+  recommendation.yaml
+  operator_policy.yaml
+  model.yaml
+  prompts.yaml
+
+policies/
+  pca.yaml
+  mba.yaml
+  saa.yaml
+
+prompts/
+  coordinator_v1.md
+  explainer_v1.md
+  operator_style_v1.md
+
+tests/
+  deterministic pytest suite
+  llm/
+    query_sets/
+    results/
+    future_training/
+
+validation/
+  results/              ML and deterministic policy validation artifacts
+```
+
+For detailed evaluation methodology see `docs/EVALUATION_V1.md`; for architecture see `docs/ARCHITECTURE_V1.md`.

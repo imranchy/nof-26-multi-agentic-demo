@@ -1,0 +1,322 @@
+[
+  {
+    "id": "full_network_state_01",
+    "category": "full_network_state",
+    "query": "What is happening on the network at 21:15?",
+    "setup_query": "",
+    "expected_tools": [
+      "get_network_state_at_time"
+    ],
+    "raw_tools": [
+      "get_network_state_at_time"
+    ],
+    "executed_tools": [
+      "get_network_state_at_time"
+    ],
+    "raw_tool_sequence_correct": true,
+    "executed_tool_sequence_correct": true,
+    "raw_arguments_correct": true,
+    "executed_arguments_correct": true,
+    "deterministic_correction": false,
+    "coordinator_parse_failure": false,
+    "coordinator_fallback_used": false,
+    "raw_explanation_accepted": true,
+    "guardrail_fallback": false,
+    "final_safe_answer": true,
+    "unsupported_numeric_claim": false,
+    "unsupported_categorical_claim": false,
+    "unsupported_causal_claim": false,
+    "implementation_detail_exposed": false,
+    "grounding_issues": [],
+    "answer": "At 21:15, predicted offered traffic is 88.5 Gbps and the predicted SLA state is Failure-prone with 88% Failure-prone risk. Under the simulated active SAA policy, the SC state is RAN | PON | RAN | PON, with 5.27% blocking and 0 SC reconfigurations.",
+    "raw_llm_answer": "At 21:15, predicted offered traffic is 88.5 Gbps and the predicted SLA state is Failure-prone with 88% Failure-prone risk. Under the simulated active SAA policy, the SC state is RAN | PON | RAN | PON, with 5.27% blocking and 0 SC reconfigurations."
+  },
+  {
+    "id": "full_network_state_02",
+    "category": "full_network_state",
+    "query": "Show me the operator state at 18:10.",
+    "setup_query": "",
+    "expected_tools": [
+      "get_network_state_at_time"
+    ],
+    "raw_tools": [
+      "get_network_state_at_time"
+    ],
+    "executed_tools": [
+      "get_network_state_at_time"
+    ],
+    "raw_tool_sequence_correct": true,
+    "executed_tool_sequence_correct": true,
+    "raw_arguments_correct": true,
+    "executed_arguments_correct": true,
+    "deterministic_correction": false,
+    "coordinator_parse_failure": false,
+    "coordinator_fallback_used": false,
+    "raw_explanation_accepted": true,
+    "guardrail_fallback": false,
+    "final_safe_answer": true,
+    "unsupported_numeric_claim": false,
+    "unsupported_categorical_claim": false,
+    "unsupported_causal_claim": false,
+    "implementation_detail_exposed": false,
+    "grounding_issues": [],
+    "answer": "At 18:10, the network state is degraded with a Failure-prone risk of 18%. Under the simulated active SAA policy, the SC state is RAN | ENTERPRISE | PON | RAN, with 0.72% blocking and no SC reconfigurations. Predicted offered traffic is 83.54 Gbps.",
+    "raw_llm_answer": "At 18:10, the network state is degraded with a Failure-prone risk of 18%. Under the simulated active SAA policy, the SC state is RAN | ENTERPRISE | PON | RAN, with 0.72% blocking and no SC reconfigurations. Predicted offered traffic is 83.54 Gbps."
+  },
+  {
+    "id": "full_network_state_03",
+    "category": "full_network_state",
+    "query": "Give me the network status at 09:30.",
+    "setup_query": "",
+    "expected_tools": [
+      "get_network_state_at_time"
+    ],
+    "raw_tools": [
+      "get_network_state_at_time"
+    ],
+    "executed_tools": [
+      "get_network_state_at_time"
+    ],
+    "raw_tool_sequence_correct": true,
+    "executed_tool_sequence_correct": true,
+    "raw_arguments_correct": true,
+    "executed_arguments_correct": true,
+    "deterministic_correction": false,
+    "coordinator_parse_failure": false,
+    "coordinator_fallback_used": false,
+    "raw_explanation_accepted": true,
+    "guardrail_fallback": false,
+    "final_safe_answer": true,
+    "unsupported_numeric_claim": false,
+    "unsupported_categorical_claim": false,
+    "unsupported_causal_claim": false,
+    "implementation_detail_exposed": false,
+    "grounding_issues": [],
+    "answer": "At 09:30, the network state is Normal with a Failure-prone risk of 0%. Under the simulated active SAA policy, the SC state is ENTERPRISE | RAN | ENTERPRISE | PON, with no blocking and 0 SC reconfigurations. Predicted offered traffic is 69.71 Gbps, served traffic is 69.71 Gbps, and idle capacity is 0 Gbps. No recommendation is advised.",
+    "raw_llm_answer": "At 09:30, the network state is Normal with a Failure-prone risk of 0%. Under the simulated active SAA policy, the SC state is ENTERPRISE | RAN | ENTERPRISE | PON, with no blocking and 0 SC reconfigurations. Predicted offered traffic is 69.71 Gbps, served traffic is 69.71 Gbps, and idle capacity is 0 Gbps. No recommendation is advised."
+  },
+  {
+    "id": "full_network_state_04",
+    "category": "full_network_state",
+    "query": "How does the network look at 14:05?",
+    "setup_query": "",
+    "expected_tools": [
+      "get_network_state_at_time"
+    ],
+    "raw_tools": [
+      "get_network_state_at_time"
+    ],
+    "executed_tools": [
+      "get_network_state_at_time"
+    ],
+    "raw_tool_sequence_correct": true,
+    "executed_tool_sequence_correct": true,
+    "raw_arguments_correct": true,
+    "executed_arguments_correct": true,
+    "deterministic_correction": false,
+    "coordinator_parse_failure": false,
+    "coordinator_fallback_used": false,
+    "raw_explanation_accepted": true,
+    "guardrail_fallback": false,
+    "final_safe_answer": true,
+    "unsupported_numeric_claim": false,
+    "unsupported_categorical_claim": false,
+    "unsupported_causal_claim": false,
+    "implementation_detail_exposed": false,
+    "grounding_issues": [],
+    "answer": "At 14:05, the network state is as follows:\n- Predicted offered traffic: 74.53 Gbps\n- Predicted SLA state: Normal\n- Failure-prone risk: 8.0%\n- Under the simulated active SAA policy, the SC state is ENTERPRISE | RAN | ENTERPRISE | PON, with 0.91% blocking and no SC reconfigurations.",
+    "raw_llm_answer": "At 14:05, the network state is as follows:\n- Predicted offered traffic: 74.53 Gbps\n- Predicted SLA state: Normal\n- Failure-prone risk: 8.0%\n- Under the simulated active SAA policy, the SC state is ENTERPRISE | RAN | ENTERPRISE | PON, with 0.91% blocking and no SC reconfigurations."
+  },
+  {
+    "id": "full_network_state_05",
+    "category": "full_network_state",
+    "query": "Show traffic, SLA risk and SC state at 07:45.",
+    "setup_query": "",
+    "expected_tools": [
+      "get_network_state_at_time"
+    ],
+    "raw_tools": [
+      "get_network_state_at_time"
+    ],
+    "executed_tools": [
+      "get_network_state_at_time"
+    ],
+    "raw_tool_sequence_correct": true,
+    "executed_tool_sequence_correct": true,
+    "raw_arguments_correct": true,
+    "executed_arguments_correct": true,
+    "deterministic_correction": false,
+    "coordinator_parse_failure": false,
+    "coordinator_fallback_used": false,
+    "raw_explanation_accepted": true,
+    "guardrail_fallback": false,
+    "final_safe_answer": true,
+    "unsupported_numeric_claim": false,
+    "unsupported_categorical_claim": false,
+    "unsupported_causal_claim": false,
+    "implementation_detail_exposed": false,
+    "grounding_issues": [],
+    "answer": "At 07:45, predicted offered traffic is 59.85 Gbps, with a predicted SLA state of Normal and 0% Failure-prone risk. Under the simulated active SAA policy, the SC state is ENTERPRISE | RAN | PON | ENTERPRISE, with no blocking and no SC reconfigurations.",
+    "raw_llm_answer": "At 07:45, predicted offered traffic is 59.85 Gbps, with a predicted SLA state of Normal and 0% Failure-prone risk. Under the simulated active SAA policy, the SC state is ENTERPRISE | RAN | PON | ENTERPRISE, with no blocking and no SC reconfigurations."
+  },
+  {
+    "id": "full_network_state_06",
+    "category": "full_network_state",
+    "query": "What is the complete network state at 16:20?",
+    "setup_query": "",
+    "expected_tools": [
+      "get_network_state_at_time"
+    ],
+    "raw_tools": [
+      "get_network_state_at_time"
+    ],
+    "executed_tools": [
+      "get_network_state_at_time"
+    ],
+    "raw_tool_sequence_correct": true,
+    "executed_tool_sequence_correct": true,
+    "raw_arguments_correct": true,
+    "executed_arguments_correct": true,
+    "deterministic_correction": false,
+    "coordinator_parse_failure": false,
+    "coordinator_fallback_used": false,
+    "raw_explanation_accepted": true,
+    "guardrail_fallback": false,
+    "final_safe_answer": true,
+    "unsupported_numeric_claim": false,
+    "unsupported_categorical_claim": false,
+    "unsupported_causal_claim": false,
+    "implementation_detail_exposed": false,
+    "grounding_issues": [],
+    "answer": "At 16:20, the network state is as follows:\n- Predicted offered traffic: 75.67 Gbps\n- Predicted SLA state: Normal\n- Failure-prone risk: 7.0%\n- Under the simulated active SAA policy, the SC state is ENTERPRISE | RAN | PON | ENTERPRISE, with 2.73% blocking and no SC reconfigurations.",
+    "raw_llm_answer": "At 16:20, the network state is as follows:\n- Predicted offered traffic: 75.67 Gbps\n- Predicted SLA state: Normal\n- Failure-prone risk: 7.0%\n- Under the simulated active SAA policy, the SC state is ENTERPRISE | RAN | PON | ENTERPRISE, with 2.73% blocking and no SC reconfigurations."
+  },
+  {
+    "id": "full_network_state_07",
+    "category": "full_network_state",
+    "query": "What's going on at 23:10?",
+    "setup_query": "",
+    "expected_tools": [
+      "get_network_state_at_time"
+    ],
+    "raw_tools": [
+      "get_network_state_at_time"
+    ],
+    "executed_tools": [
+      "get_network_state_at_time"
+    ],
+    "raw_tool_sequence_correct": true,
+    "executed_tool_sequence_correct": true,
+    "raw_arguments_correct": true,
+    "executed_arguments_correct": true,
+    "deterministic_correction": false,
+    "coordinator_parse_failure": false,
+    "coordinator_fallback_used": false,
+    "raw_explanation_accepted": true,
+    "guardrail_fallback": false,
+    "final_safe_answer": true,
+    "unsupported_numeric_claim": false,
+    "unsupported_categorical_claim": false,
+    "unsupported_causal_claim": false,
+    "implementation_detail_exposed": false,
+    "grounding_issues": [],
+    "answer": "At 23:10, predicted offered traffic is 59.61 Gbps, with a predicted SLA state of Normal and a Failure-prone risk of 7%. Under the simulated active SAA policy, the SC state is RAN | PON | RAN | ENTERPRISE, with no blocking and no SC reconfigurations.",
+    "raw_llm_answer": "At 23:10, predicted offered traffic is 59.61 Gbps, with a predicted SLA state of Normal and a Failure-prone risk of 7%. Under the simulated active SAA policy, the SC state is RAN | PON | RAN | ENTERPRISE, with no blocking and no SC reconfigurations."
+  },
+  {
+    "id": "full_network_state_08",
+    "category": "full_network_state",
+    "query": "Give me an operator snapshot for 12:35.",
+    "setup_query": "",
+    "expected_tools": [
+      "get_network_state_at_time"
+    ],
+    "raw_tools": [
+      "get_network_state_at_time"
+    ],
+    "executed_tools": [
+      "get_network_state_at_time"
+    ],
+    "raw_tool_sequence_correct": true,
+    "executed_tool_sequence_correct": true,
+    "raw_arguments_correct": true,
+    "executed_arguments_correct": true,
+    "deterministic_correction": false,
+    "coordinator_parse_failure": false,
+    "coordinator_fallback_used": false,
+    "raw_explanation_accepted": true,
+    "guardrail_fallback": false,
+    "final_safe_answer": true,
+    "unsupported_numeric_claim": false,
+    "unsupported_categorical_claim": false,
+    "unsupported_causal_claim": false,
+    "implementation_detail_exposed": false,
+    "grounding_issues": [],
+    "answer": "At 12:35, predicted offered traffic is 73.81 Gbps, and the predicted SLA state is Normal with 0% Failure-prone risk. Under the simulated active SAA policy, the SC state is ENTERPRISE | RAN | ENTERPRISE | PON, with 0% blocking and 0 SC reconfigurations.",
+    "raw_llm_answer": "At 12:35, predicted offered traffic is 73.81 Gbps, and the predicted SLA state is Normal with 0% Failure-prone risk. Under the simulated active SAA policy, the SC state is ENTERPRISE | RAN | ENTERPRISE | PON, with 0% blocking and 0 SC reconfigurations."
+  },
+  {
+    "id": "full_network_state_09",
+    "category": "full_network_state",
+    "query": "Show the network at 20:00 under MBA.",
+    "setup_query": "",
+    "expected_tools": [
+      "get_network_state_at_time"
+    ],
+    "raw_tools": [
+      "get_network_state_at_time"
+    ],
+    "executed_tools": [
+      "get_network_state_at_time"
+    ],
+    "raw_tool_sequence_correct": true,
+    "executed_tool_sequence_correct": true,
+    "raw_arguments_correct": true,
+    "executed_arguments_correct": true,
+    "deterministic_correction": false,
+    "coordinator_parse_failure": false,
+    "coordinator_fallback_used": false,
+    "raw_explanation_accepted": true,
+    "guardrail_fallback": false,
+    "final_safe_answer": true,
+    "unsupported_numeric_claim": false,
+    "unsupported_categorical_claim": false,
+    "unsupported_causal_claim": false,
+    "implementation_detail_exposed": false,
+    "grounding_issues": [],
+    "answer": "At 20:00, under MBA, predicted offered traffic is 91.77 Gbps, with a Predicted SLA state of Degraded and a Failure-prone risk of 42%. Under this policy, the SC state is RAN | PON | RAN | PON, with 8.08% blocking and 1 SC reconfiguration.",
+    "raw_llm_answer": "At 20:00, under MBA, predicted offered traffic is 91.77 Gbps, with a Predicted SLA state of Degraded and a Failure-prone risk of 42%. Under this policy, the SC state is RAN | PON | RAN | PON, with 8.08% blocking and 1 SC reconfiguration."
+  },
+  {
+    "id": "full_network_state_10",
+    "category": "full_network_state",
+    "query": "At 05:55, show me the active-policy network state.",
+    "setup_query": "",
+    "expected_tools": [
+      "get_network_state_at_time"
+    ],
+    "raw_tools": [
+      "get_network_state_at_time"
+    ],
+    "executed_tools": [
+      "get_network_state_at_time"
+    ],
+    "raw_tool_sequence_correct": true,
+    "executed_tool_sequence_correct": true,
+    "raw_arguments_correct": true,
+    "executed_arguments_correct": true,
+    "deterministic_correction": false,
+    "coordinator_parse_failure": false,
+    "coordinator_fallback_used": false,
+    "raw_explanation_accepted": true,
+    "guardrail_fallback": false,
+    "final_safe_answer": true,
+    "unsupported_numeric_claim": false,
+    "unsupported_categorical_claim": false,
+    "unsupported_causal_claim": false,
+    "implementation_detail_exposed": false,
+    "grounding_issues": [],
+    "answer": "At 05:55, the network state under the active SAA policy shows predicted offered traffic of 46.79 Gbps, with a predicted SLA state of Normal and 0% Failure-prone risk. The SC state is RAN | ENTERPRISE | PON | IDLE, with no blocking and no SC reconfigurations.",
+    "raw_llm_answer": "At 05:55, the network state under the active SAA policy shows predicted offered traffic of 46.79 Gbps, with a predicted SLA state of Normal and 0% Failure-prone risk. The SC state is RAN | ENTERPRISE | PON | IDLE, with no blocking and no SC reconfigurations."
+  }
+]

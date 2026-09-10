@@ -1,0 +1,322 @@
+[
+  {
+    "id": "policy_comparison_balanced_01",
+    "category": "policy_comparison_balanced",
+    "query": "Which allocation policy would you use at 21:15?",
+    "setup_query": "",
+    "expected_tools": [
+      "compare_policies_at_time"
+    ],
+    "raw_tools": [
+      "compare_policies_at_time"
+    ],
+    "executed_tools": [
+      "compare_policies_at_time"
+    ],
+    "raw_tool_sequence_correct": true,
+    "executed_tool_sequence_correct": true,
+    "raw_arguments_correct": true,
+    "executed_arguments_correct": true,
+    "deterministic_correction": false,
+    "coordinator_parse_failure": false,
+    "coordinator_fallback_used": false,
+    "raw_explanation_accepted": true,
+    "guardrail_fallback": false,
+    "final_safe_answer": true,
+    "unsupported_numeric_claim": false,
+    "unsupported_categorical_claim": false,
+    "unsupported_causal_claim": false,
+    "implementation_detail_exposed": false,
+    "grounding_issues": [],
+    "answer": "At 21:15, the balanced objective recommends SAA. SAA has 5.27% simulated blocking and 0 SC reconfigurations. MBA has the same blocking value at this interval, while the deterministic balanced objective still selects SAA. The recommendation is advisory.",
+    "raw_llm_answer": "At 21:15, the balanced objective recommends SAA. SAA has 5.27% simulated blocking and 0 SC reconfigurations. MBA has the same blocking value at this interval, while the deterministic balanced objective still selects SAA. The recommendation is advisory."
+  },
+  {
+    "id": "policy_comparison_balanced_02",
+    "category": "policy_comparison_balanced",
+    "query": "Compare PCA, MBA and SAA at 18:10 and recommend one.",
+    "setup_query": "",
+    "expected_tools": [
+      "compare_policies_at_time"
+    ],
+    "raw_tools": [
+      "compare_policies_at_time"
+    ],
+    "executed_tools": [
+      "compare_policies_at_time"
+    ],
+    "raw_tool_sequence_correct": true,
+    "executed_tool_sequence_correct": true,
+    "raw_arguments_correct": true,
+    "executed_arguments_correct": true,
+    "deterministic_correction": false,
+    "coordinator_parse_failure": false,
+    "coordinator_fallback_used": false,
+    "raw_explanation_accepted": true,
+    "guardrail_fallback": false,
+    "final_safe_answer": true,
+    "unsupported_numeric_claim": false,
+    "unsupported_categorical_claim": false,
+    "unsupported_causal_claim": false,
+    "implementation_detail_exposed": false,
+    "grounding_issues": [],
+    "answer": "At 18:10, the balanced objective recommends SAA with a blocking percentage of 0.72%. SAA has 0 SC reconfigurations. Both PCA and MBA have the same blocking percentage and no reconfigurations at this interval. The recommendation is advisory.",
+    "raw_llm_answer": "At 18:10, the balanced objective recommends SAA with a blocking percentage of 0.72%. SAA has 0 SC reconfigurations. Both PCA and MBA have the same blocking percentage and no reconfigurations at this interval. The recommendation is advisory."
+  },
+  {
+    "id": "policy_comparison_balanced_03",
+    "category": "policy_comparison_balanced",
+    "query": "What's the best policy trade-off at 09:30?",
+    "setup_query": "",
+    "expected_tools": [
+      "compare_policies_at_time"
+    ],
+    "raw_tools": [
+      "compare_policies_at_time"
+    ],
+    "executed_tools": [
+      "compare_policies_at_time"
+    ],
+    "raw_tool_sequence_correct": true,
+    "executed_tool_sequence_correct": true,
+    "raw_arguments_correct": true,
+    "executed_arguments_correct": true,
+    "deterministic_correction": false,
+    "coordinator_parse_failure": false,
+    "coordinator_fallback_used": false,
+    "raw_explanation_accepted": true,
+    "guardrail_fallback": false,
+    "final_safe_answer": true,
+    "unsupported_numeric_claim": false,
+    "unsupported_categorical_claim": false,
+    "unsupported_causal_claim": false,
+    "implementation_detail_exposed": false,
+    "grounding_issues": [],
+    "answer": "At 09:30, the balanced objective recommends SAA with 0% simulated blocking and 0 SC reconfigurations. MBA has the same blocking value at this interval, while the deterministic balanced objective still selects SAA. The recommendation is advisory.",
+    "raw_llm_answer": "At 09:30, the balanced objective recommends SAA with 0% simulated blocking and 0 SC reconfigurations. MBA has the same blocking value at this interval, while the deterministic balanced objective still selects SAA. The recommendation is advisory."
+  },
+  {
+    "id": "policy_comparison_balanced_04",
+    "category": "policy_comparison_balanced",
+    "query": "Which policy is preferable at 14:05?",
+    "setup_query": "",
+    "expected_tools": [
+      "compare_policies_at_time"
+    ],
+    "raw_tools": [
+      "compare_policies_at_time"
+    ],
+    "executed_tools": [
+      "compare_policies_at_time"
+    ],
+    "raw_tool_sequence_correct": true,
+    "executed_tool_sequence_correct": true,
+    "raw_arguments_correct": true,
+    "executed_arguments_correct": true,
+    "deterministic_correction": false,
+    "coordinator_parse_failure": false,
+    "coordinator_fallback_used": false,
+    "raw_explanation_accepted": true,
+    "guardrail_fallback": false,
+    "final_safe_answer": true,
+    "unsupported_numeric_claim": false,
+    "unsupported_categorical_claim": false,
+    "unsupported_causal_claim": false,
+    "implementation_detail_exposed": false,
+    "grounding_issues": [],
+    "answer": "At 14:05, the balanced objective recommends SAA with 0.91% simulated blocking and 0 SC reconfigurations. MBA also has 0.91% blocking at this interval, but the deterministic balanced objective still selects SAA. The recommendation is advisory.",
+    "raw_llm_answer": "At 14:05, the balanced objective recommends SAA with 0.91% simulated blocking and 0 SC reconfigurations. MBA also has 0.91% blocking at this interval, but the deterministic balanced objective still selects SAA. The recommendation is advisory."
+  },
+  {
+    "id": "policy_comparison_balanced_05",
+    "category": "policy_comparison_balanced",
+    "query": "Recommend a policy for 07:45.",
+    "setup_query": "",
+    "expected_tools": [
+      "compare_policies_at_time"
+    ],
+    "raw_tools": [
+      "compare_policies_at_time"
+    ],
+    "executed_tools": [
+      "compare_policies_at_time"
+    ],
+    "raw_tool_sequence_correct": true,
+    "executed_tool_sequence_correct": true,
+    "raw_arguments_correct": true,
+    "executed_arguments_correct": true,
+    "deterministic_correction": false,
+    "coordinator_parse_failure": false,
+    "coordinator_fallback_used": false,
+    "raw_explanation_accepted": true,
+    "guardrail_fallback": false,
+    "final_safe_answer": true,
+    "unsupported_numeric_claim": false,
+    "unsupported_categorical_claim": false,
+    "unsupported_causal_claim": false,
+    "implementation_detail_exposed": false,
+    "grounding_issues": [],
+    "answer": "At 07:45, the balanced objective recommends SAA with 0% simulated blocking and 0 SC reconfigurations. MBA has the same blocking value at this interval, while the deterministic balanced objective still selects SAA. The recommendation is advisory.",
+    "raw_llm_answer": "At 07:45, the balanced objective recommends SAA with 0% simulated blocking and 0 SC reconfigurations. MBA has the same blocking value at this interval, while the deterministic balanced objective still selects SAA. The recommendation is advisory."
+  },
+  {
+    "id": "policy_comparison_balanced_06",
+    "category": "policy_comparison_balanced",
+    "query": "At 16:20, which of the three policies gives the best compromise?",
+    "setup_query": "",
+    "expected_tools": [
+      "compare_policies_at_time"
+    ],
+    "raw_tools": [
+      "compare_policies_at_time"
+    ],
+    "executed_tools": [
+      "compare_policies_at_time"
+    ],
+    "raw_tool_sequence_correct": true,
+    "executed_tool_sequence_correct": true,
+    "raw_arguments_correct": true,
+    "executed_arguments_correct": true,
+    "deterministic_correction": false,
+    "coordinator_parse_failure": false,
+    "coordinator_fallback_used": false,
+    "raw_explanation_accepted": true,
+    "guardrail_fallback": false,
+    "final_safe_answer": true,
+    "unsupported_numeric_claim": false,
+    "unsupported_categorical_claim": false,
+    "unsupported_causal_claim": false,
+    "implementation_detail_exposed": false,
+    "grounding_issues": [],
+    "answer": "At 16:20, the balanced objective recommends SAA with a blocking percentage of 2.73%. Both PCA and MBA have the same blocking value, but SAA is preferred due to its lower reconfiguration count of 0. The recommendation is advisory.",
+    "raw_llm_answer": "At 16:20, the balanced objective recommends SAA with a blocking percentage of 2.73%. Both PCA and MBA have the same blocking value, but SAA is preferred due to its lower reconfiguration count of 0. The recommendation is advisory."
+  },
+  {
+    "id": "policy_comparison_balanced_07",
+    "category": "policy_comparison_balanced",
+    "query": "Compare the three SC allocation strategies at 23:10.",
+    "setup_query": "",
+    "expected_tools": [
+      "compare_policies_at_time"
+    ],
+    "raw_tools": [
+      "compare_policies_at_time"
+    ],
+    "executed_tools": [
+      "compare_policies_at_time"
+    ],
+    "raw_tool_sequence_correct": true,
+    "executed_tool_sequence_correct": true,
+    "raw_arguments_correct": true,
+    "executed_arguments_correct": true,
+    "deterministic_correction": false,
+    "coordinator_parse_failure": false,
+    "coordinator_fallback_used": false,
+    "raw_explanation_accepted": true,
+    "guardrail_fallback": false,
+    "final_safe_answer": true,
+    "unsupported_numeric_claim": false,
+    "unsupported_categorical_claim": false,
+    "unsupported_causal_claim": false,
+    "implementation_detail_exposed": false,
+    "grounding_issues": [],
+    "answer": "At 23:10, the balanced objective recommends SAA. SAA has 0% simulated blocking and 0 SC reconfigurations. Both PCA and MBA have the same blocking value at this interval, while the deterministic balanced objective still selects SAA. The recommendation is advisory.",
+    "raw_llm_answer": "At 23:10, the balanced objective recommends SAA. SAA has 0% simulated blocking and 0 SC reconfigurations. Both PCA and MBA have the same blocking value at this interval, while the deterministic balanced objective still selects SAA. The recommendation is advisory."
+  },
+  {
+    "id": "policy_comparison_balanced_08",
+    "category": "policy_comparison_balanced",
+    "query": "Which controller policy makes most sense at 12:35?",
+    "setup_query": "",
+    "expected_tools": [
+      "compare_policies_at_time"
+    ],
+    "raw_tools": [
+      "compare_policies_at_time"
+    ],
+    "executed_tools": [
+      "compare_policies_at_time"
+    ],
+    "raw_tool_sequence_correct": true,
+    "executed_tool_sequence_correct": true,
+    "raw_arguments_correct": true,
+    "executed_arguments_correct": true,
+    "deterministic_correction": false,
+    "coordinator_parse_failure": false,
+    "coordinator_fallback_used": false,
+    "raw_explanation_accepted": true,
+    "guardrail_fallback": false,
+    "final_safe_answer": true,
+    "unsupported_numeric_claim": false,
+    "unsupported_categorical_claim": false,
+    "unsupported_causal_claim": false,
+    "implementation_detail_exposed": false,
+    "grounding_issues": [],
+    "answer": "At 12:35, the balanced objective recommends SAA with 0% simulated blocking and 0 SC reconfigurations. MBA has the same blocking value at this interval, while the deterministic balanced objective still selects SAA. The recommendation is advisory.",
+    "raw_llm_answer": "At 12:35, the balanced objective recommends SAA with 0% simulated blocking and 0 SC reconfigurations. MBA has the same blocking value at this interval, while the deterministic balanced objective still selects SAA. The recommendation is advisory."
+  },
+  {
+    "id": "policy_comparison_balanced_09",
+    "category": "policy_comparison_balanced",
+    "query": "For 20:00, recommend a balanced allocation policy.",
+    "setup_query": "",
+    "expected_tools": [
+      "compare_policies_at_time"
+    ],
+    "raw_tools": [
+      "compare_policies_at_time"
+    ],
+    "executed_tools": [
+      "compare_policies_at_time"
+    ],
+    "raw_tool_sequence_correct": true,
+    "executed_tool_sequence_correct": true,
+    "raw_arguments_correct": true,
+    "executed_arguments_correct": true,
+    "deterministic_correction": false,
+    "coordinator_parse_failure": false,
+    "coordinator_fallback_used": false,
+    "raw_explanation_accepted": true,
+    "guardrail_fallback": false,
+    "final_safe_answer": true,
+    "unsupported_numeric_claim": false,
+    "unsupported_categorical_claim": false,
+    "unsupported_causal_claim": false,
+    "implementation_detail_exposed": false,
+    "grounding_issues": [],
+    "answer": "At 20:00, the balanced objective recommends MBA. MBA has 8.08% simulated blocking and 1 reconfiguration. PCA and SAA both have 16.38% blocking. The recommendation is advisory.",
+    "raw_llm_answer": "At 20:00, the balanced objective recommends MBA. MBA has 8.08% simulated blocking and 1 reconfiguration. PCA and SAA both have 16.38% blocking. The recommendation is advisory."
+  },
+  {
+    "id": "policy_comparison_balanced_10",
+    "category": "policy_comparison_balanced",
+    "query": "Which policy should the operator consider at 05:55?",
+    "setup_query": "",
+    "expected_tools": [
+      "compare_policies_at_time"
+    ],
+    "raw_tools": [
+      "compare_policies_at_time"
+    ],
+    "executed_tools": [
+      "compare_policies_at_time"
+    ],
+    "raw_tool_sequence_correct": true,
+    "executed_tool_sequence_correct": true,
+    "raw_arguments_correct": true,
+    "executed_arguments_correct": true,
+    "deterministic_correction": false,
+    "coordinator_parse_failure": false,
+    "coordinator_fallback_used": false,
+    "raw_explanation_accepted": true,
+    "guardrail_fallback": false,
+    "final_safe_answer": true,
+    "unsupported_numeric_claim": false,
+    "unsupported_categorical_claim": false,
+    "unsupported_causal_claim": false,
+    "implementation_detail_exposed": false,
+    "grounding_issues": [],
+    "answer": "At 05:55, the balanced objective recommends SAA with 0% simulated blocking and 0 SC reconfigurations. MBA has the same blocking value at this interval, while the deterministic balanced objective still selects SAA. The recommendation is advisory.",
+    "raw_llm_answer": "At 05:55, the balanced objective recommends SAA with 0% simulated blocking and 0 SC reconfigurations. MBA has the same blocking value at this interval, while the deterministic balanced objective still selects SAA. The recommendation is advisory."
+  }
+]

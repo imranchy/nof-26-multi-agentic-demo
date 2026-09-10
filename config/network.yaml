@@ -1,0 +1,22 @@
+network:
+  name: NoF 2026 coherent P2MP metro-access demonstrator
+  topology_type: filterless_p2mp
+  hub_capacity_gbps: 400
+  hub_subcarriers: 16
+  access_nodes: 4
+  leaf_capacity_gbps: 100
+  subcarriers_per_leaf: 4
+  subcarrier_capacity_gbps: 25
+  modulation: 16-QAM
+  services:
+    - enterprise
+    - ran
+    - pon
+
+# The live demonstrator is advisory. This is a simulated controller state,
+# not a claim that a physical network has been reconfigured.
+controller:
+  active_policy: SAA
+  mode: advisory_simulation
+  operator_approval_required: true
+  representative_leaf: A1

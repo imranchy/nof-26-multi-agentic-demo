@@ -6,6 +6,6 @@ if not exist .venv\Scripts\python.exe (
   pause
   exit /b 1
 )
-.venv\Scripts\python.exe -m PyInstaller --noconfirm --clean --name NoF2026MultiAgentDemo --collect-all streamlit --collect-all plotly --add-data "app;app" --add-data "data;data" --add-data "models;models" launcher.py
+.venv\Scripts\python.exe -m PyInstaller --noconfirm --clean --name NoF2026MultiAgentDemo --collect-all streamlit --collect-all plotly --add-data "app;app" --add-data "config;config" --add-data "policies;policies" --add-data "prompts;prompts" --add-data "data;data" --add-data "models;models" --add-data "validation;validation" launcher.py
 echo Build output: dist\NoF2026MultiAgentDemo\NoF2026MultiAgentDemo.exe
 pause

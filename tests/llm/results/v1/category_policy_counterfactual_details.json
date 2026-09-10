@@ -1,0 +1,322 @@
+[
+  {
+    "id": "policy_counterfactual_01",
+    "category": "policy_counterfactual",
+    "query": "What happens if we use PCA at 21:15?",
+    "setup_query": "",
+    "expected_tools": [
+      "simulate_policy_at_time"
+    ],
+    "raw_tools": [
+      "simulate_policy_at_time"
+    ],
+    "executed_tools": [
+      "simulate_policy_at_time"
+    ],
+    "raw_tool_sequence_correct": true,
+    "executed_tool_sequence_correct": true,
+    "raw_arguments_correct": true,
+    "executed_arguments_correct": true,
+    "deterministic_correction": false,
+    "coordinator_parse_failure": false,
+    "coordinator_fallback_used": false,
+    "raw_explanation_accepted": true,
+    "guardrail_fallback": false,
+    "final_safe_answer": true,
+    "unsupported_numeric_claim": false,
+    "unsupported_categorical_claim": false,
+    "unsupported_causal_claim": false,
+    "implementation_detail_exposed": false,
+    "grounding_issues": [],
+    "answer": "At 21:15, the PCA counterfactual produces ENTERPRISE | RAN | RAN | PON, with 15.44% overall blocking and an 84.56% fresh-service ratio. This is an advisory simulation, not network actuation.",
+    "raw_llm_answer": "At 21:15, the PCA counterfactual produces ENTERPRISE | RAN | RAN | PON, with 15.44% overall blocking and an 84.56% fresh-service ratio. This is an advisory simulation, not network actuation."
+  },
+  {
+    "id": "policy_counterfactual_02",
+    "category": "policy_counterfactual",
+    "query": "Simulate MBA at 18:10.",
+    "setup_query": "",
+    "expected_tools": [
+      "simulate_policy_at_time"
+    ],
+    "raw_tools": [
+      "simulate_policy_at_time"
+    ],
+    "executed_tools": [
+      "simulate_policy_at_time"
+    ],
+    "raw_tool_sequence_correct": true,
+    "executed_tool_sequence_correct": true,
+    "raw_arguments_correct": true,
+    "executed_arguments_correct": true,
+    "deterministic_correction": false,
+    "coordinator_parse_failure": false,
+    "coordinator_fallback_used": false,
+    "raw_explanation_accepted": true,
+    "guardrail_fallback": false,
+    "final_safe_answer": true,
+    "unsupported_numeric_claim": false,
+    "unsupported_categorical_claim": false,
+    "unsupported_causal_claim": false,
+    "implementation_detail_exposed": false,
+    "grounding_issues": [],
+    "answer": "At 18:10, the MBA counterfactual produces RAN | ENTERPRISE | PON | RAN, with 0.72% overall blocking and a 99.28% fresh-service ratio. This is an advisory simulation, not network actuation.",
+    "raw_llm_answer": "At 18:10, the MBA counterfactual produces RAN | ENTERPRISE | PON | RAN, with 0.72% overall blocking and a 99.28% fresh-service ratio. This is an advisory simulation, not network actuation."
+  },
+  {
+    "id": "policy_counterfactual_03",
+    "category": "policy_counterfactual",
+    "query": "Show me SAA performance at 09:30.",
+    "setup_query": "",
+    "expected_tools": [
+      "simulate_policy_at_time"
+    ],
+    "raw_tools": [
+      "simulate_policy_at_time"
+    ],
+    "executed_tools": [
+      "simulate_policy_at_time"
+    ],
+    "raw_tool_sequence_correct": true,
+    "executed_tool_sequence_correct": true,
+    "raw_arguments_correct": true,
+    "executed_arguments_correct": true,
+    "deterministic_correction": false,
+    "coordinator_parse_failure": false,
+    "coordinator_fallback_used": false,
+    "raw_explanation_accepted": true,
+    "guardrail_fallback": false,
+    "final_safe_answer": true,
+    "unsupported_numeric_claim": false,
+    "unsupported_categorical_claim": false,
+    "unsupported_causal_claim": false,
+    "implementation_detail_exposed": false,
+    "grounding_issues": [],
+    "answer": "At 09:30, the SAA policy counterfactual produces ENTERPRISE | RAN | ENTERPRISE | PON, with 0.0% overall blocking and a 100.0% fresh-service ratio. This is an advisory simulation, not network actuation.",
+    "raw_llm_answer": "At 09:30, the SAA policy counterfactual produces ENTERPRISE | RAN | ENTERPRISE | PON, with 0.0% overall blocking and a 100.0% fresh-service ratio. This is an advisory simulation, not network actuation."
+  },
+  {
+    "id": "policy_counterfactual_04",
+    "category": "policy_counterfactual",
+    "query": "What would PCA do at 14:05?",
+    "setup_query": "",
+    "expected_tools": [
+      "simulate_policy_at_time"
+    ],
+    "raw_tools": [
+      "simulate_policy_at_time"
+    ],
+    "executed_tools": [
+      "simulate_policy_at_time"
+    ],
+    "raw_tool_sequence_correct": true,
+    "executed_tool_sequence_correct": true,
+    "raw_arguments_correct": true,
+    "executed_arguments_correct": true,
+    "deterministic_correction": false,
+    "coordinator_parse_failure": false,
+    "coordinator_fallback_used": false,
+    "raw_explanation_accepted": true,
+    "guardrail_fallback": false,
+    "final_safe_answer": true,
+    "unsupported_numeric_claim": false,
+    "unsupported_categorical_claim": false,
+    "unsupported_causal_claim": false,
+    "implementation_detail_exposed": false,
+    "grounding_issues": [],
+    "answer": "At 14:05, the PCA counterfactual produces ENTERPRISE | ENTERPRISE | RAN | RAN, with 17.66% overall blocking and an 82.34% fresh-service ratio. This is an advisory simulation, not network actuation.",
+    "raw_llm_answer": "At 14:05, the PCA counterfactual produces ENTERPRISE | ENTERPRISE | RAN | RAN, with 17.66% overall blocking and an 82.34% fresh-service ratio. This is an advisory simulation, not network actuation."
+  },
+  {
+    "id": "policy_counterfactual_05",
+    "category": "policy_counterfactual",
+    "query": "Run a counterfactual with MBA at 07:45.",
+    "setup_query": "",
+    "expected_tools": [
+      "simulate_policy_at_time"
+    ],
+    "raw_tools": [
+      "simulate_policy_at_time"
+    ],
+    "executed_tools": [
+      "simulate_policy_at_time"
+    ],
+    "raw_tool_sequence_correct": true,
+    "executed_tool_sequence_correct": true,
+    "raw_arguments_correct": true,
+    "executed_arguments_correct": true,
+    "deterministic_correction": false,
+    "coordinator_parse_failure": false,
+    "coordinator_fallback_used": false,
+    "raw_explanation_accepted": true,
+    "guardrail_fallback": false,
+    "final_safe_answer": true,
+    "unsupported_numeric_claim": false,
+    "unsupported_categorical_claim": false,
+    "unsupported_causal_claim": false,
+    "implementation_detail_exposed": false,
+    "grounding_issues": [],
+    "answer": "At 07:45, the MBA counterfactual produces ENTERPRISE | RAN | ENTERPRISE | PON, with 0% overall blocking and a 100% fresh-service ratio. This is an advisory simulation, not network actuation.",
+    "raw_llm_answer": "At 07:45, the MBA counterfactual produces ENTERPRISE | RAN | ENTERPRISE | PON, with 0% overall blocking and a 100% fresh-service ratio. This is an advisory simulation, not network actuation."
+  },
+  {
+    "id": "policy_counterfactual_06",
+    "category": "policy_counterfactual",
+    "query": "If we use SAA at 16:20, what performance do we get?",
+    "setup_query": "",
+    "expected_tools": [
+      "simulate_policy_at_time"
+    ],
+    "raw_tools": [
+      "simulate_policy_at_time"
+    ],
+    "executed_tools": [
+      "simulate_policy_at_time"
+    ],
+    "raw_tool_sequence_correct": true,
+    "executed_tool_sequence_correct": true,
+    "raw_arguments_correct": true,
+    "executed_arguments_correct": true,
+    "deterministic_correction": false,
+    "coordinator_parse_failure": false,
+    "coordinator_fallback_used": false,
+    "raw_explanation_accepted": true,
+    "guardrail_fallback": false,
+    "final_safe_answer": true,
+    "unsupported_numeric_claim": false,
+    "unsupported_categorical_claim": false,
+    "unsupported_causal_claim": false,
+    "implementation_detail_exposed": false,
+    "grounding_issues": [],
+    "answer": "At 16:20, the SAA policy counterfactual produces ENTERPRISE | RAN | PON | ENTERPRISE, with 2.73% overall blocking and a 97.27% fresh-service ratio. This is an advisory simulation, not network actuation.",
+    "raw_llm_answer": "At 16:20, the SAA policy counterfactual produces ENTERPRISE | RAN | PON | ENTERPRISE, with 2.73% overall blocking and a 97.27% fresh-service ratio. This is an advisory simulation, not network actuation."
+  },
+  {
+    "id": "policy_counterfactual_07",
+    "category": "policy_counterfactual",
+    "query": "Try PCA instead at 23:10.",
+    "setup_query": "",
+    "expected_tools": [
+      "simulate_policy_at_time"
+    ],
+    "raw_tools": [
+      "simulate_policy_at_time"
+    ],
+    "executed_tools": [
+      "simulate_policy_at_time"
+    ],
+    "raw_tool_sequence_correct": true,
+    "executed_tool_sequence_correct": true,
+    "raw_arguments_correct": true,
+    "executed_arguments_correct": true,
+    "deterministic_correction": false,
+    "coordinator_parse_failure": false,
+    "coordinator_fallback_used": false,
+    "raw_explanation_accepted": true,
+    "guardrail_fallback": false,
+    "final_safe_answer": true,
+    "unsupported_numeric_claim": false,
+    "unsupported_categorical_claim": false,
+    "unsupported_causal_claim": false,
+    "implementation_detail_exposed": false,
+    "grounding_issues": [],
+    "answer": "At 23:10, the PCA counterfactual produces ENTERPRISE | RAN | RAN | PON, with 0% overall blocking and a 100% fresh-service ratio. This is an advisory simulation, not network actuation.",
+    "raw_llm_answer": "At 23:10, the PCA counterfactual produces ENTERPRISE | RAN | RAN | PON, with 0% overall blocking and a 100% fresh-service ratio. This is an advisory simulation, not network actuation."
+  },
+  {
+    "id": "policy_counterfactual_08",
+    "category": "policy_counterfactual",
+    "query": "Show the MBA outcome at 12:35.",
+    "setup_query": "",
+    "expected_tools": [
+      "simulate_policy_at_time"
+    ],
+    "raw_tools": [
+      "simulate_policy_at_time"
+    ],
+    "executed_tools": [
+      "simulate_policy_at_time"
+    ],
+    "raw_tool_sequence_correct": true,
+    "executed_tool_sequence_correct": true,
+    "raw_arguments_correct": true,
+    "executed_arguments_correct": true,
+    "deterministic_correction": false,
+    "coordinator_parse_failure": false,
+    "coordinator_fallback_used": false,
+    "raw_explanation_accepted": true,
+    "guardrail_fallback": false,
+    "final_safe_answer": true,
+    "unsupported_numeric_claim": false,
+    "unsupported_categorical_claim": false,
+    "unsupported_causal_claim": false,
+    "implementation_detail_exposed": false,
+    "grounding_issues": [],
+    "answer": "At 12:35, the MBA counterfactual produces ENTERPRISE | RAN | ENTERPRISE | PON, with 0.0% overall blocking and a 100.0% fresh-service ratio. This is an advisory simulation, not network actuation.",
+    "raw_llm_answer": "At 12:35, the MBA counterfactual produces ENTERPRISE | RAN | ENTERPRISE | PON, with 0.0% overall blocking and a 100.0% fresh-service ratio. This is an advisory simulation, not network actuation."
+  },
+  {
+    "id": "policy_counterfactual_09",
+    "category": "policy_counterfactual",
+    "query": "At 20:00, what if the controller used SAA?",
+    "setup_query": "",
+    "expected_tools": [
+      "simulate_policy_at_time"
+    ],
+    "raw_tools": [
+      "simulate_policy_at_time"
+    ],
+    "executed_tools": [
+      "simulate_policy_at_time"
+    ],
+    "raw_tool_sequence_correct": true,
+    "executed_tool_sequence_correct": true,
+    "raw_arguments_correct": true,
+    "executed_arguments_correct": true,
+    "deterministic_correction": false,
+    "coordinator_parse_failure": false,
+    "coordinator_fallback_used": false,
+    "raw_explanation_accepted": true,
+    "guardrail_fallback": false,
+    "final_safe_answer": true,
+    "unsupported_numeric_claim": false,
+    "unsupported_categorical_claim": false,
+    "unsupported_causal_claim": false,
+    "implementation_detail_exposed": false,
+    "grounding_issues": [],
+    "answer": "At 20:00, the SAA policy counterfactual produces RAN | PON | RAN | ENTERPRISE, with 16.38% overall blocking and an 83.62% fresh-service ratio. This is an advisory simulation, not network actuation.",
+    "raw_llm_answer": "At 20:00, the SAA policy counterfactual produces RAN | PON | RAN | ENTERPRISE, with 16.38% overall blocking and an 83.62% fresh-service ratio. This is an advisory simulation, not network actuation."
+  },
+  {
+    "id": "policy_counterfactual_10",
+    "category": "policy_counterfactual",
+    "query": "Give me the counterfactual PCA allocation at 05:55.",
+    "setup_query": "",
+    "expected_tools": [
+      "simulate_policy_at_time"
+    ],
+    "raw_tools": [
+      "simulate_policy_at_time"
+    ],
+    "executed_tools": [
+      "simulate_policy_at_time"
+    ],
+    "raw_tool_sequence_correct": true,
+    "executed_tool_sequence_correct": true,
+    "raw_arguments_correct": true,
+    "executed_arguments_correct": true,
+    "deterministic_correction": false,
+    "coordinator_parse_failure": false,
+    "coordinator_fallback_used": false,
+    "raw_explanation_accepted": true,
+    "guardrail_fallback": false,
+    "final_safe_answer": true,
+    "unsupported_numeric_claim": false,
+    "unsupported_categorical_claim": false,
+    "unsupported_causal_claim": false,
+    "implementation_detail_exposed": false,
+    "grounding_issues": [],
+    "answer": "At 05:55, the PCA counterfactual produces ENTERPRISE | RAN | PON | IDLE, with 0% overall blocking and a 100% fresh-service ratio. This is an advisory simulation, not network actuation.",
+    "raw_llm_answer": "At 05:55, the PCA counterfactual produces ENTERPRISE | RAN | PON | IDLE, with 0% overall blocking and a 100% fresh-service ratio. This is an advisory simulation, not network actuation."
+  }
+]

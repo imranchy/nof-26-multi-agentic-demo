@@ -1,0 +1,12 @@
+benchmark:
+  version: v1
+  operational_categories: 10
+  queries_per_category: 10
+  total_queries: 100
+  forecast_mode: prepared
+  pass_thresholds:
+    raw_tool_sequence_accuracy: 0.80
+    raw_argument_accuracy: 0.80
+    executed_tool_sequence_accuracy: 1.00
+    executed_argument_accuracy: 1.00
+    final_safe_answer_rate: 1.00

@@ -5,21 +5,18 @@ from typing import Any
 
 
 @dataclass
-class QueryPlan:
-    intent: str = "network_summary"
-    service: str | None = None
-    state: str | None = None
-    start_minute: int = 0
-    end_minute: int = 1440
-    top_k: int = 5
-    needs_recovery: bool = False
-    needs_diagnosis: bool = False
-    source: str = "deterministic"
+class ToolStep:
+    tool_name: str
+    arguments: dict[str, Any] = field(default_factory=dict)
 
-    @classmethod
-    def from_dict(cls, value: dict[str, Any]) -> "QueryPlan":
-        allowed = set(cls.__dataclass_fields__)
-        return cls(**{k: v for k, v in value.items() if k in allowed})
+
+@dataclass
+class QueryPlan:
+    intent: str
+    tool_name: str
+    arguments: dict[str, Any] = field(default_factory=dict)
+    source: str = "mistral-tool-plan"
+    steps: list[ToolStep] = field(default_factory=list)
 
 
 @dataclass
@@ -33,11 +30,14 @@ class AgentEvent:
 @dataclass
 class AgentResponse:
     answer: str
+    raw_llm_answer: str | None
     plan: QueryPlan
     evidence: dict[str, Any]
+    grounding_passed: bool
+    grounding_issues: list[str] = field(default_factory=list)
     warnings: list[str] = field(default_factory=list)
     trace: list[AgentEvent] = field(default_factory=list)
+    routing_audit: dict[str, Any] = field(default_factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
         return asdict(self)
-

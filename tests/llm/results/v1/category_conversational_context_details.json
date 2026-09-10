@@ -1,0 +1,326 @@
+[
+  {
+    "id": "conversational_context_01",
+    "category": "conversational_context",
+    "query": "What about an hour later?",
+    "setup_query": "Show me the network state at 18:10.",
+    "expected_tools": [
+      "get_network_state_at_time"
+    ],
+    "raw_tools": [
+      "get_network_state_at_time"
+    ],
+    "executed_tools": [
+      "get_network_state_at_time"
+    ],
+    "raw_tool_sequence_correct": true,
+    "executed_tool_sequence_correct": true,
+    "raw_arguments_correct": true,
+    "executed_arguments_correct": true,
+    "deterministic_correction": false,
+    "coordinator_parse_failure": false,
+    "coordinator_fallback_used": false,
+    "raw_explanation_accepted": true,
+    "guardrail_fallback": false,
+    "final_safe_answer": true,
+    "unsupported_numeric_claim": false,
+    "unsupported_categorical_claim": false,
+    "unsupported_causal_claim": false,
+    "implementation_detail_exposed": false,
+    "grounding_issues": [],
+    "answer": "At 19:10, predicted offered traffic is 95.17 Gbps and the predicted SLA state is Failure-prone with a 53.0% Failure-prone risk. Under the simulated active SAA policy, the SC state is RAN | PON | RAN | ENTERPRISE, with 11.86% blocking and 0 SC reconfigurations.",
+    "raw_llm_answer": "At 19:10, predicted offered traffic is 95.17 Gbps and the predicted SLA state is Failure-prone with a 53.0% Failure-prone risk. Under the simulated active SAA policy, the SC state is RAN | PON | RAN | ENTERPRISE, with 11.86% blocking and 0 SC reconfigurations."
+  },
+  {
+    "id": "conversational_context_02",
+    "category": "conversational_context",
+    "query": "And an hour later?",
+    "setup_query": "What traffic do you expect at 09:00?",
+    "expected_tools": [
+      "get_traffic_forecast"
+    ],
+    "raw_tools": [
+      "get_traffic_forecast"
+    ],
+    "executed_tools": [
+      "get_traffic_forecast"
+    ],
+    "raw_tool_sequence_correct": true,
+    "executed_tool_sequence_correct": true,
+    "raw_arguments_correct": true,
+    "executed_arguments_correct": true,
+    "deterministic_correction": false,
+    "coordinator_parse_failure": false,
+    "coordinator_fallback_used": false,
+    "raw_explanation_accepted": false,
+    "guardrail_fallback": true,
+    "final_safe_answer": true,
+    "unsupported_numeric_claim": true,
+    "unsupported_categorical_claim": false,
+    "unsupported_causal_claim": false,
+    "implementation_detail_exposed": false,
+    "grounding_issues": [
+      "unsupported_numeric_claim"
+    ],
+    "answer": "At 10:00, predicted traffic is 72.19 Gbps total: Enterprise 38.71 Gbps, RAN 23.76 Gbps, and PON 9.71 Gbps.",
+    "raw_llm_answer": "At 11:00, predicted offered traffic is 72.19 Gbps total: Enterprise 38.71 Gbps, RAN 23.76 Gbps, and PON 9.71 Gbps."
+  },
+  {
+    "id": "conversational_context_03",
+    "category": "conversational_context",
+    "query": "What about the next interval?",
+    "setup_query": "What is the predicted SLA state at 12:00?",
+    "expected_tools": [
+      "get_sla_prediction"
+    ],
+    "raw_tools": [
+      "get_sla_prediction"
+    ],
+    "executed_tools": [
+      "get_sla_prediction"
+    ],
+    "raw_tool_sequence_correct": true,
+    "executed_tool_sequence_correct": true,
+    "raw_arguments_correct": true,
+    "executed_arguments_correct": true,
+    "deterministic_correction": false,
+    "coordinator_parse_failure": false,
+    "coordinator_fallback_used": false,
+    "raw_explanation_accepted": false,
+    "guardrail_fallback": true,
+    "final_safe_answer": true,
+    "unsupported_numeric_claim": false,
+    "unsupported_categorical_claim": false,
+    "unsupported_causal_claim": false,
+    "implementation_detail_exposed": false,
+    "grounding_issues": [
+      "unsupported_advisory_claim"
+    ],
+    "answer": "At 12:05, the predicted SLA state is normal and the Failure-prone risk is 0.0%.",
+    "raw_llm_answer": "Predicted SLA state at 12:05 is Normal. Failure-prone risk is 0%. No action is required for the next interval."
+  },
+  {
+    "id": "conversational_context_04",
+    "category": "conversational_context",
+    "query": "What performance does that policy give?",
+    "setup_query": "Compare PCA, MBA and SAA at 20:00 and recommend one.",
+    "expected_tools": [
+      "simulate_policy_at_time"
+    ],
+    "raw_tools": [
+      "summarize_time_range"
+    ],
+    "executed_tools": [
+      "simulate_policy_at_time"
+    ],
+    "raw_tool_sequence_correct": false,
+    "executed_tool_sequence_correct": true,
+    "raw_arguments_correct": false,
+    "executed_arguments_correct": true,
+    "deterministic_correction": true,
+    "coordinator_parse_failure": false,
+    "coordinator_fallback_used": false,
+    "raw_explanation_accepted": true,
+    "guardrail_fallback": false,
+    "final_safe_answer": true,
+    "unsupported_numeric_claim": false,
+    "unsupported_categorical_claim": false,
+    "unsupported_causal_claim": false,
+    "implementation_detail_exposed": false,
+    "grounding_issues": [],
+    "answer": "At 20:00, the MBA policy counterfactual produces a RAN | PON | RAN | PON assignment, with 8.08% overall blocking and a 91.92% fresh-service ratio. This is an advisory simulation, not network actuation.",
+    "raw_llm_answer": "At 20:00, the MBA policy counterfactual produces a RAN | PON | RAN | PON assignment, with 8.08% overall blocking and a 91.92% fresh-service ratio. This is an advisory simulation, not network actuation."
+  },
+  {
+    "id": "conversational_context_05",
+    "category": "conversational_context",
+    "query": "Show the same policy an hour later.",
+    "setup_query": "Simulate MBA at 17:00.",
+    "expected_tools": [
+      "simulate_policy_at_time"
+    ],
+    "raw_tools": [
+      "simulate_policy_at_time"
+    ],
+    "executed_tools": [
+      "simulate_policy_at_time"
+    ],
+    "raw_tool_sequence_correct": true,
+    "executed_tool_sequence_correct": true,
+    "raw_arguments_correct": true,
+    "executed_arguments_correct": true,
+    "deterministic_correction": false,
+    "coordinator_parse_failure": false,
+    "coordinator_fallback_used": false,
+    "raw_explanation_accepted": true,
+    "guardrail_fallback": false,
+    "final_safe_answer": true,
+    "unsupported_numeric_claim": false,
+    "unsupported_categorical_claim": false,
+    "unsupported_causal_claim": false,
+    "implementation_detail_exposed": false,
+    "grounding_issues": [],
+    "answer": "At 18:00, the MBA counterfactual produces RAN | ENTERPRISE | PON | RAN, with 0.72% overall blocking and a 99.28% fresh-service ratio. This is an advisory simulation, not network actuation.",
+    "raw_llm_answer": "At 18:00, the MBA counterfactual produces RAN | ENTERPRISE | PON | RAN, with 0.72% overall blocking and a 99.28% fresh-service ratio. This is an advisory simulation, not network actuation."
+  },
+  {
+    "id": "conversational_context_06",
+    "category": "conversational_context",
+    "query": "What about an hour earlier?",
+    "setup_query": "Show me the network at 23:00.",
+    "expected_tools": [
+      "get_network_state_at_time"
+    ],
+    "raw_tools": [
+      "get_network_state_at_time"
+    ],
+    "executed_tools": [
+      "get_network_state_at_time"
+    ],
+    "raw_tool_sequence_correct": true,
+    "executed_tool_sequence_correct": true,
+    "raw_arguments_correct": true,
+    "executed_arguments_correct": true,
+    "deterministic_correction": false,
+    "coordinator_parse_failure": false,
+    "coordinator_fallback_used": false,
+    "raw_explanation_accepted": true,
+    "guardrail_fallback": false,
+    "final_safe_answer": true,
+    "unsupported_numeric_claim": false,
+    "unsupported_categorical_claim": false,
+    "unsupported_causal_claim": false,
+    "implementation_detail_exposed": false,
+    "grounding_issues": [],
+    "answer": "At 22:00, predicted offered traffic is 67.63 Gbps and the predicted SLA state is Degraded with a Failure-prone risk of 32%. Under the simulated active SAA policy, the SC state is RAN | PON | RAN | ENTERPRISE, with 0.95% blocking and 1 SC reconfiguration.",
+    "raw_llm_answer": "At 22:00, predicted offered traffic is 67.63 Gbps and the predicted SLA state is Degraded with a Failure-prone risk of 32%. Under the simulated active SAA policy, the SC state is RAN | PON | RAN | ENTERPRISE, with 0.95% blocking and 1 SC reconfiguration."
+  },
+  {
+    "id": "conversational_context_07",
+    "category": "conversational_context",
+    "query": "At that time, what is the SLA risk?",
+    "setup_query": "What traffic do you expect at 08:15?",
+    "expected_tools": [
+      "get_sla_prediction"
+    ],
+    "raw_tools": [
+      "get_sla_prediction"
+    ],
+    "executed_tools": [
+      "get_sla_prediction"
+    ],
+    "raw_tool_sequence_correct": true,
+    "executed_tool_sequence_correct": true,
+    "raw_arguments_correct": true,
+    "executed_arguments_correct": true,
+    "deterministic_correction": false,
+    "coordinator_parse_failure": false,
+    "coordinator_fallback_used": false,
+    "raw_explanation_accepted": true,
+    "guardrail_fallback": false,
+    "final_safe_answer": true,
+    "unsupported_numeric_claim": false,
+    "unsupported_categorical_claim": false,
+    "unsupported_causal_claim": false,
+    "implementation_detail_exposed": false,
+    "grounding_issues": [],
+    "answer": "Predicted SLA state at 08:15 is Normal. Failure-prone risk is 0%.",
+    "raw_llm_answer": "Predicted SLA state at 08:15 is Normal. Failure-prone risk is 0%."
+  },
+  {
+    "id": "conversational_context_08",
+    "category": "conversational_context",
+    "query": "Use PCA instead and show me the outcome.",
+    "setup_query": "Which policy would you use at 18:30?",
+    "expected_tools": [
+      "simulate_policy_at_time"
+    ],
+    "raw_tools": [
+      "compare_policies_at_time"
+    ],
+    "executed_tools": [
+      "simulate_policy_at_time"
+    ],
+    "raw_tool_sequence_correct": false,
+    "executed_tool_sequence_correct": true,
+    "raw_arguments_correct": false,
+    "executed_arguments_correct": true,
+    "deterministic_correction": true,
+    "coordinator_parse_failure": false,
+    "coordinator_fallback_used": false,
+    "raw_explanation_accepted": true,
+    "guardrail_fallback": false,
+    "final_safe_answer": true,
+    "unsupported_numeric_claim": false,
+    "unsupported_categorical_claim": false,
+    "unsupported_causal_claim": false,
+    "implementation_detail_exposed": false,
+    "grounding_issues": [],
+    "answer": "At 18:30, the PCA counterfactual produces ENTERPRISE | RAN | RAN | PON, with 0.81% overall blocking and a 99.19% fresh-service ratio. This is an advisory simulation, not network actuation.",
+    "raw_llm_answer": "At 18:30, the PCA counterfactual produces ENTERPRISE | RAN | RAN | PON, with 0.81% overall blocking and a 99.19% fresh-service ratio. This is an advisory simulation, not network actuation."
+  },
+  {
+    "id": "conversational_context_09",
+    "category": "conversational_context",
+    "query": "Also keep PON on 1 SC.",
+    "setup_query": "Keep RAN on 2 subcarriers at 19:00.",
+    "expected_tools": [
+      "analyze_constrained_allocation"
+    ],
+    "raw_tools": [
+      "analyze_constrained_allocation"
+    ],
+    "executed_tools": [
+      "analyze_constrained_allocation"
+    ],
+    "raw_tool_sequence_correct": true,
+    "executed_tool_sequence_correct": true,
+    "raw_arguments_correct": true,
+    "executed_arguments_correct": true,
+    "deterministic_correction": false,
+    "coordinator_parse_failure": false,
+    "coordinator_fallback_used": false,
+    "raw_explanation_accepted": true,
+    "guardrail_fallback": false,
+    "final_safe_answer": true,
+    "unsupported_numeric_claim": false,
+    "unsupported_categorical_claim": false,
+    "unsupported_causal_claim": false,
+    "implementation_detail_exposed": false,
+    "grounding_issues": [],
+    "answer": "At 19:00, the PON=1-SC and RAN=2-SC constraints are feasible under the balanced objective. The resulting SC assignment is RAN | ENTERPRISE | PON | RAN, with 11.96% overall blocking and no SC reconfigurations. The fresh-service ratio is 88.04%. Keeping PON on 1 SC as requested.",
+    "raw_llm_answer": "At 19:00, the PON=1-SC and RAN=2-SC constraints are feasible under the balanced objective. The resulting SC assignment is RAN | ENTERPRISE | PON | RAN, with 11.96% overall blocking and no SC reconfigurations. The fresh-service ratio is 88.04%. Keeping PON on 1 SC as requested."
+  },
+  {
+    "id": "conversational_context_10",
+    "category": "conversational_context",
+    "query": "Show that time under MBA.",
+    "setup_query": "Show me the network state at 16:00.",
+    "expected_tools": [
+      "get_network_state_at_time"
+    ],
+    "raw_tools": [
+      "get_network_state_at_time"
+    ],
+    "executed_tools": [
+      "get_network_state_at_time"
+    ],
+    "raw_tool_sequence_correct": true,
+    "executed_tool_sequence_correct": true,
+    "raw_arguments_correct": true,
+    "executed_arguments_correct": true,
+    "deterministic_correction": false,
+    "coordinator_parse_failure": false,
+    "coordinator_fallback_used": false,
+    "raw_explanation_accepted": true,
+    "guardrail_fallback": false,
+    "final_safe_answer": true,
+    "unsupported_numeric_claim": false,
+    "unsupported_categorical_claim": false,
+    "unsupported_causal_claim": false,
+    "implementation_detail_exposed": false,
+    "grounding_issues": [],
+    "answer": "At 16:00, under MBA:\n- Predicted SLA state: Normal\n- Failure-prone risk: 7.0%\n- Simulated active policy: MBA\n- SC state: ENTERPRISE | RAN | PON | ENTERPRISE\n- Blocking: 2.74%\n- No SC reconfigurations\n\nUnder the active SAA policy:\n- SC state: ENTERPRISE | RAN | PON | ENTERPRISE\n- Blocking: 0.0%\n\nThe network is currently operating under the MBA policy, with a predicted SLA state of Normal and a Failure-prone risk of 7.0%. Under this policy, the SC state is ENTERPRISE | RAN | PON | ENTERPRISE, with 2.74% blocking and no SC reconfigurations. For comparison, under the active SAA policy, the SC state remains the same, but blocking is 0.0%.",
+    "raw_llm_answer": "At 16:00, under MBA:\n- Predicted SLA state: Normal\n- Failure-prone risk: 7.0%\n- Simulated active policy: MBA\n- SC state: ENTERPRISE | RAN | PON | ENTERPRISE\n- Blocking: 2.74%\n- No SC reconfigurations\n\nUnder the active SAA policy:\n- SC state: ENTERPRISE | RAN | PON | ENTERPRISE\n- Blocking: 0.0%\n\nThe network is currently operating under the MBA policy, with a predicted SLA state of Normal and a Failure-prone risk of 7.0%. Under this policy, the SC state is ENTERPRISE | RAN | PON | ENTERPRISE, with 2.74% blocking and no SC reconfigurations. For comparison, under the active SAA policy, the SC state remains the same, but blocking is 0.0%."
+  }
+]

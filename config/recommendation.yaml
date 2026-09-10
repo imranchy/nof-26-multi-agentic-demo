@@ -1,0 +1,16 @@
+recommendation:
+  default_objective: balanced
+  objectives:
+    balanced:
+      description: Minimize blocking first, then prefer lower reconfiguration when blocking is near-optimal.
+      blocking_tolerance_ratio: 0.005
+    min_blocking:
+      description: Select the policy with the lowest overall blocking ratio.
+    min_reconfiguration:
+      description: Select the policy with the fewest SC changes, then lowest blocking.
+    sla_priority:
+      description: Use the SLA-aware PCA baseline.
+  tie_break_order:
+    balanced: [SAA, MBA, PCA]
+    min_blocking: [MBA, SAA, PCA]
+    min_reconfiguration: [SAA, PCA, MBA]
