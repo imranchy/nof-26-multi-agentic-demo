@@ -10,6 +10,7 @@ from app.agents.sla import SLAAgent
 from app.schemas import AgentEvent, AgentResponse, QueryPlan, ToolStep
 from app.semantic import SemanticResolver
 from app.tools import OperatorTools
+from app.state_manager import ConversationStateManager
 
 class MultiAgentRuntime:
     """Mistral semantic orchestration over prediction and deterministic network tools."""
@@ -25,16 +26,18 @@ class MultiAgentRuntime:
         self.coordinator = CoordinatorAgent(use_llm=use_llm)
         self.explainer = ExplanationAgent(self.guardrail)
         self.memory: dict[str, Any] = {}
+        self.state_manager = ConversationStateManager()
 
     def ask(self, query: str) -> AgentResponse:
         trace = [AgentEvent("Coordinator Agent", "Interpreting operator intent with Mistral")]
-        proposed = self.coordinator.select_plan(query, self.memory)
+        context_memory = self.state_manager.scoped_memory(query, self.memory)
+        proposed = self.coordinator.select_plan(query, context_memory)
         coordinator_audit = dict(self.coordinator.last_audit)
         raw_proposed = [] if coordinator_audit.get("fallback_used") else [
             {"tool": name, "arguments": dict(arguments)} for name, arguments in proposed
         ]
 
-        proposed, correction = self._guard_plan(query, proposed)
+        proposed, correction = self._guard_plan(query, proposed, context_memory)
         if correction:
             trace.append(AgentEvent("Deterministic Routing Guardrail", correction, status="corrected"))
 
@@ -44,7 +47,7 @@ class MultiAgentRuntime:
 
         for index, (tool_name, arguments) in enumerate(proposed, start=1):
             tool_name = self._normalize_decline_route(query, tool_name)
-            args = self._normalize_tool_arguments(query, tool_name, arguments)
+            args = self._normalize_tool_arguments(query, tool_name, arguments, context_memory)
             trace.append(AgentEvent("Coordinator Agent", f"Step {index}: selected {tool_name}", detail=str(args)))
             evidence, fallback = self.tools.execute(tool_name, args, self.memory)
             trace.append(AgentEvent(self._tool_agent_name(tool_name), f"Executed {tool_name}"))
@@ -95,7 +98,7 @@ class MultiAgentRuntime:
         self.coordinator.reset()
         self.memory.clear()
 
-    def _guard_plan(self, query: str, proposed: list[tuple[str, dict[str, Any]]]) -> tuple[list[tuple[str, dict[str, Any]]], str | None]:
+    def _guard_plan(self, query: str, proposed: list[tuple[str, dict[str, Any]]], context_memory: dict[str, Any]) -> tuple[list[tuple[str, dict[str, Any]]], str | None]:
         q = query.lower()
         # One useful compound workflow in v1: find a risky interval then compare policies there.
         if any(x in q for x in ("highest-risk", "highest risk", "riskiest", "worst interval")) and any(x in q for x in ("recommend", "which policy", "compare policies", "best policy")):
@@ -106,7 +109,7 @@ class MultiAgentRuntime:
 
         forced = SemanticResolver.high_confidence_tool(
             query,
-            self.memory,
+            context_memory,
         )
 
         if not forced:
@@ -152,7 +155,7 @@ class MultiAgentRuntime:
 
         return value
 
-    def _normalize_tool_arguments(self, query: str, tool_name: str, arguments: dict[str, Any]) -> dict[str, Any]:
+    def _normalize_tool_arguments(self, query: str, tool_name: str, arguments: dict[str, Any], context_memory: dict[str, Any]) -> dict[str, Any]:
         args = dict(arguments)
         default_objective = self.tools.recommendation_cfg["default_objective"]
 
@@ -165,10 +168,10 @@ class MultiAgentRuntime:
             resolved = SemanticResolver.normalize_time(query, str(proposed) if proposed else None, self.memory)
             if resolved:
                 args["time"] = resolved
-            elif self.memory.get("last_time"):
-                args["time"] = self.memory["last_time"]
+            elif context_memory.get("last_time"):
+                args["time"] = context_memory["last_time"]
             else:
-                args["time"] = self.tools._resolve_time({}, self.memory)
+                args["time"] = self.tools._resolve_time({}, context_memory)
 
         if tool_name == "compare_network_states":
             explicit = SemanticResolver.explicit_times(query)
@@ -184,10 +187,10 @@ class MultiAgentRuntime:
                 time_b = args.get("time_b")
 
                 if not time_a:
-                    time_a = self.memory.get("comparison_time_a")
+                    time_a = context_memory.get("comparison_time_a")
 
                 if not time_b:
-                    time_b = self.memory.get("last_time")
+                    time_b = context_memory.get("last_time")
 
                 if time_a:
                     args["time_a"] = str(time_a)
@@ -197,7 +200,7 @@ class MultiAgentRuntime:
 
             args["policy"] = (
                 self._normalize_optional_policy(args.get("policy"))
-                or self._normalize_optional_policy(self.memory.get("recommended_policy"))
+                or self._normalize_optional_policy(context_memory.get("recommended_policy"))
                 or str(self.tools.controller["active_policy"]).upper()
             )
 
@@ -222,41 +225,54 @@ class MultiAgentRuntime:
             else:
                 args["policy"] = (
                     self._normalize_optional_policy(args.get("policy"))
-                    or self._normalize_optional_policy(self.memory.get("recommended_policy"))
-                    or self._normalize_optional_policy(self.memory.get("last_policy"))
+                    or self._normalize_optional_policy(context_memory.get("recommended_policy"))
+                    or self._normalize_optional_policy(context_memory.get("last_policy"))
                     or str(self.tools.controller["active_policy"]).upper()
                 )
 
         if tool_name == "analyze_constrained_allocation":
             extracted = SemanticResolver.extract_constraints(query)
-            constraint_keys = {"enterprise_subcarriers", "ran_subcarriers", "pon_subcarriers"}
-            proposed_constraints = {
-                k: v for k, v in args.items()
-                if k in constraint_keys and v is not None
+
+            constraint_keys = {
+                "enterprise_subcarriers",
+                "ran_subcarriers",
+                "pon_subcarriers",
             }
-            q = query.lower()
-            additive_followup = any(
-                token in q
-                for token in ("also", "in addition", "as well", "and keep", "and give")
+
+            proposed_constraints = {
+                k: v
+                for k, v in args.items()
+                if k in constraint_keys
+                and v is not None
+            }
+
+            current = {
+                **proposed_constraints,
+                **extracted,
+            }
+
+            previous_constraints = (
+                self.state_manager.memory_for_constraints(
+                    query,
+                    self.memory,
+                )
             )
 
-            # Explicit constraints in the current utterance are authoritative.
-            # For additive follow-ups, preserve prior constraints and fill only
-            # genuinely missing services from the coordinator proposal. This
-            # prevents schema/default values from erasing remembered constraints.
-            current = dict(self.memory.get("last_constraints_raw", {})) if additive_followup else {}
-            for key, value in proposed_constraints.items():
-                if key not in current and key not in extracted:
-                    current[key] = value
-            current.update(extracted)
+            if previous_constraints:
+                current = {
+                    **previous_constraints,
+                    **current,
+                }
 
             for key in constraint_keys:
                 args.pop(key, None)
+
             args.update(current)
-            args["reference_policy"] = (
-                self._normalize_optional_policy(args.get("reference_policy"))
-                or self._normalize_optional_policy(self.memory.get("recommended_policy"))
-                or str(self.tools.controller["active_policy"]).upper()
+
+            args.setdefault(
+                "reference_policy",
+                context_memory.get("recommended_policy")
+                or self.tools.controller["active_policy"],
             )
 
         if tool_name == "get_network_state_at_time":
