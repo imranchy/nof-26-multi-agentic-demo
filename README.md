@@ -27,16 +27,33 @@ Normal operator answers do not require or expose ML implementation names. The UI
 
 ## Architecture
 
-Mistral is the semantic interface, not the numerical source of truth.
+The demo remains fully local. Mistral runs through Ollama and owns language understanding, multilingual conversation interpretation, semantic specialist routing, and local agent handoffs. Python remains the source of truth for state transitions and network computation.
 
-1. Traffic/SLA prediction capabilities provide the predicted state.
-2. The deterministic PSC engine executes PCA, MBA, and SAA.
-3. Mistral interprets natural language, extracts timestamps/objectives/constraints, and produces a bounded tool plan.
-4. Deterministic argument normalization catches explicit routing mistakes.
-5. Mistral explains the returned evidence.
-6. Grounding guardrails reject unsupported numeric, categorical, causal, physical-layer, or implementation-detail claims and fall back to deterministic text.
+1. The local Mistral coordinator interprets English, Italian, Portuguese, or code-switched operator requests.
+2. It emits a schema-constrained context decision plus one or more specialist handoffs.
+3. The selected local Mistral specialist receives only its bounded capability set and emits structured tool arguments.
+4. Python applies explicit > inherited > default precedence, relative-time arithmetic, constraint merging, enum/range validation, and feasibility checks.
+5. Deterministic traffic/SLA models and PCA/MBA/SAA policy code execute the requested analysis.
+6. Mistral explains only the returned evidence; grounding guardrails retain deterministic fallback behavior.
 
-Policy algorithms remain Python source-of-truth implementations. YAML files contain declarative policy and operator-policy metadata.
+The coordinator never executes network tools directly, and specialists cannot call capabilities outside their registered scope. There is no Python phrase list or regex router for operator intent, follow-up wording, objectives, policies, or SC constraints.
+
+The local handoff path is:
+
+```text
+Operator (EN / IT / PT)
+        ↓
+Local Mistral Coordinator
+context + specialist handoff
+        ↓
+Local Mistral Specialist
+structured capability call
+        ↓
+Deterministic Python
+state + arithmetic + validation + network execution
+        ↓
+Grounded operator response
+```
 
 ## Prompt versioning
 
@@ -47,7 +64,7 @@ NoF v1 keeps prompts outside application code:
 - `prompts/operator_style_v1.md`
 - `config/prompts.yaml`
 
-This allows prompt changes to be evaluated independently of the model and network logic. All v1 prompt versions are `v1`.
+This allows prompt changes to be evaluated independently of the model and network logic. The coordinator prompt is versioned as `v3-local-handoff`; explainer/operator-style prompts remain independently versioned.
 
 ## Failure-prone risk
 
@@ -158,7 +175,7 @@ The UI is a single operator page with:
 
 ```text
 app/
-  agents/              Mistral coordinator/explainer + guardrails + prediction wrappers
+  agents/              local Mistral coordinator, bounded specialists, explainer, guardrails
   policy_engine/       deterministic PCA/MBA/SAA and metrics
   semantic/            deterministic semantic normalization/safety
   tools/               operator analytical capabilities
@@ -195,3 +212,22 @@ validation/
 ```
 
 For detailed evaluation methodology see `docs/EVALUATION_V1.md`; for architecture see `docs/ARCHITECTURE_V1.md`.
+
+## Multilingual semantic coordinator
+
+The coordinator now treats natural-language understanding as an LLM concern and
+keeps deterministic Python focused on validation, state transitions, temporal
+arithmetic, constraint merging, and network execution. Operator requests may be
+written in English, Italian, Portuguese, or code-switch between those languages
+and networking terminology. Mistral maps them to the same canonical structured
+contract before execution.
+
+The runtime no longer uses Python phrase lists or regex-based operator intent,
+objective, follow-up, policy, or SC-constraint parsing. Relative time is emitted
+as a structured minute offset and applied deterministically in Python.
+
+Run the multilingual conversational-context benchmark with:
+
+```bash
+python tests/llm/evaluate.py --query-set operator_multilingual_context_v1.json --all
+```

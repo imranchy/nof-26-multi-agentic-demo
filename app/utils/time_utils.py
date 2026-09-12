@@ -2,21 +2,18 @@ from __future__ import annotations
 
 from datetime import datetime
 
-import dateparser
-
 
 def normalize_time(value: str) -> str | None:
-    """Normalize an explicit operator clock expression to canonical HH:MM."""
-    parsed = dateparser.parse(
-        value,
-        settings={
-            # We only care about the clock component. A fixed base keeps
-            # time-only parsing deterministic and independent of today's date.
-            "RELATIVE_BASE": datetime(2000, 1, 1),
-        },
-    )
+    """Normalize a structured clock value to canonical HH:MM.
 
-    if parsed is None:
-        return None
-
-    return parsed.strftime("%H:%M")
+    Natural-language time interpretation belongs to the coordinator model. This
+    helper only validates common clock representations returned or supplied as
+    structured values.
+    """
+    text = str(value).strip()
+    for fmt in ("%H:%M", "%I:%M %p", "%I:%M%p"):
+        try:
+            return datetime.strptime(text.upper(), fmt).strftime("%H:%M")
+        except ValueError:
+            continue
+    return None

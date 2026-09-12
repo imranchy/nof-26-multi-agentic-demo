@@ -5,6 +5,25 @@ from typing import Any
 
 
 @dataclass
+class ContextInterpretation:
+    relation: str = "standalone"
+    inherit: list[str] = field(default_factory=list)
+    relative_time_offset_minutes: int | None = None
+
+
+@dataclass
+class CoordinatorDecision:
+    context: ContextInterpretation
+    handoffs: list[str] = field(default_factory=list)
+
+
+@dataclass
+class SpecialistDecision:
+    agent: str
+    steps: list[tuple[str, dict[str, Any]]] = field(default_factory=list)
+
+
+@dataclass
 class ToolStep:
     tool_name: str
     arguments: dict[str, Any] = field(default_factory=dict)
@@ -15,7 +34,7 @@ class QueryPlan:
     intent: str
     tool_name: str
     arguments: dict[str, Any] = field(default_factory=dict)
-    source: str = "mistral-tool-plan"
+    source: str = "mistral-local-agent-handoff"
     steps: list[ToolStep] = field(default_factory=list)
 
 

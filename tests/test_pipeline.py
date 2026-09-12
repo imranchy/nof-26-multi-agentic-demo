@@ -135,26 +135,23 @@ def test_constrained_subcarrier_allocation_uses_current_tool():
     assert fallback
 
 
-def test_followup_constraint_normalization_ignores_llm_inferred_old_counts():
+def test_followup_constraint_merge_uses_structured_context_not_language_phrases():
+    from app.schemas import ContextInterpretation
+
     runtime = MultiAgentRuntime(use_llm=False)
     runtime.memory.update({
         "last_time": "19:00",
         "last_constraints_raw": {"ran_subcarriers": 2},
     })
-    context_memory = runtime.state_manager.scoped_memory(
-        "Also reserve one SC for PON.",
-        runtime.memory,
+    context = ContextInterpretation(
+        relation="followup",
+        inherit=["time", "constraints"],
     )
+    context_memory = runtime.state_manager.scoped_memory(context, runtime.memory)
 
     args = runtime._normalize_tool_arguments(
-        "Also reserve one SC for PON.",
         "analyze_constrained_allocation",
-        {
-            # Simulate a bad coordinator inference based on the prior result.
-            "ran_subcarriers": 1,
-            "enterprise_subcarriers": 2,
-            "pon_subcarriers": 1,
-        },
+        {"pon_subcarriers": 1},
         context_memory,
     )
 
@@ -162,3 +159,22 @@ def test_followup_constraint_normalization_ignores_llm_inferred_old_counts():
     assert args["pon_subcarriers"] == 1
     assert "enterprise_subcarriers" not in args
     assert args["time"] == "19:00"
+
+
+def test_relative_followup_time_overrides_model_time_with_python_arithmetic():
+    from app.schemas import ContextInterpretation
+
+    runtime = MultiAgentRuntime(use_llm=False)
+    runtime.memory.update({"last_time": "09:00", "last_tool": "get_traffic_forecast"})
+    context = ContextInterpretation(
+        relation="followup",
+        inherit=["intent", "time"],
+        relative_time_offset_minutes=60,
+    )
+    context_memory = runtime.state_manager.scoped_memory(context, runtime.memory)
+    args = runtime._normalize_tool_arguments(
+        "get_traffic_forecast",
+        {"time": "09:00"},
+        context_memory,
+    )
+    assert args["time"] == "10:00"

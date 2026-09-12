@@ -1,121 +1,77 @@
-# Conversational context routing v1
+# Conversational context routing v2
 
-Resolve conversational references using the supplied context, but always
-identify the current operator intent before inheriting the previous tool.
+Interpret the relationship between the current utterance and supplied structured
+memory semantically. Do not rely on literal phrase matching.
 
-## Current intent overrides previous tool
+Return a context interpretation together with the tool plan:
 
-A contextual reference such as:
+- `relation`: `standalone` or `followup`
+- `inherit`: zero or more of `intent`, `time`, `policy`, `objective`, `constraints`
+- `relative_time.offset_minutes`: only for relative temporal references
 
-- that time
-- same time
-- then
-- an hour later
-- next interval
+The model identifies the meaning; deterministic Python applies inheritance,
+precedence, constraint merging, and clock arithmetic.
 
-may supply a missing timestamp.
+## Precedence
 
-It does not force reuse of the previous analytical capability.
+Explicit information in the current turn overrides inherited state. Inherited
+state overrides configured defaults. Do not let prior assistant prose become
+authoritative state.
 
-Examples:
+## Relative time
 
-Operator:
-"What traffic do you expect at 08:15?"
+For a relative temporal follow-up, inherit `time` and convert the linguistic
+relationship into an integer minute offset. Do not calculate the resulting clock
+time yourself.
 
-Follow-up:
-"At that time, what is the SLA risk?"
+These utterances have the same semantic interpretation:
 
--> use `get_sla_prediction`
--> time = 08:15
+- English: `And one hour later?`
+- Italian: `E un'ora dopo?`
+- Portuguese: `E uma hora depois?`
 
-Do NOT reuse `get_traffic_forecast`.
+They should yield an offset of `+60` minutes when they refer to the previous
+operator timestamp.
 
-Operator:
-"Show me the network state at 18:10."
+Likewise, semantically equivalent formulations such as `60 minutes after that`,
+`60 minuti dopo`, or `60 minutos depois` should map to the same structured
+offset when context makes the reference unambiguous.
 
-Follow-up:
-"What about an hour later?"
+## Intent changes at inherited time
 
--> use `get_network_state_at_time`
--> time = 19:10
+A follow-up may inherit a timestamp while changing analytical intent.
 
-Here the follow-up contains no new analytical intent, so preserving the
-previous capability is correct.
+English: `At that time, what is the SLA risk?`
+Italian: `A quell'ora, qual è il rischio SLA?`
+Portuguese: `Naquele horário, qual é o risco de SLA?`
 
-## Policy references
+These inherit `time` but select the SLA prediction capability rather than
+reusing the previous tool.
 
-When the context identifies a recommended or previously simulated policy,
-resolve:
+## Explicit policy override
 
-- that policy
-- the recommended policy
-- it
-- same policy
+A policy explicitly named in the current utterance overrides an inherited
+policy while other missing context may still be inherited.
 
-only when unambiguous.
+English: `Use PCA instead. Show the outcome.`
+Italian: `Usa invece PCA. Mostrami il risultato.`
+Portuguese: `Use PCA em vez disso. Mostre o resultado.`
 
-If the follow-up asks for performance or outcome, use a policy
-counterfactual rather than blindly repeating the previous comparison.
+If the prior timestamp is unambiguous, inherit only that time and select the
+single-policy counterfactual capability with `policy=PCA`.
 
-Example:
+## Additive SC constraints
 
-Operator:
-"Compare PCA, MBA and SAA at 20:00 and recommend one."
+When the current utterance semantically adds a new SC constraint to an existing
+constraint set, inherit `constraints` and emit only the newly explicit counts in
+the current step. Python performs the deterministic merge.
 
-Follow-up:
-"What performance does that policy give?"
+English: `Also reserve one SC for PON.`
+Italian: `Riserva anche una SC per PON.`
+Portuguese: `Reserve também uma SC para PON.`
 
--> `simulate_policy_at_time`
--> use the recommended policy
--> time = 20:00
+## Standalone isolation
 
-## Explicit policy overrides context
-
-If the current query explicitly names PCA, MBA, or SAA, use that policy even
-if another policy was stored in conversation context.
-
-Example:
-
-Operator:
-"Which policy would you use at 18:30?"
-
-Follow-up:
-"Use PCA instead and show me the outcome."
-
--> `simulate_policy_at_time`
--> policy = PCA
--> time = 18:30
-
-## Constraint continuation
-
-When a constrained-allocation follow-up says:
-
-- also
-- in addition
-- as well
-- and keep
-- and give
-
-merge the new explicit constraint with the existing constraint context.
-
-Do not discard previously stated constraints unless the operator explicitly
-replaces them.
-
-Example:
-
-Operator:
-"Keep RAN on 2 subcarriers at 19:00."
-
-Follow-up:
-"Also keep PON on 1 SC."
-
--> retain RAN = 2
--> add PON = 1
--> retain time = 19:00
-
-## Minimum-tool rule
-
-Use the current query's intent and only inherit missing arguments from context.
-
-Do not reuse the previous tool merely because the query contains a contextual
-time reference.
+An unrelated request with its own complete intent and arguments is standalone,
+even when previous memory exists. It must not inherit prior intent, time,
+policy, objective, or constraints.

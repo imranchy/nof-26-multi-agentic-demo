@@ -117,3 +117,14 @@ When a relative follow-up such as "one hour later" has already been resolved to 
 absolute timestamp, answer using the resolved timestamp directly. Do not repeat the
 numeric relative offset (for example, do not say "one hour later") unless that number is
 explicitly present in the current deterministic evidence.
+
+The resolved absolute timestamp in the supplied deterministic evidence is authoritative.
+
+Never recompute, increment, decrement, infer, or reinterpret that timestamp from the
+operator's conversational wording.
+
+If the evidence says `10:00`, report `10:00`, even if the current utterance contains
+a relative expression such as "one hour later".
+
+Conversation language is used only to understand the request. Once deterministic
+execution has produced the resolved timestamp, use that supplied timestamp exactly.

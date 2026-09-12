@@ -1,110 +1,79 @@
 from __future__ import annotations
 
+from datetime import datetime, timedelta
 from typing import Any
+
+from app.schemas import ContextInterpretation
 
 
 class ConversationStateManager:
-    """
-    Scope conversation memory so genuine follow-ups inherit relevant state
-    while standalone requests are protected from unrelated prior context.
-    """
+    """Apply validated, language-independent conversational state transitions."""
 
-    FOLLOWUP_MARKERS = (
-        "also",
-        "instead",
-        "same time",
-        "that time",
-        "at that time",
-        "that point",
-        "then",
-        "what about",
-        "how about",
-        "and now",
-        "in addition",
-        "as well",
-        "next interval",
-        "previous interval",
-        "one interval later",
-        "one interval before",
-        "an hour later",
-        "an hour earlier",
-        "use that",
-        "keep that",
-        "validate that",
-        "check that",
-    )
-
-    CONSTRAINT_FOLLOWUP_MARKERS = (
-        "also",
-        "in addition",
-        "as well",
-        "and keep",
-        "and give",
-        "reserve another",
-        "keep the rest",
-        "with the rest",
-    )
-
-    @classmethod
-    def is_followup(cls, query: str) -> bool:
-        q = query.lower().strip()
-
-        return any(
-            marker in q
-            for marker in cls.FOLLOWUP_MARKERS
-        )
-
-    @classmethod
-    def is_constraint_followup(cls, query: str) -> bool:
-        q = query.lower().strip()
-
-        return any(
-            marker in q
-            for marker in cls.CONSTRAINT_FOLLOWUP_MARKERS
-        )
+    INHERITABLE_FIELDS = {
+        "intent",
+        "time",
+        "policy",
+        "objective",
+        "constraints",
+    }
 
     @classmethod
     def scoped_memory(
         cls,
-        query: str,
+        context: ContextInterpretation,
         memory: dict[str, Any],
     ) -> dict[str, Any]:
-        """
-        Return only memory appropriate for interpreting this turn.
-
-        A standalone query gets almost no inherited semantic state.
-        A genuine follow-up gets the relevant previous state.
-        """
-
-        if not memory:
+        if not memory or context.relation != "followup":
             return {}
 
-        if cls.is_followup(query):
-            return dict(memory)
+        inherit = set(context.inherit) & cls.INHERITABLE_FIELDS
+        scoped: dict[str, Any] = {}
 
-        # Standalone request:
-        # do not leak previous policy/objective/constraints/task intent.
-        #
-        # Keep no semantic values here because explicit values in the
-        # current query and configured defaults should determine execution.
-        return {}
+        if "intent" in inherit:
+            if memory.get("last_tool"):
+                scoped["last_tool"] = memory["last_tool"]
+            if memory.get("last_agent"):
+                scoped["last_agent"] = memory["last_agent"]
 
-    @classmethod
-    def memory_for_constraints(
-        cls,
-        query: str,
-        memory: dict[str, Any],
-    ) -> dict[str, Any]:
-        """
-        Constraint state is inherited only for additive follow-ups.
-        """
+        if "time" in inherit:
+            if memory.get("last_time"):
+                scoped["last_time"] = memory["last_time"]
+            if memory.get("comparison_time_a"):
+                scoped["comparison_time_a"] = memory["comparison_time_a"]
+            if memory.get("comparison_time_b"):
+                scoped["comparison_time_b"] = memory["comparison_time_b"]
 
-        if not cls.is_constraint_followup(query):
+        if "policy" in inherit:
+            for key in ("last_policy", "recommended_policy", "last_reference_policy"):
+                if memory.get(key) is not None:
+                    scoped[key] = memory[key]
+
+        if "objective" in inherit and memory.get("last_objective") is not None:
+            scoped["last_objective"] = memory["last_objective"]
+
+        if "constraints" in inherit and memory.get("last_constraints_raw"):
+            scoped["last_constraints_raw"] = dict(memory["last_constraints_raw"])
+
+        if context.relative_time_offset_minutes is not None:
+            base = scoped.get("last_time")
+            if base is not None:
+                scoped["last_time"] = cls.apply_relative_minutes(
+                    str(base),
+                    context.relative_time_offset_minutes,
+                )
+                scoped["relative_time_applied"] = True
+
+        return scoped
+
+    @staticmethod
+    def apply_relative_minutes(base_time: str, offset_minutes: int) -> str:
+        parsed = datetime.strptime(base_time, "%H:%M")
+        shifted = parsed + timedelta(minutes=int(offset_minutes))
+        return shifted.strftime("%H:%M")
+
+    @staticmethod
+    def memory_for_constraints(context_memory: dict[str, Any]) -> dict[str, int]:
+        raw = context_memory.get("last_constraints_raw", {})
+        if not isinstance(raw, dict):
             return {}
-
-        return dict(
-            memory.get(
-                "last_constraints_raw",
-                {},
-            )
-        )
+        return {str(k): int(v) for k, v in raw.items()}

@@ -1,0 +1,168 @@
+[
+  {
+    "id": "conversational_context_01",
+    "category": "conversational_context",
+    "query": "What about an hour later?",
+    "setup_query": "Show me the network state at 18:10.",
+    "expected_tools": [
+      "get_network_state_at_time"
+    ],
+    "raw_tools": [
+      "compare_network_states"
+    ],
+    "executed_tools": [
+      "compare_network_states"
+    ],
+    "raw_tool_sequence_correct": false,
+    "executed_tool_sequence_correct": false,
+    "raw_arguments_correct": false,
+    "executed_arguments_correct": false,
+    "deterministic_correction": false,
+    "coordinator_parse_failure": false,
+    "coordinator_fallback_used": false,
+    "raw_explanation_accepted": false,
+    "guardrail_fallback": true,
+    "final_safe_answer": true,
+    "unsupported_numeric_claim": true,
+    "unsupported_categorical_claim": false,
+    "unsupported_causal_claim": false,
+    "implementation_detail_exposed": false,
+    "grounding_issues": [
+      "unsupported_advisory_claim",
+      "unsupported_numeric_claim"
+    ],
+    "answer": "From 18:10 to 19:10, predicted total traffic changes by +11.63 Gbps and Failure-prone risk by +35.0 percentage points. Under SAA, blocking changes by +11.14 percentage points.",
+    "raw_llm_answer": "Between 18:10 and 19:10, the network experienced significant changes. The predicted offered traffic increased by 11.63 Gbps. Failure-prone risk increased by 35 percentage points, and blocking increased by 11.14 percentage points. The SLA state transitioned from degraded to failure-prone. No reconfiguration was recommended."
+  },
+  {
+    "id": "conversational_context_02",
+    "category": "conversational_context",
+    "query": "And one hour later?",
+    "setup_query": "What traffic do you expect at 09:00?",
+    "expected_tools": [
+      "get_traffic_forecast"
+    ],
+    "raw_tools": [
+      "compare_network_states"
+    ],
+    "executed_tools": [
+      "compare_network_states"
+    ],
+    "raw_tool_sequence_correct": false,
+    "executed_tool_sequence_correct": false,
+    "raw_arguments_correct": false,
+    "executed_arguments_correct": false,
+    "deterministic_correction": false,
+    "coordinator_parse_failure": false,
+    "coordinator_fallback_used": false,
+    "raw_explanation_accepted": false,
+    "guardrail_fallback": true,
+    "final_safe_answer": true,
+    "unsupported_numeric_claim": true,
+    "unsupported_categorical_claim": false,
+    "unsupported_causal_claim": false,
+    "implementation_detail_exposed": false,
+    "grounding_issues": [
+      "unsupported_advisory_claim",
+      "unsupported_numeric_claim"
+    ],
+    "answer": "From 09:00 to 10:00, predicted total traffic changes by +1.56 Gbps and Failure-prone risk by +0.0 percentage points. Under SAA, blocking changes by +0.00 percentage points.",
+    "raw_llm_answer": "Between 9:00 and 10:00, the predicted offered traffic increased by 1.56 Gbps, but there were no changes in Failure-prone risk or blocking. Both SLA states remained normal. No reconfigurations were recommended."
+  },
+  {
+    "id": "conversational_context_03",
+    "category": "conversational_context",
+    "query": "At that time, what is the SLA risk?",
+    "setup_query": "What traffic do you expect at 08:15?",
+    "expected_tools": [
+      "get_sla_prediction"
+    ],
+    "raw_tools": [
+      "get_sla_prediction"
+    ],
+    "executed_tools": [
+      "get_sla_prediction"
+    ],
+    "raw_tool_sequence_correct": true,
+    "executed_tool_sequence_correct": true,
+    "raw_arguments_correct": true,
+    "executed_arguments_correct": true,
+    "deterministic_correction": false,
+    "coordinator_parse_failure": false,
+    "coordinator_fallback_used": false,
+    "raw_explanation_accepted": true,
+    "guardrail_fallback": false,
+    "final_safe_answer": true,
+    "unsupported_numeric_claim": false,
+    "unsupported_categorical_claim": false,
+    "unsupported_causal_claim": false,
+    "implementation_detail_exposed": false,
+    "grounding_issues": [],
+    "answer": "At 08:15, the predicted SLA state is Normal, with a Failure-prone risk of 0%.",
+    "raw_llm_answer": "At 08:15, the predicted SLA state is Normal, with a Failure-prone risk of 0%."
+  },
+  {
+    "id": "conversational_context_04",
+    "category": "conversational_context",
+    "query": "Use PCA instead. Show the outcome.",
+    "setup_query": "Which policy would you use at 18:30?",
+    "expected_tools": [
+      "simulate_policy_at_time"
+    ],
+    "raw_tools": [
+      "simulate_policy_at_time"
+    ],
+    "executed_tools": [
+      "simulate_policy_at_time"
+    ],
+    "raw_tool_sequence_correct": true,
+    "executed_tool_sequence_correct": true,
+    "raw_arguments_correct": true,
+    "executed_arguments_correct": true,
+    "deterministic_correction": false,
+    "coordinator_parse_failure": false,
+    "coordinator_fallback_used": false,
+    "raw_explanation_accepted": true,
+    "guardrail_fallback": false,
+    "final_safe_answer": true,
+    "unsupported_numeric_claim": false,
+    "unsupported_categorical_claim": false,
+    "unsupported_causal_claim": false,
+    "implementation_detail_exposed": false,
+    "grounding_issues": [],
+    "answer": "At 18:30, the PCA counterfactual produces ENTERPRISE | RAN | RAN | PON, with 0.81% overall blocking and a 99.19% fresh-service ratio. No SC reconfigurations are required.",
+    "raw_llm_answer": "At 18:30, the PCA counterfactual produces ENTERPRISE | RAN | RAN | PON, with 0.81% overall blocking and a 99.19% fresh-service ratio. No SC reconfigurations are required."
+  },
+  {
+    "id": "conversational_context_05",
+    "category": "conversational_context",
+    "query": "Also reserve one SC for PON.",
+    "setup_query": "Keep RAN on 2 subcarriers at 19:00.",
+    "expected_tools": [
+      "analyze_constrained_allocation"
+    ],
+    "raw_tools": [
+      "analyze_constrained_allocation"
+    ],
+    "executed_tools": [
+      "analyze_constrained_allocation"
+    ],
+    "raw_tool_sequence_correct": true,
+    "executed_tool_sequence_correct": true,
+    "raw_arguments_correct": false,
+    "executed_arguments_correct": false,
+    "deterministic_correction": false,
+    "coordinator_parse_failure": false,
+    "coordinator_fallback_used": false,
+    "raw_explanation_accepted": true,
+    "guardrail_fallback": false,
+    "final_safe_answer": true,
+    "unsupported_numeric_claim": false,
+    "unsupported_categorical_claim": false,
+    "unsupported_causal_claim": false,
+    "implementation_detail_exposed": false,
+    "grounding_issues": [],
+    "answer": "At 19:00, the PON=1-SC constraint is feasible. The resulting SC assignment is RAN | ENTERPRISE | PON | RAN under the balanced objective, with 11.96% overall blocking and 0 SC reconfigurations.",
+    "raw_llm_answer": "At 19:00, the PON=1-SC constraint is feasible. The resulting SC assignment is RAN | ENTERPRISE | PON | RAN under the balanced objective, with 11.96% overall blocking and 0 SC reconfigurations."
+  }
+]

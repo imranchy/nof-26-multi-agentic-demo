@@ -1,0 +1,120 @@
+{
+  "benchmark": "NoF multilingual conversational-context suite",
+  "version": "v1",
+  "languages": ["Italian", "Portuguese"],
+  "total_queries": 14,
+  "cases": [
+    {
+      "id": "it_context_01",
+      "category": "multilingual_context_it",
+      "setup_query": "Mostrami lo stato della rete alle 18:10.",
+      "query": "E un'ora dopo?",
+      "expected_tools": ["get_network_state_at_time"],
+      "expected_args_by_tool": {"get_network_state_at_time": {"time": "19:10"}}
+    },
+    {
+      "id": "it_context_02",
+      "category": "multilingual_context_it",
+      "setup_query": "Che traffico prevedi alle 09:00?",
+      "query": "E tra un'ora?",
+      "expected_tools": ["get_traffic_forecast"],
+      "expected_args_by_tool": {"get_traffic_forecast": {"time": "10:00"}}
+    },
+    {
+      "id": "it_context_03",
+      "category": "multilingual_context_it",
+      "setup_query": "Che traffico prevedi alle 08:15?",
+      "query": "E 60 minuti dopo?",
+      "expected_tools": ["get_traffic_forecast"],
+      "expected_args_by_tool": {"get_traffic_forecast": {"time": "09:15"}}
+    },
+    {
+      "id": "it_context_04",
+      "category": "multilingual_context_it",
+      "setup_query": "Che traffico prevedi alle 08:15?",
+      "query": "A quell'ora, qual è il rischio SLA?",
+      "expected_tools": ["get_sla_prediction"],
+      "expected_args_by_tool": {"get_sla_prediction": {"time": "08:15"}}
+    },
+    {
+      "id": "it_context_05",
+      "category": "multilingual_context_it",
+      "setup_query": "Quale politica useresti alle 18:30?",
+      "query": "Usa invece PCA. Mostrami il risultato.",
+      "expected_tools": ["simulate_policy_at_time"],
+      "expected_args_by_tool": {"simulate_policy_at_time": {"time": "18:30", "policy": "PCA"}}
+    },
+    {
+      "id": "it_context_06",
+      "category": "multilingual_context_it",
+      "setup_query": "Mantieni RAN su 2 SC alle 19:00.",
+      "query": "Riserva anche una SC per PON.",
+      "expected_tools": ["analyze_constrained_allocation"],
+      "expected_args_by_tool": {"analyze_constrained_allocation": {"time": "19:00", "ran_subcarriers": 2, "pon_subcarriers": 1}}
+    },
+    {
+      "id": "it_context_07",
+      "category": "multilingual_context_it",
+      "setup_query": "Mostrami lo stato completo della rete alle 16:20.",
+      "query": "Quale politica di allocazione useresti alle 21:15?",
+      "expected_tools": ["compare_policies_at_time"],
+      "expected_args_by_tool": {"compare_policies_at_time": {"time": "21:15"}}
+    },
+    {
+      "id": "pt_context_01",
+      "category": "multilingual_context_pt",
+      "setup_query": "Mostre o estado da rede às 18:10.",
+      "query": "E uma hora depois?",
+      "expected_tools": ["get_network_state_at_time"],
+      "expected_args_by_tool": {"get_network_state_at_time": {"time": "19:10"}}
+    },
+    {
+      "id": "pt_context_02",
+      "category": "multilingual_context_pt",
+      "setup_query": "Que tráfego você espera às 09:00?",
+      "query": "E daqui a uma hora?",
+      "expected_tools": ["get_traffic_forecast"],
+      "expected_args_by_tool": {"get_traffic_forecast": {"time": "10:00"}}
+    },
+    {
+      "id": "pt_context_03",
+      "category": "multilingual_context_pt",
+      "setup_query": "Que tráfego você espera às 08:15?",
+      "query": "E 60 minutos depois disso?",
+      "expected_tools": ["get_traffic_forecast"],
+      "expected_args_by_tool": {"get_traffic_forecast": {"time": "09:15"}}
+    },
+    {
+      "id": "pt_context_04",
+      "category": "multilingual_context_pt",
+      "setup_query": "Que tráfego você espera às 08:15?",
+      "query": "Naquele horário, qual é o risco de SLA?",
+      "expected_tools": ["get_sla_prediction"],
+      "expected_args_by_tool": {"get_sla_prediction": {"time": "08:15"}}
+    },
+    {
+      "id": "pt_context_05",
+      "category": "multilingual_context_pt",
+      "setup_query": "Qual política você usaria às 18:30?",
+      "query": "Use PCA em vez disso. Mostre o resultado.",
+      "expected_tools": ["simulate_policy_at_time"],
+      "expected_args_by_tool": {"simulate_policy_at_time": {"time": "18:30", "policy": "PCA"}}
+    },
+    {
+      "id": "pt_context_06",
+      "category": "multilingual_context_pt",
+      "setup_query": "Mantenha RAN com 2 SCs às 19:00.",
+      "query": "Reserve também uma SC para PON.",
+      "expected_tools": ["analyze_constrained_allocation"],
+      "expected_args_by_tool": {"analyze_constrained_allocation": {"time": "19:00", "ran_subcarriers": 2, "pon_subcarriers": 1}}
+    },
+    {
+      "id": "pt_context_07",
+      "category": "multilingual_context_pt",
+      "setup_query": "Mostre o estado completo da rede às 16:20.",
+      "query": "Qual política de alocação você usaria às 21:15?",
+      "expected_tools": ["compare_policies_at_time"],
+      "expected_args_by_tool": {"compare_policies_at_time": {"time": "21:15"}}
+    }
+  ]
+}

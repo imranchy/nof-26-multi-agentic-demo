@@ -16,6 +16,6 @@ llm:
   numeric_network_values_must_come_from_tools: true
 
 prompt_versions:
-  coordinator: v1
+  coordinator: v2
   explainer: v1
   operator_style: v1

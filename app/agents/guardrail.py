@@ -155,7 +155,6 @@ class GuardrailAgent:
             issues.append("invalid_unit_GBps")
 
         lowered = answer.lower()
-        q = (query or "").lower()
 
         if (
             any(
@@ -176,31 +175,14 @@ class GuardrailAgent:
                 "unsupported_physical_layer_diagnosis"
             )
 
-        provenance_requested = any(
-            term in q
+        if any(
+            term in lowered
             for term in (
-                "which model",
-                "what model",
-                "algorithm",
-                "implementation",
-                "provenance",
                 "xgboost",
                 "random forest",
-                "classifier",
-            )
-        )
-
-        if (
-            not provenance_requested
-            and any(
-                term in lowered
-                for term in (
-                    "xgboost",
-                    "random forest",
-                    "classifier confidence",
-                    "rf-v1",
-                    "xgb-v1",
-                )
+                "classifier confidence",
+                "rf-v1",
+                "xgb-v1",
             )
         ):
             issues.append(
@@ -389,27 +371,6 @@ class GuardrailAgent:
     ) -> list[str]:
         """Reject operational advice that is absent from deterministic evidence."""
         lowered = answer.lower()
-        q = (query or "").lower()
-
-        advisory_requested = any(
-            term in q
-            for term in (
-                "recommend",
-                "recommendation",
-                "what should",
-                "what action",
-                "should we",
-                "what do you suggest",
-                "advice",
-                "advise",
-            )
-        )
-
-        # If the operator explicitly asked for recommendation/advice,
-        # other category-specific validation decides whether the
-        # recommendation itself is grounded.
-        if advisory_requested:
-            return []
 
         # Evidence must contain an explicit advisory/recommendation
         # signal before unsolicited operational advice is allowed.

@@ -121,33 +121,19 @@ Compose one concise operator-facing answer, normally under 130 words.
         query: str,
     ):
         """Hide implementation details and shape category-specific evidence."""
-        provenance_requested = any(
-            term in query.lower()
-            for term in (
-                "which model",
-                "what model",
-                "algorithm",
-                "implementation",
-                "provenance",
-                "how is the prediction produced",
-            )
-        )
-
+        # Keep implementation metadata out of normal operator-facing evidence.
+        # Language-specific provenance detection no longer happens in Python.
         hidden = {
             "prediction_confidence",
             "severity_score",
             "internal_probabilities",
+            "provenance",
+            "model",
+            "version",
+            "execution_mode",
+            "saved_model_inference",
+            "source_of_truth",
         }
-
-        if not provenance_requested:
-            hidden |= {
-                "provenance",
-                "model",
-                "version",
-                "execution_mode",
-                "saved_model_inference",
-                "source_of_truth",
-            }
 
         if isinstance(value, dict):
             category = value.get("category")
@@ -535,8 +521,6 @@ Compose one concise operator-facing answer, normally under 130 words.
         hidden: set[str],
     ) -> dict:
         """Expose bounded range evidence based on the operator's requested scope."""
-        q = query.lower()
-
         shaped: dict = {
             "category": "time_range_summary",
         }

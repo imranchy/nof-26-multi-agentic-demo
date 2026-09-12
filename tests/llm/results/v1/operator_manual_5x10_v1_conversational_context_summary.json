@@ -1,0 +1,66 @@
+{
+  "benchmark_version": "v1",
+  "prompt_versions": {
+    "coordinator": "v3-local-handoff",
+    "explainer": "v1",
+    "operator_style": "v1"
+  },
+  "generated_at": "2026-09-12T19:03:56",
+  "overall": {
+    "n": 5,
+    "raw_tool_sequence_accuracy": 0.6,
+    "raw_argument_accuracy": 0.4,
+    "executed_tool_sequence_accuracy": 0.6,
+    "executed_argument_accuracy": 0.4,
+    "deterministic_correction_rate": 0.0,
+    "coordinator_parse_failure_rate": 0.0,
+    "coordinator_fallback_rate": 0.0,
+    "raw_explanation_accept_rate": 0.6,
+    "guardrail_fallback_rate": 0.4,
+    "final_safe_answer_rate": 1.0,
+    "unsupported_numeric_claim_rate": 0.4,
+    "unsupported_categorical_claim_rate": 0.0,
+    "unsupported_causal_claim_rate": 0.0,
+    "implementation_detail_exposure_rate": 0.0,
+    "system_pass": false,
+    "threshold_failures": [
+      "raw_tool_sequence_accuracy=0.600 < 0.800",
+      "raw_argument_accuracy=0.400 < 0.800",
+      "executed_tool_sequence_accuracy=0.600 < 1.000",
+      "executed_argument_accuracy=0.400 < 1.000"
+    ]
+  },
+  "by_category": {
+    "conversational_context": {
+      "n": 5,
+      "raw_tool_sequence_accuracy": 0.6,
+      "raw_argument_accuracy": 0.4,
+      "executed_tool_sequence_accuracy": 0.6,
+      "executed_argument_accuracy": 0.4,
+      "deterministic_correction_rate": 0.0,
+      "coordinator_parse_failure_rate": 0.0,
+      "coordinator_fallback_rate": 0.0,
+      "raw_explanation_accept_rate": 0.6,
+      "guardrail_fallback_rate": 0.4,
+      "final_safe_answer_rate": 1.0,
+      "unsupported_numeric_claim_rate": 0.4,
+      "unsupported_categorical_claim_rate": 0.0,
+      "unsupported_causal_claim_rate": 0.0,
+      "implementation_detail_exposure_rate": 0.0,
+      "system_pass": false,
+      "threshold_failures": [
+        "raw_tool_sequence_accuracy=0.600 < 0.800",
+        "raw_argument_accuracy=0.400 < 0.800",
+        "executed_tool_sequence_accuracy=0.600 < 1.000",
+        "executed_argument_accuracy=0.400 < 1.000"
+      ]
+    }
+  },
+  "thresholds": {
+    "raw_tool_sequence_accuracy": 0.8,
+    "raw_argument_accuracy": 0.8,
+    "executed_tool_sequence_accuracy": 1.0,
+    "executed_argument_accuracy": 1.0,
+    "final_safe_answer_rate": 1.0
+  }
+}

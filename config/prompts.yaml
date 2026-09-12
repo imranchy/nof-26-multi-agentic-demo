@@ -1,18 +1,10 @@
 prompts:
 
   coordinator:
-    version: v1
+    version: v3-local-handoff
     base: coordinator/base_v1.md
     modules:
-      - coordinator/traffic_prediction_v1.md
-      - coordinator/sla_risk_state_v1.md
-      - coordinator/full_network_state_v1.md
-      - coordinator/policy_comparison_balanced_v1.md
-      - coordinator/objective_aware_policy_v1.md
-      - coordinator/policy_counterfactual_v1.md
-      - coordinator/sc_constraints_v1.md
-      - coordinator/temporal_comparison_v1.md
-      - coordinator/range_risk_discovery_v1.md
+      - coordinator/local_handoffs_v1.md
       - coordinator/conversational_context_v1.md
 
   explainer:
