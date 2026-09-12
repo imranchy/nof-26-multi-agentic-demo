@@ -18,6 +18,39 @@ class ConversationStateManager:
     }
 
     @classmethod
+    def missing_inherited_fields(
+        cls,
+        context: ContextInterpretation,
+        memory: dict[str, Any],
+    ) -> list[str]:
+        """Return referenced state fields that do not exist.
+
+        This validates the structured context contract only. It never inspects the
+        operator's wording.
+        """
+        if context.relation != "followup":
+            return []
+
+        missing: list[str] = []
+        inherit = set(context.inherit) & cls.INHERITABLE_FIELDS
+
+        if "intent" in inherit and not (memory.get("last_tool") and memory.get("last_agent")):
+            missing.append("intent")
+        if "time" in inherit and not memory.get("last_time"):
+            missing.append("time")
+        if "policy" in inherit and not any(
+            memory.get(key) is not None
+            for key in ("last_policy", "recommended_policy", "last_reference_policy")
+        ):
+            missing.append("policy")
+        if "objective" in inherit and memory.get("last_objective") is None:
+            missing.append("objective")
+        if "constraints" in inherit and not memory.get("last_constraints_raw"):
+            missing.append("constraints")
+
+        return missing
+
+    @classmethod
     def scoped_memory(
         cls,
         context: ContextInterpretation,

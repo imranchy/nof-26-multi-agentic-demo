@@ -10,8 +10,8 @@ def normalize_time(value: str) -> str | None:
     helper only validates common clock representations returned or supplied as
     structured values.
     """
-    text = str(value).strip()
-    for fmt in ("%H:%M", "%I:%M %p", "%I:%M%p"):
+    text = str(value).strip().strip("\"\'").rstrip(".,;").strip()
+    for fmt in ("%H:%M", "%H:%M:%S", "%I:%M %p", "%I:%M%p"):
         try:
             return datetime.strptime(text.upper(), fmt).strftime("%H:%M")
         except ValueError:

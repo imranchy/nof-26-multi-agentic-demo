@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from typing import Any
 
+from app import config
 from app.utils.time_utils import normalize_time as normalize_clock_time
 
 
@@ -12,8 +13,8 @@ class SemanticResolver:
     canonical values before deterministic execution.
     """
 
-    POLICIES = {"PCA", "MBA", "SAA"}
-    OBJECTIVES = {"balanced", "min_blocking", "min_reconfiguration", "sla_priority"}
+    POLICIES = set(config.policy_ids())
+    OBJECTIVES = set(config.recommendation_objectives())
     METRICS = {"failure_probability", "total_gbps", "blocking", "reconfiguration"}
     SLA_STATES = {"normal", "degraded", "failure_prone"}
     CONSTRAINT_KEYS = {"enterprise_subcarriers", "ran_subcarriers", "pon_subcarriers"}

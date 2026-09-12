@@ -27,40 +27,48 @@ Normal operator answers do not require or expose ML implementation names. The UI
 
 ## Architecture
 
-The demo remains fully local. Mistral runs through Ollama and owns language understanding, multilingual conversation interpretation, semantic specialist routing, and local agent handoffs. Python remains the source of truth for state transitions and network computation.
+The demo remains fully local. Mistral runs through Ollama and owns multilingual language understanding, conversational context interpretation, native function selection, structured function arguments, and evidence explanation. Python remains the source of truth for state transitions and network computation.
 
-1. The local Mistral coordinator interprets English, Italian, Portuguese, or code-switched operator requests.
-2. It emits a schema-constrained context decision plus one or more specialist handoffs.
-3. The selected local Mistral specialist receives only its bounded capability set and emits structured tool arguments.
+1. The local Mistral context coordinator interprets English, Italian, Portuguese, or code-switched requests and emits only a schema-constrained context relation/inheritance contract.
+2. The same local Mistral model receives the actual registered function schemas through Ollama native tool calling and selects exactly one function plus explicit arguments.
+3. The selected function identifies the specialist domain (traffic, SLA, policy, network analysis, or scope).
 4. Python applies explicit > inherited > default precedence, relative-time arithmetic, constraint merging, enum/range validation, and feasibility checks.
-5. Deterministic traffic/SLA models and PCA/MBA/SAA policy code execute the requested analysis.
-6. Mistral explains only the returned evidence; grounding guardrails retain deterministic fallback behavior.
+5. Deterministic traffic/SLA models and PCA/MBA/SAA policy code execute locally. Policy metadata and optimization objectives are declarative configuration, not generated code.
+6. Mistral explains only returned evidence; grounding guardrails retain deterministic fallback behavior.
 
-The coordinator never executes network tools directly, and specialists cannot call capabilities outside their registered scope. There is no Python phrase list or regex router for operator intent, follow-up wording, objectives, policies, or SC constraints.
-
-The local handoff path is:
+There is no Python phrase list or regex router for operator intent, follow-up wording, objectives, policies, or SC constraints. The custom specialist `steps` JSON planner has also been removed in favor of the model's native function-calling interface.
 
 ```text
 Operator (EN / IT / PT)
         ↓
-Local Mistral Coordinator
-context + specialist handoff
+Local Mistral Context Coordinator
+structured conversational contract
         ↓
-Local Mistral Specialist
-structured capability call
+Local Mistral Native Tool Calling
+function name + explicit arguments
         ↓
 Deterministic Python
 state + arithmetic + validation + network execution
         ↓
-Grounded operator response
+Mistral grounded explanation
+        ↓
+Grounding guardrail / fallback
 ```
+
+### Structured follow-up contract
+
+For conversational turns, Mistral decides whether intent/time/policy/objective/constraints are inherited. Python never interprets the operator's wording. When `intent` is inherited, Python restricts the native function-calling stage to the previously executed function. This prevents a time-only follow-up from silently changing analytical intent while preserving an explicit intent switch such as traffic → SLA.
+
+If Mistral references state that does not exist, Python requests clarification instead of guessing.
+
+See `docs/ARCHITECTURE_LOCAL_HANDOFF.md` and `UPGRADE_NATIVE_MISTRAL_TOOL_CALLING.md`.
 
 ## Prompt versioning
 
 NoF v1 keeps prompts outside application code:
 
-- `prompts/coordinator_v1.md`
-- `prompts/explainer_v1.md`
+- `prompts/coordinator/*.md`
+- `prompts/explainer/*.md`
 - `prompts/operator_style_v1.md`
 - `config/prompts.yaml`
 
@@ -175,7 +183,7 @@ The UI is a single operator page with:
 
 ```text
 app/
-  agents/              local Mistral coordinator, bounded specialists, explainer, guardrails
+  agents/              local context coordinator, native tool catalog/caller, explainer, guardrails
   policy_engine/       deterministic PCA/MBA/SAA and metrics
   semantic/            deterministic semantic normalization/safety
   tools/               operator analytical capabilities
@@ -196,8 +204,8 @@ policies/
   saa.yaml
 
 prompts/
-  coordinator_v1.md
-  explainer_v1.md
+  coordinator/          routing/context modules
+  explainer/            category-grounded explanation modules
   operator_style_v1.md
 
 tests/

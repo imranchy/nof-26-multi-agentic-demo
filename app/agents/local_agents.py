@@ -51,3 +51,13 @@ def agent_catalog() -> list[dict[str, Any]]:
         }
         for spec in LOCAL_AGENT_SPECS.values()
     ]
+
+TOOL_TO_AGENT: dict[str, str] = {
+    tool_name: agent_name
+    for agent_name, spec in LOCAL_AGENT_SPECS.items()
+    for tool_name in spec.tools
+}
+
+
+def agent_for_tool(tool_name: str) -> str | None:
+    return TOOL_TO_AGENT.get(tool_name)

@@ -10,7 +10,7 @@ from app import config
 from app.policy_engine import PolicyRegistry, PolicySimulator
 from app.policy_engine.base import ASSIGNMENT_STATES, IDLE, SERVICES
 
-POLICIES = ("PCA", "MBA", "SAA")
+POLICIES = config.policy_ids()
 
 
 class OperatorTools:

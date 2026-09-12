@@ -3,7 +3,7 @@
 Interpret the relationship between the current utterance and supplied structured
 memory semantically. Do not rely on literal phrase matching.
 
-Return a context interpretation together with the tool plan:
+Return a context interpretation only; native function calling selects the analytical tool afterward:
 
 - `relation`: `standalone` or `followup`
 - `inherit`: zero or more of `intent`, `time`, `policy`, `objective`, `constraints`

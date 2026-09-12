@@ -5,106 +5,120 @@ from typing import Any
 from urllib.request import Request, urlopen
 
 from app import config
-from app.agents.local_agents import LOCAL_AGENT_SPECS
-
-POLICY = {"type": "string", "enum": ["PCA", "MBA", "SAA"]}
-TIME = {
-    "type": "string",
-    "pattern": r"^([01]\d|2[0-3]):[0-5]\d$",
-    "description": "Canonical 24-hour HH:MM time.",
-}
-OBJECTIVE = {"type": "string", "enum": ["balanced", "min_blocking", "min_reconfiguration", "sla_priority"]}
-SC_COUNT = {"type": "integer", "minimum": 0, "maximum": 4}
-METRIC = {"type": "string", "enum": ["failure_probability", "total_gbps", "blocking", "reconfiguration"]}
-SLA_STATE = {"type": "string", "enum": ["normal", "degraded", "failure_prone"]}
-
-
-def _tool(name: str, description: str, properties: dict[str, Any] | None = None) -> dict[str, Any]:
-    return {
-        "name": name,
-        "description": description,
-        "parameters": {
-            "type": "object",
-            "properties": properties or {},
-            "additionalProperties": False,
-        },
-    }
-
-
-TOOLS: dict[str, dict[str, Any]] = {
-    item["name"]: item
-    for item in [
-        _tool("get_traffic_forecast", "Return predicted Enterprise, RAN, PON, and total offered traffic at one timestamp.", {"time": TIME}),
-        _tool("get_sla_prediction", "Return predicted SLA state and Failure-prone risk at one timestamp.", {"time": TIME}),
-        _tool("explain_sla_risk", "Explain/correct a predicted SLA state using validated risk evidence and concurrent traffic as non-causal context.", {"time": TIME, "claimed_state": SLA_STATE}),
-        _tool("get_network_state_at_time", "Retrieve the complete network-state snapshot at one timestamp, optionally under one named policy.", {"time": TIME, "policy": POLICY}),
-        _tool("compare_policies_at_time", "Compare PCA, MBA, and SAA at one timestamp and recommend according to an operator objective.", {"time": TIME, "objective": OBJECTIVE}),
-        _tool("simulate_policy_at_time", "Return the counterfactual outcome of one named allocation policy at one timestamp.", {"time": TIME, "policy": POLICY}),
-        _tool("analyze_constrained_allocation", "Evaluate explicit operator SC-count constraints and choose the best feasible four-SC assignment.", {
-            "time": TIME,
-            "enterprise_subcarriers": SC_COUNT,
-            "ran_subcarriers": SC_COUNT,
-            "pon_subcarriers": SC_COUNT,
-            "reference_policy": POLICY,
-            "objective": OBJECTIVE,
-        }),
-        _tool("compare_network_states", "Compare network state, traffic, SLA risk, and policy KPIs at two timestamps.", {"time_a": TIME, "time_b": TIME, "policy": POLICY}),
-        _tool("find_risk_intervals", "Find top-k highest-risk, highest-load, highest-blocking, or highest-reconfiguration intervals.", {"metric": METRIC, "top_k": {"type": "integer", "minimum": 1, "maximum": 10}}),
-        _tool("summarize_time_range", "Summarize traffic, SLA state distribution, policy blocking, reconfiguration, and recommendations over a continuous time range.", {"start_time": TIME, "end_time": TIME, "objective": OBJECTIVE}),
-        _tool("decline_physical_layer", "Use for unsupported physical-layer requests such as OSNR, BER, Q-factor, fiber-cut, or GNPy analysis."),
-        _tool("decline_out_of_scope", "Use for generic non-network requests."),
-    ]
-}
-
-ARGUMENT_PROPERTIES: dict[str, Any] = {
-    "time": TIME,
-    "time_a": TIME,
-    "time_b": TIME,
-    "start_time": TIME,
-    "end_time": TIME,
-    "policy": POLICY,
-    "reference_policy": POLICY,
-    "objective": OBJECTIVE,
-    "enterprise_subcarriers": SC_COUNT,
-    "ran_subcarriers": SC_COUNT,
-    "pon_subcarriers": SC_COUNT,
-    "metric": METRIC,
-    "top_k": {"type": "integer", "minimum": 1, "maximum": 10},
-    "claimed_state": SLA_STATE,
-}
+from app.agents.tool_catalog import ALL_TOOL_NAMES, tool_schemas
 
 
 class LocalSpecialistAgent:
-    """One local Mistral specialist selected by the coordinator handoff."""
+    """Local Mistral raw function-calling selector.
+
+    Mistral selects exactly one registered local function and its structured
+    arguments using Mistral 7B v0.3's raw function-calling protocol.
+
+    Python remains responsible for:
+    - validation
+    - inherited state
+    - precedence
+    - clock arithmetic
+    - constraint merging
+    - deterministic network execution
+
+    No operator-language phrase routing is implemented here.
+    """
 
     def __init__(self, use_llm: bool = True) -> None:
         self.use_llm = use_llm
         self.last_audit: dict[str, Any] = {}
 
-    def plan(
+    def select_tool(
         self,
-        agent_name: str,
         query: str,
         context_memory: dict[str, Any],
         conversation_history: list[dict[str, Any]],
-    ) -> list[tuple[str, dict[str, Any]]]:
+        allowed_tools_override: tuple[str, ...] | None = None,
+    ) -> tuple[str, dict[str, Any]]:
         if not self.use_llm:
-            raise RuntimeError("LLM specialist planning is disabled.")
-        if agent_name not in LOCAL_AGENT_SPECS:
-            raise ValueError(f"unknown local specialist: {agent_name}")
+            raise RuntimeError("LLM tool selection is disabled.")
 
-        spec = LOCAL_AGENT_SPECS[agent_name]
-        tool_specs = [TOOLS[name] for name in spec.tools]
-        prompt = f"""You are {agent_name}, a local specialist in an optical-network operations assistant.
+        allowed_tools = tuple(allowed_tools_override or ALL_TOOL_NAMES)
 
-Specialist responsibility:
-{spec.description}
+        if not allowed_tools:
+            raise ValueError("At least one local tool must be available.")
 
-Allowed capabilities for this specialist:
-{json.dumps(tool_specs, ensure_ascii=False)}
+        inherited_lock = (
+            context_memory.get("last_tool")
+            if len(allowed_tools) == 1
+            and context_memory.get("last_tool") in allowed_tools
+            else None
+        )
 
+        tools = tool_schemas(allowed_tools)
+
+        system_prompt = """
+You are the function-selection layer of a local optical-network operations assistant.
+
+Your only task is to select exactly one available function.
+
+The operator request may be:
+- English
+- Italian
+- Portuguese
+- code-switched technical language
+
+Use the semantic meaning of the request, not literal phrase matching.
+
+Capability rules:
+
+- Traffic/load/forecast at one timestamp:
+  get_traffic_forecast
+
+- Direct SLA state or Failure-prone risk:
+  get_sla_prediction
+
+- Explain, verify or correct an SLA state/risk claim:
+  explain_sla_risk
+
+- Complete network snapshot at one timestamp:
+  get_network_state_at_time
+
+- Compare policies or choose the best policy according to an objective:
+  compare_policies_at_time
+
+- Evaluate what one explicitly named policy would produce:
+  simulate_policy_at_time
+
+- Evaluate explicit hard SC-count reservations or assignments:
+  analyze_constrained_allocation
+
+- Compare network conditions at two timestamps:
+  compare_network_states
+
+- Find highest/worst/top-k intervals:
+  find_risk_intervals
+
+- Summarize one continuous start-to-end time range:
+  summarize_time_range
+
+Important distinctions:
+
+- An optimization preference is NOT a hard SC-count constraint.
+- Minimum blocking, fewest reconfigurations, stability, or SLA priority are policy objectives.
+- Explicit assignments such as RAN=2 SCs or reserve 1 SC for PON are hard constraints.
+- A named-policy hypothetical is a counterfactual, not a complete network snapshot.
+- A broader function is not equivalent to the specifically requested function.
+- A relative-time follow-up does not automatically imply comparison.
+- Do not calculate network values.
+- Do not perform clock arithmetic.
+- Do not answer the operator in prose.
+- Do not invent timestamps, policies, objectives, SC counts, or network values.
+- Call exactly one function.
+""".strip()
+
+        user_content = f"""
 Validated context state eligible for this turn:
 {json.dumps(context_memory, ensure_ascii=False)}
+
+Inherited capability lock:
+{json.dumps(inherited_lock, ensure_ascii=False)}
 
 Recent structured conversation history:
 {json.dumps(conversation_history[-4:], ensure_ascii=False)}
@@ -112,124 +126,242 @@ Recent structured conversation history:
 Current operator request:
 {query}
 
-Return the minimum schema-constrained capability plan for your responsibility.
+Select exactly one available function.
 
-Rules:
-- Interpret natural language semantically in English, Italian, Portuguese, or code-switched technical language.
-- Do not calculate network values.
-- Emit only capabilities allowed for this specialist.
-- Emit canonical structured arguments only when they are explicit in the current turn.
-- Context state contains already validated inherited values; omit an argument when the current turn merely references inherited context and Python can apply it.
-- Never invent timestamps, policies, objectives, constraints, metrics, or numerical network results.
-- For an additive SC constraint follow-up, emit only the newly explicit SC counts; Python merges inherited constraints.
-- For relative-time follow-ups, do not emit a guessed absolute timestamp; Python already applied the offset in context state.
-- Preserve a specific inherited analytical intent. Do not broaden it into a more comprehensive capability merely because that capability includes the requested information.
-- If the inherited context identifies a specific tool family or analytical intent, select the matching capability unless the current utterance explicitly asks for a different analysis.
-- A broader result that happens to contain the requested information is not equivalent to the requested capability.
-- Select `compare_network_states` only when the operator explicitly requests comparison, change, difference, delta, or another two-state analysis.
-- Select `get_network_state_at_time` only when the operator requests a complete network-state snapshot; do not use it as a fallback for traffic-only or SLA-only requests.
-- Use one step unless the operator explicitly asks for multiple capabilities owned by this same specialist.
+Include only arguments that are explicit in the current operator request.
+Validated inherited values and defaults are applied later by deterministic Python.
+""".strip()
 
-Capability-selection discipline:
-- Select the single minimum capability that directly answers the operator request.
-- Do not add supporting, contextual, diagnostic, comparison, or state-retrieval capabilities merely because they might provide useful additional information.
-- Use multiple capabilities only when the operator explicitly requests multiple distinct analytical outputs.
-- A relative change of timestamp alone preserves the inherited analytical intent; it does not imply comparison.
-- Select `compare_network_states` only when the operator explicitly asks to compare two network states, changes between times, differences, or deltas.
-- For an SC-allocation constraint request, select `analyze_constrained_allocation` only unless the operator explicitly requests another analytical result as well.
-- For a named-policy outcome, select `simulate_policy_at_time`; do not additionally retrieve network state unless explicitly requested.
-- For a complete network-state request at one timestamp, select `get_network_state_at_time`; do not add comparison merely because a previous timestamp exists.
+        attempts: list[dict[str, Any]] = []
+
+        for attempt_no in (1, 2):
+            attempt_instruction = user_content
+
+            if attempt_no == 2:
+                attempt_instruction += """
+
+Your previous response was not a valid function call.
+Return exactly one function call using the required Mistral tool-call protocol.
+Do not answer in prose.
 """
 
-        schema = self._output_schema(spec.tools)
-        attempts: list[dict[str, Any]] = []
-        for attempt_no in (1, 2):
+            raw_prompt = self._build_raw_prompt(
+                tools=tools,
+                system_prompt=system_prompt,
+                user_content=attempt_instruction,
+            )
+
             payload = {
                 "model": config.OLLAMA_MODEL,
-                "prompt": prompt if attempt_no == 1 else prompt + "\nThe previous plan failed validation. Return only a schema-valid specialist plan.",
+                "prompt": raw_prompt,
+                "raw": True,
                 "stream": False,
-                "format": schema,
-                "options": {"temperature": 0, "num_predict": 320},
+                "options": {
+                    "temperature": 0,
+                    "num_predict": 220,
+                },
             }
+
             try:
                 request = Request(
                     f"{config.OLLAMA_URL}/api/generate",
                     data=json.dumps(payload).encode("utf-8"),
                     headers={"Content-Type": "application/json"},
                 )
+
                 with urlopen(request, timeout=90) as response:
                     body = json.loads(response.read())
-                raw = str(body.get("response", "")).strip()
-                selected = json.loads(raw)
-                steps = self._validate_steps(agent_name, selected)
+
+                raw_text = str(body.get("response", "")).strip()
+
+                tool_name, arguments = self._parse_raw_tool_call(
+                    raw_text=raw_text,
+                    allowed_tools=allowed_tools,
+                )
+
                 self.last_audit = {
-                    "agent": agent_name,
-                    "attempts": attempts + [{"attempt": attempt_no, "ok": True, "raw": raw}],
+                    "mode": "mistral_raw_function_calling",
+                    "attempts": attempts
+                    + [
+                        {
+                            "attempt": attempt_no,
+                            "ok": True,
+                            "raw": raw_text,
+                            "tool": tool_name,
+                            "arguments": arguments,
+                        }
+                    ],
                     "parse_failed": False,
                     "fallback_used": False,
                 }
-                return steps
-            except Exception as exc:
-                attempts.append({"attempt": attempt_no, "ok": False, "error": f"{type(exc).__name__}: {exc}"})
 
-        # Fail closed inside the selected specialist's scope.
-        fallback_tool = "decline_out_of_scope" if agent_name == "scope_agent" else None
+                return tool_name, arguments
+
+            except Exception as exc:
+                attempts.append(
+                    {
+                        "attempt": attempt_no,
+                        "ok": False,
+                        "error": f"{type(exc).__name__}: {exc}",
+                    }
+                )
+
         self.last_audit = {
-            "agent": agent_name,
+            "mode": "mistral_raw_function_calling",
             "attempts": attempts,
             "parse_failed": True,
             "fallback_used": True,
         }
-        if fallback_tool:
-            return [(fallback_tool, {})]
-        raise RuntimeError(f"local specialist {agent_name} could not produce a valid structured plan")
+
+        raise RuntimeError(
+            "Mistral did not return one valid raw function call"
+        )
 
     @staticmethod
-    def _output_schema(allowed_tools: tuple[str, ...]) -> dict[str, Any]:
-        return {
-            "type": "object",
-            "properties": {
-                "steps": {
-                    "type": "array",
-                    "minItems": 1,
-                    "maxItems": 2,
-                    "items": {
-                        "type": "object",
-                        "properties": {
-                            "name": {"type": "string", "enum": list(allowed_tools)},
-                            "arguments": {
-                                "type": "object",
-                                "properties": ARGUMENT_PROPERTIES,
-                                "additionalProperties": False,
-                            },
-                        },
-                        "required": ["name", "arguments"],
-                        "additionalProperties": False,
-                    },
-                }
-            },
-            "required": ["steps"],
-            "additionalProperties": False,
-        }
+    def _validate_native_tool_calls(
+        tool_calls: list[dict[str, Any]],
+        allowed_tools: tuple[str, ...],
+    ) -> tuple[str, dict[str, Any]]:
+        """Validate one function call from Ollama's generic tool-call shape.
+
+        Retained for compatibility with existing tests and older adapters.
+        The active mistral:7b runtime path uses _parse_raw_tool_call().
+        """
+
+        if not isinstance(tool_calls, list):
+            raise ValueError("tool_calls must be a list")
+
+        if len(tool_calls) != 1:
+            raise ValueError("exactly one tool call is required")
+
+        call = tool_calls[0]
+
+        if not isinstance(call, dict):
+            raise ValueError("tool call must be an object")
+
+        function = call.get("function")
+
+        if not isinstance(function, dict):
+            raise ValueError("tool call must contain a function object")
+
+        name = str(function.get("name", "")).strip()
+
+        if not name:
+            raise ValueError("function name is required")
+
+        if name not in allowed_tools:
+            raise ValueError(
+                f"tool {name!r} is not available for this turn"
+            )
+
+        arguments = function.get("arguments", {})
+
+        if isinstance(arguments, str):
+            try:
+                arguments = json.loads(arguments or "{}")
+            except json.JSONDecodeError as exc:
+                raise ValueError(
+                    f"invalid function arguments JSON: {exc}"
+                ) from exc
+
+        if arguments is None:
+            arguments = {}
+
+        if not isinstance(arguments, dict):
+            raise ValueError("function arguments must be an object")
+
+        return name, dict(arguments)
 
     @staticmethod
-    def _validate_steps(agent_name: str, selected: Any) -> list[tuple[str, dict[str, Any]]]:
-        if not isinstance(selected, dict):
-            raise ValueError("specialist response must be an object")
-        raw_steps = selected.get("steps")
-        if not isinstance(raw_steps, list) or not 1 <= len(raw_steps) <= 2:
-            raise ValueError("specialist must return one or two steps")
+    def _build_raw_prompt(
+        tools: list[dict[str, Any]],
+        system_prompt: str,
+        user_content: str,
+    ) -> str:
+        """Build Mistral 7B v0.3 raw function-calling prompt."""
 
-        allowed = set(LOCAL_AGENT_SPECS[agent_name].tools)
-        steps: list[tuple[str, dict[str, Any]]] = []
-        for item in raw_steps:
-            if not isinstance(item, dict):
-                raise ValueError("specialist step must be an object")
-            name = str(item.get("name", ""))
-            arguments = item.get("arguments", {})
-            if name not in allowed:
-                raise ValueError(f"{agent_name} cannot call {name}")
-            if not isinstance(arguments, dict):
-                raise ValueError("specialist arguments must be an object")
-            steps.append((name, dict(arguments)))
-        return steps
+        tools_json = json.dumps(
+            tools,
+            ensure_ascii=False,
+            separators=(",", ":"),
+        )
+
+        return (
+            f"[AVAILABLE_TOOLS] {tools_json}[/AVAILABLE_TOOLS]"
+            f"[INST] {system_prompt}\n\n{user_content} [/INST]"
+        )
+
+    @staticmethod
+    def _parse_raw_tool_call(
+        raw_text: str,
+        allowed_tools: tuple[str, ...],
+    ) -> tuple[str, dict[str, Any]]:
+        """Parse Mistral's [TOOL_CALLS] structured protocol.
+
+        This parses only the model's machine-readable function-call protocol.
+        It does not parse or interpret operator language.
+        """
+
+        if not raw_text:
+            raise ValueError("empty Mistral response")
+
+        marker = "[TOOL_CALLS]"
+
+        if marker not in raw_text:
+            raise ValueError(
+                "Mistral response did not contain [TOOL_CALLS]"
+            )
+
+        payload_text = raw_text.split(marker, 1)[1].strip()
+
+        # Some model/template variants may append EOS-like content.
+        if "</s>" in payload_text:
+            payload_text = payload_text.split("</s>", 1)[0].strip()
+
+        decoder = json.JSONDecoder()
+
+        try:
+            calls, _ = decoder.raw_decode(payload_text)
+        except json.JSONDecodeError as exc:
+            raise ValueError(
+                f"invalid TOOL_CALLS JSON: {exc}"
+            ) from exc
+
+        if not isinstance(calls, list):
+            raise ValueError(
+                "TOOL_CALLS payload must be a list"
+            )
+
+        if len(calls) != 1:
+            raise ValueError(
+                "exactly one tool call is required"
+            )
+
+        call = calls[0]
+
+        if not isinstance(call, dict):
+            raise ValueError(
+                "tool call must be an object"
+            )
+
+        name = str(call.get("name", "")).strip()
+
+        if name not in allowed_tools:
+            raise ValueError(
+                f"tool {name!r} is not available for this turn"
+            )
+
+        arguments = call.get("arguments", {})
+
+        if isinstance(arguments, str):
+            arguments = json.loads(arguments or "{}")
+
+        if arguments is None:
+            arguments = {}
+
+        if not isinstance(arguments, dict):
+            raise ValueError(
+                "tool arguments must be an object"
+            )
+
+        return name, dict(arguments)

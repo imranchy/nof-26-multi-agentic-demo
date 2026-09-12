@@ -55,3 +55,24 @@ def test_explicit_current_constraint_can_override_inherited_constraint():
     current = {"pon_subcarriers": 2}
     merged = {**previous, **current}
     assert merged == {"ran_subcarriers": 2, "pon_subcarriers": 2}
+
+
+def test_missing_inherited_time_is_detected_without_language_parsing():
+    context = ContextInterpretation(
+        relation="followup",
+        inherit=["time"],
+        relative_time_offset_minutes=60,
+    )
+    assert ConversationStateManager.missing_inherited_fields(context, {}) == ["time"]
+
+
+def test_missing_inherited_intent_requires_previous_tool_and_agent():
+    context = ContextInterpretation(relation="followup", inherit=["intent"])
+    assert ConversationStateManager.missing_inherited_fields(
+        context,
+        {"last_tool": "get_traffic_forecast"},
+    ) == ["intent"]
+    assert ConversationStateManager.missing_inherited_fields(
+        context,
+        {"last_tool": "get_traffic_forecast", "last_agent": "traffic_agent"},
+    ) == []

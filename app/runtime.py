@@ -6,6 +6,8 @@ from app.agents.coordinator import CoordinatorAgent
 from app.agents.explanation import ExplanationAgent
 from app.agents.forecast import ForecastAgent
 from app.agents.specialist import LocalSpecialistAgent
+from app.agents.local_agents import agent_for_tool
+from app.agents.tool_catalog import ALL_TOOL_NAMES, argument_names
 from app.agents.guardrail import GuardrailAgent
 from app.agents.sla import SLAAgent
 from app.schemas import AgentEvent, AgentResponse, QueryPlan, ToolStep
@@ -17,23 +19,9 @@ from app.tools import OperatorTools
 class MultiAgentRuntime:
     """Mistral semantic orchestration over deterministic prediction/network tools."""
 
-    TOOL_ARGUMENTS = {
-        "get_traffic_forecast": {"time"},
-        "get_sla_prediction": {"time"},
-        "explain_sla_risk": {"time", "claimed_state"},
-        "get_network_state_at_time": {"time", "policy"},
-        "compare_policies_at_time": {"time", "objective"},
-        "simulate_policy_at_time": {"time", "policy"},
-        "analyze_constrained_allocation": {
-            "time", "enterprise_subcarriers", "ran_subcarriers", "pon_subcarriers",
-            "reference_policy", "objective",
-        },
-        "compare_network_states": {"time_a", "time_b", "policy"},
-        "find_risk_intervals": {"metric", "top_k"},
-        "summarize_time_range": {"start_time", "end_time", "objective"},
-        "decline_physical_layer": set(),
-        "decline_out_of_scope": set(),
-    }
+    TOOL_ARGUMENTS = {name: argument_names(name) for name in ALL_TOOL_NAMES}
+
+
 
     def __init__(self, forecast_mode: str = "live", use_llm: bool = True) -> None:
         self.forecast_agent = ForecastAgent(mode=forecast_mode)
@@ -50,59 +38,72 @@ class MultiAgentRuntime:
         self.state_manager = ConversationStateManager()
 
     def ask(self, query: str) -> AgentResponse:
-        trace = [AgentEvent("Local Coordinator", "Interpreting multilingual context and selecting specialist handoff(s)")]
+        trace = [AgentEvent("Local Coordinator", "Interpreting multilingual conversational context")]
 
-        # Stage 1: Mistral decides conversational relation and specialist handoff.
+        # Stage 1: Mistral interprets conversational relation only.
         # Python never inspects operator wording.
         decision = self.coordinator.select_decision(query, self.memory)
-        context_memory = self.state_manager.scoped_memory(decision.context, self.memory)
         coordinator_audit = dict(self.coordinator.last_audit)
 
-        proposed_steps: list[tuple[str, dict[str, Any], str]] = []
-        raw_proposed: list[dict[str, Any]] = []
-        specialist_audits: list[dict[str, Any]] = []
+        missing_context = self.state_manager.missing_inherited_fields(decision.context, self.memory)
+        if missing_context:
+            return self._clarification_response(
+                query=query,
+                missing_fields=missing_context,
+                decision=decision,
+                coordinator_audit=coordinator_audit,
+                trace=trace,
+            )
 
-        # Stage 2: each selected local specialist uses Mistral again to choose only
-        # capabilities within its own bounded tool set. This is the local handoff.
-        for agent_name in decision.handoffs:
-            trace.append(AgentEvent("Local Coordinator", f"Handed off to {agent_name}"))
-            try:
-                specialist_steps = self.specialist.plan(
-                    agent_name=agent_name,
-                    query=query,
-                    context_memory=context_memory,
-                    conversation_history=self.coordinator.history,
-                )
-                specialist_audits.append(dict(self.specialist.last_audit))
-                for tool_name, arguments in specialist_steps:
-                    proposed_steps.append((tool_name, arguments, agent_name))
-                    raw_proposed.append({"tool": tool_name, "arguments": dict(arguments), "agent": agent_name})
-            except Exception as exc:
-                specialist_audits.append({
-                    "agent": agent_name,
-                    "parse_failed": True,
-                    "fallback_used": True,
-                    "error": f"{type(exc).__name__}: {exc}",
-                })
-                proposed_steps.append(("decline_out_of_scope", {}, "scope_agent"))
+        context_memory = self.state_manager.scoped_memory(decision.context, self.memory)
 
-        executed_steps: list[ToolStep] = []
-        step_evidence: list[dict[str, Any]] = []
-        fallbacks: list[str] = []
+        # Stage 2: native Mistral/Ollama function calling chooses exactly one local
+        # analytical capability. If intent is explicitly inherited, Python exposes
+        # only the previously executed function; this enforces the validated
+        # context contract without parsing natural language.
+        allowed_tools_override = self._native_tool_scope(decision, context_memory)
 
-        for index, (tool_name, arguments, agent_name) in enumerate(proposed_steps, start=1):
+        try:
+            tool_name, arguments = self.specialist.select_tool(
+                query=query,
+                context_memory=context_memory,
+                conversation_history=self.coordinator.history,
+                allowed_tools_override=allowed_tools_override,
+            )
+            specialist_audit = dict(self.specialist.last_audit)
+        except Exception as exc:
+            specialist_audit = {
+                "mode": "mistral_raw_function_calling",
+                "parse_failed": True,
+                "fallback_used": True,
+                "error": f"{type(exc).__name__}: {exc}",
+            }
+            tool_name, arguments = "decline_out_of_scope", {}
+
+        agent_name = agent_for_tool(tool_name) or "scope_agent"
+        trace.append(AgentEvent("Local Coordinator", f"Native Mistral tool call handed off to {agent_name}"))
+
+        try:
             args = self._normalize_tool_arguments(tool_name, arguments, context_memory)
-            trace.append(AgentEvent(agent_name, f"Selected capability {tool_name}", detail=str(args)))
+            trace.append(AgentEvent(agent_name, f"Selected native function {tool_name}", detail=str(args)))
             evidence, fallback = self.tools.execute(tool_name, args, self.memory)
-            trace.append(AgentEvent(self._tool_agent_name(tool_name), f"Executed {tool_name}"))
-            executed_steps.append(ToolStep(tool_name=tool_name, arguments=args))
-            step_evidence.append(evidence)
-            fallbacks.append(fallback)
-            self._update_memory(tool_name, args, evidence, agent_name)
+        except Exception as exc:
+            return self._tool_validation_failure_response(
+                query=query,
+                tool_name=tool_name,
+                raw_arguments=arguments,
+                agent_name=agent_name,
+                error=exc,
+                coordinator_audit=coordinator_audit,
+                specialist_audit=specialist_audit,
+                trace=trace,
+            )
 
-        combined = self._combine_evidence(step_evidence)
-        fallback = " ".join(dict.fromkeys(fallbacks))
-        explanation = self.explainer.explain(query, combined, fallback)
+        trace.append(AgentEvent(self._tool_agent_name(tool_name), f"Executed {tool_name}"))
+        self._update_memory(tool_name, args, evidence, agent_name)
+
+        executed_steps = [ToolStep(tool_name=tool_name, arguments=args)]
+        explanation = self.explainer.explain(query, evidence, fallback)
         trace.append(AgentEvent(
             "Grounding Guardrail",
             "Accepted Mistral explanation" if explanation.grounding_passed else "Used deterministic fallback",
@@ -110,37 +111,151 @@ class MultiAgentRuntime:
             detail=", ".join(explanation.issues),
         ))
 
-        history_steps = [{"tool": s.tool_name, "arguments": s.arguments} for s in executed_steps]
+        history_steps = [{"tool": tool_name, "arguments": args}]
         self.coordinator.record_turn(
             query=query,
-            handoffs=decision.handoffs,
+            handoffs=[agent_name],
             steps=history_steps,
-            evidence=combined,
+            evidence=evidence,
             answer=explanation.accepted_answer,
         )
-        primary = executed_steps[-1]
+
         return AgentResponse(
             answer=explanation.accepted_answer,
             raw_llm_answer=explanation.raw_answer,
             plan=QueryPlan(
-                intent=str(combined.get("category", primary.tool_name)),
-                tool_name=primary.tool_name,
-                arguments=primary.arguments,
+                intent=str(evidence.get("category", tool_name)),
+                tool_name=tool_name,
+                arguments=args,
                 steps=executed_steps,
+                source="mistral-native-tool-calling",
             ),
-            evidence=combined,
+            evidence=evidence,
             grounding_passed=explanation.grounding_passed,
             grounding_issues=explanation.issues,
             warnings=list(self.startup_warnings),
             trace=trace,
             routing_audit={
-                "mistral_proposed": raw_proposed,
-                "handoffs": list(decision.handoffs),
+                "mistral_proposed": [{"tool": tool_name, "arguments": dict(arguments), "agent": agent_name}],
+                "handoffs": [agent_name],
                 "context": coordinator_audit.get("context", {}),
-                "specialists": specialist_audits,
+                "specialists": [specialist_audit],
                 "executed": history_steps,
                 "deterministic_correction": None,
                 "coordinator": coordinator_audit,
+                "tool_calling_mode": "mistral_raw_function_calling",
+            },
+        )
+
+    def _tool_validation_failure_response(
+        self,
+        query: str,
+        tool_name: str,
+        raw_arguments: dict[str, Any],
+        agent_name: str,
+        error: Exception,
+        coordinator_audit: dict[str, Any],
+        specialist_audit: dict[str, Any],
+        trace: list[AgentEvent],
+    ) -> AgentResponse:
+        """Fail safely when a native tool call cannot be validated/executed."""
+        trace.append(AgentEvent(
+            "Deterministic Validation",
+            f"Rejected invalid arguments for {tool_name}",
+            status="clarification",
+            detail=f"{type(error).__name__}: {error}",
+        ))
+        answer = "I could not safely resolve the requested parameters. Please restate the time, policy, range, or constraint explicitly."
+        return AgentResponse(
+            answer=answer,
+            raw_llm_answer=None,
+            plan=QueryPlan(
+                intent="clarification_required",
+                tool_name=tool_name,
+                arguments=dict(raw_arguments),
+                steps=[],
+                source="mistral-native-tool-calling",
+            ),
+            evidence={
+                "category": "clarification_required",
+                "reason": "invalid_tool_arguments",
+                "rejected_tool": tool_name,
+            },
+            grounding_passed=True,
+            grounding_issues=[],
+            warnings=list(self.startup_warnings),
+            trace=trace,
+            routing_audit={
+                "mistral_proposed": [{"tool": tool_name, "arguments": dict(raw_arguments), "agent": agent_name}],
+                "handoffs": [agent_name],
+                "context": coordinator_audit.get("context", {}),
+                "specialists": [specialist_audit],
+                "executed": [],
+                "deterministic_correction": "rejected_invalid_tool_arguments",
+                "coordinator": coordinator_audit,
+                "tool_calling_mode": "ollama_native",
+            },
+        )
+
+    @staticmethod
+    def _native_tool_scope(decision, context_memory: dict[str, Any]) -> tuple[str, ...] | None:
+        """Restrict native function calling only when validated intent is inherited."""
+        if (
+            decision.context.relation == "followup"
+            and "intent" in decision.context.inherit
+            and context_memory.get("last_tool")
+        ):
+            return (str(context_memory["last_tool"]),)
+        return None
+
+    def _clarification_response(
+        self,
+        query: str,
+        missing_fields: list[str],
+        decision,
+        coordinator_audit: dict[str, Any],
+        trace: list[AgentEvent],
+    ) -> AgentResponse:
+        missing = set(missing_fields)
+        if missing == {"time"}:
+            answer = "Please specify the reference time (HH:MM) for that follow-up."
+        else:
+            labels = ", ".join(sorted(missing_fields))
+            answer = f"Please provide the missing conversational context ({labels}) before I continue."
+
+        trace.append(AgentEvent(
+            "Local Coordinator",
+            "Requested clarification because referenced structured state is unavailable",
+            status="clarification",
+            detail=", ".join(sorted(missing_fields)),
+        ))
+
+        return AgentResponse(
+            answer=answer,
+            raw_llm_answer=None,
+            plan=QueryPlan(
+                intent="clarification_required",
+                tool_name="request_clarification",
+                arguments={"missing_fields": sorted(missing_fields)},
+                steps=[],
+            ),
+            evidence={
+                "category": "clarification_required",
+                "missing_fields": sorted(missing_fields),
+            },
+            grounding_passed=True,
+            grounding_issues=[],
+            warnings=list(self.startup_warnings),
+            trace=trace,
+            routing_audit={
+                "mistral_proposed": [],
+                "handoffs": list(decision.handoffs),
+                "context": coordinator_audit.get("context", {}),
+                "specialists": [],
+                "executed": [],
+                "deterministic_correction": None,
+                "coordinator": coordinator_audit,
+                "clarification_required": True,
             },
         )
 

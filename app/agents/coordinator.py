@@ -5,20 +5,17 @@ from typing import Any
 from urllib.request import Request, urlopen
 
 from app import config
-from app.agents.local_agents import LOCAL_AGENT_NAMES, agent_catalog
 from app.schemas import ContextInterpretation, CoordinatorDecision
 
 CONTEXT_FIELDS = ["intent", "time", "policy", "objective", "constraints"]
 
 
 class CoordinatorAgent:
-    """Local Mistral coordinator for multilingual context and agent handoffs.
+    """Local Mistral conversational-context interpreter.
 
-    The coordinator does not choose tool arguments. It decides only:
-    1) how the current utterance relates to structured conversation state; and
-    2) which specialist agent(s) should receive the turn.
-
-    No Python phrase matching is used for either decision.
+    This stage decides only how the current utterance relates to validated
+    structured state. Native function calling in the next stage chooses the
+    analytical capability. Python never performs natural-language routing.
     """
 
     def __init__(self, use_llm: bool = True) -> None:
@@ -28,15 +25,13 @@ class CoordinatorAgent:
 
     def select_decision(self, query: str, memory: dict[str, Any] | None = None) -> CoordinatorDecision:
         if not self.use_llm:
-            raise RuntimeError("LLM agent handoff is disabled.")
+            raise RuntimeError("LLM context interpretation is disabled.")
 
         memory = memory or {}
         prompt = f"""{config.coordinator_prompt()}
 
-You are the local handoff coordinator. The application is fully local and uses the same Mistral model for coordinator and specialist agents.
-
-Available specialist agents:
-{json.dumps(agent_catalog(), ensure_ascii=False)}
+You are the conversational-context stage of a fully local optical-network assistant.
+Do not choose a network tool here. A separate native Mistral function-calling stage selects the tool.
 
 Structured conversation memory from previous deterministic execution:
 {json.dumps(self._compact_memory(memory), ensure_ascii=False)}
@@ -47,7 +42,7 @@ Recent structured turn history:
 Current operator request:
 {query}
 
-Return one schema-constrained handoff decision.
+Return only the schema-constrained context interpretation.
 
 Context contract:
 - relation is standalone or followup.
@@ -55,16 +50,10 @@ Context contract:
 - relative_time.offset_minutes is present only when the current utterance expresses time relative to an inherited timestamp.
 - Do not calculate the resulting clock time. Python performs clock arithmetic.
 - Explicit current-turn information overrides inherited state.
-- A standalone request must not inherit any previous state.
-
-Handoff contract:
-- handoffs is an ordered list of the minimum specialist agents required to answer the request.
-- Select agents by semantic meaning, not by literal phrase matching.
-- The request may be English, Italian, Portuguese, or code-switched technical language.
-- If the current turn has no new analytical intent, use structured history/memory to hand off to the specialist matching the inherited intent.
-- Use multiple specialists only when the operator explicitly asks for multiple analytical capabilities.
-- Do not perform network calculations, choose final tool arguments, or invent values.
-- Do not expose implementation terminology to the operator; this response is internal only.
+- A standalone request must not inherit previous state.
+- If the current turn continues the same analytical request while changing only time/arguments, inherit intent.
+- If the current turn explicitly changes analytical intent, do not inherit intent; inherit only referenced fields such as time.
+- Do not invent missing reference values.
 """
 
         attempts: list[dict[str, Any]] = []
@@ -72,10 +61,10 @@ Handoff contract:
         for attempt_no in (1, 2):
             payload = {
                 "model": config.OLLAMA_MODEL,
-                "prompt": prompt if attempt_no == 1 else prompt + "\nThe previous decision failed validation. Return only a schema-valid handoff decision.",
+                "prompt": prompt if attempt_no == 1 else prompt + "\nThe previous context object failed validation. Return only a schema-valid context object.",
                 "stream": False,
                 "format": schema,
-                "options": {"temperature": 0, "num_predict": 260},
+                "options": {"temperature": 0, "num_predict": 180},
             }
             try:
                 request = Request(
@@ -98,23 +87,18 @@ Handoff contract:
                         "inherit": list(decision.context.inherit),
                         "relative_time_offset_minutes": decision.context.relative_time_offset_minutes,
                     },
-                    "handoffs": list(decision.handoffs),
                 }
                 return decision
             except Exception as exc:
                 attempts.append({"attempt": attempt_no, "ok": False, "error": f"{type(exc).__name__}: {exc}"})
 
-        fallback = CoordinatorDecision(
-            context=ContextInterpretation(),
-            handoffs=["scope_agent"],
-        )
+        fallback = CoordinatorDecision(context=ContextInterpretation(), handoffs=[])
         self.last_audit = {
             "prompt_version": config.prompt_version("coordinator"),
             "attempts": attempts,
             "parse_failed": True,
             "fallback_used": True,
             "context": {"relation": "standalone", "inherit": [], "relative_time_offset_minutes": None},
-            "handoffs": ["scope_agent"],
         }
         return fallback
 
@@ -144,15 +128,8 @@ Handoff contract:
                     "required": ["relation", "inherit"],
                     "additionalProperties": False,
                 },
-                "handoffs": {
-                    "type": "array",
-                    "items": {"type": "string", "enum": list(LOCAL_AGENT_NAMES)},
-                    "minItems": 1,
-                    "maxItems": 3,
-                    "uniqueItems": True,
-                },
             },
-            "required": ["context", "handoffs"],
+            "required": ["context"],
             "additionalProperties": False,
         }
 
@@ -195,20 +172,13 @@ Handoff contract:
         elif offset is not None and "time" not in inherit:
             raise ValueError("relative time requires inherited time")
 
-        raw_handoffs = selected.get("handoffs")
-        if not isinstance(raw_handoffs, list) or not 1 <= len(raw_handoffs) <= 3:
-            raise ValueError("Mistral must return between one and three specialist handoffs")
-        handoffs = list(dict.fromkeys(str(x) for x in raw_handoffs))
-        if any(name not in LOCAL_AGENT_NAMES for name in handoffs):
-            raise ValueError("unknown specialist handoff")
-
         return CoordinatorDecision(
             context=ContextInterpretation(
                 relation=relation,
                 inherit=inherit,
                 relative_time_offset_minutes=offset,
             ),
-            handoffs=handoffs,
+            handoffs=[],
         )
 
     def record_turn(

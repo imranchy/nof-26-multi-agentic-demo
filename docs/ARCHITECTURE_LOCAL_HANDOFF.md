@@ -1,46 +1,50 @@
-# NoF 2026 local multilingual agent-handoff architecture
+# NoF 2026 local multilingual native-tool architecture
 
 ## Boundary
 
-The demonstrator keeps the entire operator interaction path local. Ollama hosts the
-Mistral model; no managed Mistral Agents API, cloud conversation service, web search,
-or connector is required for the conference demo.
+The demonstrator keeps the operator interaction path local. Ollama hosts Mistral; no managed Mistral Agents API, cloud conversation service, web search, connector, or server-side code interpreter is required.
 
-Mistral owns linguistic decisions:
+Mistral owns semantic decisions:
 
-- multilingual semantic interpretation (English, Italian, Portuguese, code-switching)
+- multilingual interpretation (English, Italian, Portuguese, code-switching)
 - standalone vs follow-up interpretation
 - inheritance eligibility
 - relative-time offset extraction
-- specialist-agent handoff selection
-- bounded specialist capability/tool selection
+- native function/tool selection
+- explicit structured function arguments
 - operator-facing explanation
 
 Python owns deterministic decisions:
 
 - explicit > inherited > default precedence
-- clock arithmetic from structured minute offsets
+- clock arithmetic from structured offsets
 - constraint accumulation and explicit override
 - enum/range validation
 - SC feasibility and allocation mathematics
 - traffic/SLA model execution
-- PCA/MBA/SAA execution
+- PCA/MBA/SAA policy execution
 - evidence grounding and deterministic fallback
 
-## Local handoff path
+## Local execution path
 
 ```text
 Operator query
     ↓
-CoordinatorAgent (local Mistral / Ollama)
-    ├─ ContextInterpretation
-    └─ specialist handoff list
+Context Coordinator (local Mistral / structured output)
+    └─ ContextInterpretation only
             ↓
-LocalSpecialistAgent (same local Mistral / Ollama)
-    └─ schema-bounded capability call(s)
+Mistral native function calling through Ollama /api/chat
+    └─ exactly one registered local function + explicit arguments
+            ↓
+Tool ownership identifies specialist domain
+    ├─ traffic_agent
+    ├─ sla_agent
+    ├─ policy_agent
+    ├─ network_analysis_agent
+    └─ scope_agent
             ↓
 ConversationStateManager + SemanticResolver
-    └─ deterministic state application and value validation
+    └─ deterministic inheritance, arithmetic and value validation
             ↓
 OperatorTools / policy engine / frozen predictors
             ↓
@@ -49,42 +53,42 @@ ExplanationAgent + grounding guardrail
 Operator response
 ```
 
-## Specialist boundaries
+The previous custom specialist `steps` JSON planner has been removed. Mistral now uses the model's native tool-call interface. Python executes the named function locally; Mistral never executes or mutates network state directly.
 
-- `traffic_agent`: `get_traffic_forecast`
-- `sla_agent`: `get_sla_prediction`, `explain_sla_risk`
-- `policy_agent`: `compare_policies_at_time`, `simulate_policy_at_time`, `analyze_constrained_allocation`
-- `network_analysis_agent`: `get_network_state_at_time`, `compare_network_states`, `find_risk_intervals`, `summarize_time_range`
-- `scope_agent`: `decline_physical_layer`, `decline_out_of_scope`
+## Tool boundaries
 
-A specialist response is rejected if it attempts to call a capability outside its
-registered scope. This keeps local agent handoffs observable and bounded without
-hard-coding natural-language routing rules in Python.
+- `get_traffic_forecast`: direct traffic prediction
+- `get_sla_prediction`: direct SLA state/risk prediction
+- `explain_sla_risk`: explanation/correction of an SLA claim
+- `get_network_state_at_time`: complete one-time snapshot
+- `compare_policies_at_time`: policy comparison / objective-aware recommendation
+- `simulate_policy_at_time`: one named-policy counterfactual
+- `analyze_constrained_allocation`: explicit hard SC-count constraints
+- `compare_network_states`: explicit two-time comparison
+- `find_risk_intervals`: ranked top-k discovery
+- `summarize_time_range`: continuous time-window summary
+- scope-decline tools: unsupported requests
+
+Tool descriptions deliberately distinguish optimization objectives from hard SC-count constraints and named-policy counterfactuals from complete network snapshots.
 
 ## Conversation state
 
-Mistral receives compact structured execution memory and recent structured turns for
-linguistic continuity. Python remains authoritative for operational state. Generated
-assistant prose is not used as network state.
+Mistral receives compact structured execution memory and recent structured turns for linguistic continuity. Python remains authoritative for operational state. Generated assistant prose is not used as network state.
 
-Typical retained fields include:
+When Mistral marks `intent` as inherited, Python exposes only the previously executed native function on that follow-up. This enforces conversational continuity without matching any operator phrase.
 
-- `last_time`
-- `last_tool`
-- `last_agent`
-- `last_policy`
-- `recommended_policy`
-- `last_objective`
-- `last_constraints_raw`
-- comparison timestamps
-- last deterministic evidence
+If referenced state is missing, Python asks for clarification rather than inventing a timestamp, policy, objective, or constraint.
+
+## Policy configuration
+
+Policy definitions remain deterministic and reproducible. Metadata lives in `policies/*.yaml`; optimization objectives live in `config/recommendation.yaml`. Mistral may choose a configured policy/objective through structured function arguments, but it does not generate authoritative policy code at runtime.
+
+This deliberately avoids arbitrary LLM-generated Python in the network control path while still removing language-routing code.
 
 ## Multilingual evaluation
 
-The original English benchmark remains unchanged. A separate Italian/Portuguese
-conversational-context suite validates equivalent semantic behavior across languages:
+The original English benchmark remains unchanged. A separate Italian/Portuguese conversational-context suite validates equivalent semantic behavior across languages:
 
 `tests/llm/query_sets/operator_multilingual_context_v1.json`
 
-The benchmark records both the raw specialist-proposed tool sequence and final
-executed sequence so local-agent routing errors remain visible.
+The evaluator records the raw native Mistral tool call and the final executed call so routing/argument errors remain visible.

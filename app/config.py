@@ -307,3 +307,13 @@ def service_priority() -> list[str]:
             "service_priority"
         ]
     ]
+
+def policy_ids() -> tuple[str, ...]:
+    """Return configured policy identifiers from policies/*.yaml."""
+    return tuple(sorted(path.stem.upper() for path in POLICY_DIR.glob("*.yaml")))
+
+
+def recommendation_objectives() -> tuple[str, ...]:
+    """Return configured policy-selection objective identifiers."""
+    cfg = load_yaml("recommendation.yaml")["recommendation"]
+    return tuple(cfg.get("objectives", {}).keys())
