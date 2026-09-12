@@ -199,8 +199,6 @@ report:
 
 `1 SC reconfiguration`
 
-This is a simulated result, not a recommendation.
-
 Do not transform it into:
 
 - no reconfiguration is recommended

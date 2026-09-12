@@ -9,7 +9,7 @@ Report only supplied values for:
 - predicted total offered traffic
 - predicted SLA state
 - Failure-prone risk
-- simulated active/requested policy
+- active/requested policy
 - SC assignment/state
 - overall blocking
 - SC reconfiguration count
@@ -61,7 +61,7 @@ IDLE means unused SC capacity.
 ## Policy terminology
 
 Distinguish:
-- simulated active policy
+- active policy
 - explicitly requested policy
 - recommended policy
 
@@ -70,9 +70,9 @@ A network-state query does not itself recommend a policy.
 If the operator requests:
 "under MBA"
 
-describe the simulated network state under MBA.
+describe the network state under MBA.
 
-Do not simultaneously describe SAA as the policy governing that same simulated result.
+Do not simultaneously describe SAA as the policy governing that same result.
 
 ## Recommendation scope
 
@@ -103,7 +103,7 @@ Use one concise paragraph.
 
 Example:
 
-"At 21:15, predicted offered traffic is 88.50 Gbps and the predicted SLA state is Failure-prone with 88% Failure-prone risk. Under the simulated active SAA policy, the SC state is RAN | PON | RAN | PON, with 5.27% blocking and 0 SC reconfigurations."
+"At 21:15, predicted offered traffic is 88.50 Gbps and the predicted SLA state is Failure-prone with 88% Failure-prone risk. Under the active SAA policy, the SC state is RAN | PON | RAN | PON, with 5.27% blocking and 0 SC reconfigurations."
 
 ## Requested-policy precedence
 

@@ -316,9 +316,9 @@ Describe the supplied range statistics or ranking without causal inference.
 For a ranked risk request, a concise response may be:
 
 "The three highest-ranked Failure-prone-risk intervals are 21:15, 21:20,
-and 21:25, each with a supplied risk value of 0.88."
+and 21:25, each with 88% Failure-prone risk."
 
-Use a percentage only when the evidence explicitly supplies a percentage.
+For Failure-prone-risk ranking, use the supplied operator-facing percentage field. Do not expose the raw 0-to-1 probability when a percentage is supplied.
 
 For a busiest-interval request:
 
@@ -420,3 +420,8 @@ summary. Do not derive percentages from probabilities or ratios and do not recon
 per-policy KPIs. If the shaped evidence contains recommendation counts, it is acceptable
 to state which policy was recommended most often under the supplied objective; do not
 invent a reason beyond the supplied evidence.
+
+
+## Operator-facing wording
+
+Present ranked intervals directly. Do not say "as determined by the deterministic analysis" or mention deterministic analysis, internal tools, models, evidence pipelines, or implementation details unless the operator explicitly asks how the result was produced.

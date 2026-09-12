@@ -191,8 +191,8 @@ class OperatorTools:
         r = results[recommended]
         fallback = (
             f"At {time_value}, the {objective.replace('_', ' ')} objective recommends {recommended}. "
-            f"Its simulated blocking is {100*r['overall_blocking_ratio_epoch']:.2f}% with {r['reconfig_count']} SC reconfiguration(s). "
-            "The recommendation is advisory; PCA, MBA, and SAA remain available for comparison."
+            f"It has {100*r['overall_blocking_ratio_epoch']:.2f}% blocking with "
+            f"{r['reconfig_count']} SC reconfiguration(s)."
         )
         evidence["rendered_values"] = {p: {"blocking_percent": round(100 * v["overall_blocking_ratio_epoch"], 2)} for p, v in results.items()}
         return evidence, fallback
@@ -305,6 +305,7 @@ class OperatorTools:
                 "total_gbps": round(float(row["total_gbps"]), 2),
                 "sla_state": str(row["predicted_state"]),
                 "failure_prone_probability": round(float(row["failure_probability"]), 4),
+                "failure_risk_percent": round(100 * float(row["failure_probability"]), 1),
             }
             if policy and trace is not None:
                 pr = trace[int(idx)]
@@ -313,7 +314,14 @@ class OperatorTools:
         evidence = {"category": "risk_intervals", "metric": metric, "top_k": top_k, "intervals": intervals}
         if policy:
             evidence["policy"] = policy
-        fallback = f"The highest-ranked interval by {metric.replace('_', ' ')} is {intervals[0]['time']}; {top_k} interval(s) are returned for comparison."
+        if metric == "failure_probability":
+            times = ", ".join(item["time"] for item in intervals)
+            fallback = (
+                f"The {top_k} highest Failure-prone-risk intervals are {times}. "
+                f"The highest supplied risk is {intervals[0]['failure_risk_percent']:.1f}%."
+            )
+        else:
+            fallback = f"The highest-ranked interval by {metric.replace('_', ' ')} is {intervals[0]['time'].strip()}."
         return evidence, fallback
 
     def summarize_time_range(self, args: dict[str, Any], memory: dict[str, Any]) -> tuple[dict[str, Any], str]:

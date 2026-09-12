@@ -84,13 +84,14 @@ class CoordinatorAgent:
         if not self.use_llm:
             raise RuntimeError("LLM tool selection is disabled.")
         memory = memory or {}
+        include_history = bool(memory)
         prompt = f"""{config.coordinator_prompt()}
 
 Available tools and JSON argument schemas:
 {json.dumps(TOOLS, ensure_ascii=False)}
 
 Recent conversation context:
-{self._history_text()}
+{self._history_text(include_history)}
 
 Deterministic conversation memory:
 {json.dumps(memory, ensure_ascii=False)}
@@ -219,10 +220,22 @@ Return ONLY JSON in this exact shape:
         self.history.clear()
         self.last_audit = {}
 
-    def _history_text(self) -> str:
-        if not self.history:
+    def _history_text(self, include_history: bool = True) -> str:
+        if not include_history or not self.history:
             return "(none)"
-        return "\n".join(json.dumps(item, ensure_ascii=False) for item in self.history)
+
+        compact_history = []
+        for item in self.history:
+            compact_history.append({
+                "query": item.get("query"),
+                "steps": item.get("steps"),
+                "evidence_summary": item.get("evidence_summary"),
+            })
+
+        return "\n".join(
+            json.dumps(item, ensure_ascii=False)
+            for item in compact_history
+        )
 
     @staticmethod
     def _compact_evidence(evidence: dict[str, Any]) -> dict[str, Any]:

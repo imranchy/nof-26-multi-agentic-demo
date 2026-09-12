@@ -175,3 +175,10 @@ For numerical change statements, use only `delta_b_minus_a` fields and the expli
 supplied `rendered_values`. Do not quote endpoint traffic, endpoint probabilities, or
 endpoint blocking values and do not recompute a difference from them. If endpoint SLA
 state labels are supplied, they may be named without adding a numeric value.
+
+
+## Operator-facing numeric precision
+
+Use the supplied rendered/operator-facing values exactly. Do not increase numeric precision.
+Traffic values and traffic deltas must use at most two decimal places.
+Do not reconstruct higher-precision values from other evidence.

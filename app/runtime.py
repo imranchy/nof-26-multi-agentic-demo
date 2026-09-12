@@ -165,7 +165,7 @@ class MultiAgentRuntime:
         }
         if tool_name in single_time_tools:
             proposed = args.get("time")
-            resolved = SemanticResolver.normalize_time(query, str(proposed) if proposed else None, self.memory)
+            resolved = SemanticResolver.normalize_time(query, str(proposed) if proposed else None, context_memory)
             if resolved:
                 args["time"] = resolved
             elif context_memory.get("last_time"):
@@ -246,11 +246,6 @@ class MultiAgentRuntime:
                 and v is not None
             }
 
-            current = {
-                **proposed_constraints,
-                **extracted,
-            }
-
             previous_constraints = (
                 self.state_manager.memory_for_constraints(
                     query,
@@ -259,9 +254,19 @@ class MultiAgentRuntime:
             )
 
             if previous_constraints:
+                # In an additive follow-up, the operator's remembered explicit
+                # constraints remain authoritative. Only constraints explicitly
+                # stated in the new utterance may add to or replace them.
                 current = {
                     **previous_constraints,
-                    **current,
+                    **extracted,
+                }
+            else:
+                # For a standalone request, accept coordinator-proposed
+                # constraints, but explicit query extraction always wins.
+                current = {
+                    **proposed_constraints,
+                    **extracted,
                 }
 
             for key in constraint_keys:

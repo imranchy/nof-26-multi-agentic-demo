@@ -426,19 +426,12 @@ Compose one concise operator-facing answer, normally under 130 words.
         delta = value.get("delta_b_minus_a")
 
         if isinstance(delta, dict):
-            allowed_delta_fields = {
-                "total_gbps",
-                "enterprise_gbps",
-                "ran_gbps",
-                "pon_gbps",
-                "reconfig_count",
-            }
-
+            # Expose operator-facing precision only. The deterministic tool may
+            # retain higher precision internally, but the explainer should not
+            # increase the precision shown to operators.
             shaped["delta_b_minus_a"] = {
-                key: cls._operator_evidence(item, query)
-                for key, item in delta.items()
-                if key in allowed_delta_fields
-                and key not in hidden
+                "total_gbps": round(float(delta.get("total_gbps", 0.0)), 2),
+                "reconfig_count": int(delta.get("reconfig_count", 0)),
             }
 
         return shaped
@@ -483,7 +476,7 @@ Compose one concise operator-facing answer, normally under 130 words.
             if metric == "failure_probability":
                 allowed = {
                     "time",
-                    "failure_prone_probability",
+                    "failure_risk_percent",
                 }
 
             # Peak/busiest traffic discovery:

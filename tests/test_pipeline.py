@@ -68,7 +68,7 @@ def test_current_deterministic_tool_execution():
         + traffic["ran_gbps"]
         + traffic["pon_gbps"],
         traffic["total_gbps"],
-        atol=1e-6,
+        atol=0.02,  # values are independently rounded to two decimals for display
     )
 
     assert isinstance(fallback, str)
@@ -133,3 +133,32 @@ def test_constrained_subcarrier_allocation_uses_current_tool():
 
     assert isinstance(fallback, str)
     assert fallback
+
+
+def test_followup_constraint_normalization_ignores_llm_inferred_old_counts():
+    runtime = MultiAgentRuntime(use_llm=False)
+    runtime.memory.update({
+        "last_time": "19:00",
+        "last_constraints_raw": {"ran_subcarriers": 2},
+    })
+    context_memory = runtime.state_manager.scoped_memory(
+        "Also reserve one SC for PON.",
+        runtime.memory,
+    )
+
+    args = runtime._normalize_tool_arguments(
+        "Also reserve one SC for PON.",
+        "analyze_constrained_allocation",
+        {
+            # Simulate a bad coordinator inference based on the prior result.
+            "ran_subcarriers": 1,
+            "enterprise_subcarriers": 2,
+            "pon_subcarriers": 1,
+        },
+        context_memory,
+    )
+
+    assert args["ran_subcarriers"] == 2
+    assert args["pon_subcarriers"] == 1
+    assert "enterprise_subcarriers" not in args
+    assert args["time"] == "19:00"

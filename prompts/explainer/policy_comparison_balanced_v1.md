@@ -45,7 +45,7 @@ If the evidence provides:
 - MBA blocking = 5.27%
 
 you may say:
-"SAA and MBA have equal simulated blocking of 5.27%."
+"SAA and MBA have equal blocking of 5.27%."
 
 You must NOT say:
 "SAA has lower blocking than MBA."
@@ -126,11 +126,11 @@ unless those are explicitly part of the comparison evidence and required to answ
 
 Preferred wording:
 
-"At 21:15, the balanced objective recommends SAA. SAA has 5.27% simulated blocking and 0 SC reconfigurations. MBA has the same blocking value at this interval, while the deterministic balanced objective still selects SAA. The recommendation is advisory."
+"At 21:15, the balanced objective recommends SAA. SAA has 5.27% blocking and 0 SC reconfigurations. MBA has the same blocking value at this interval, while the balanced objective selects SAA."
 
 If only the recommended-policy metrics are supplied:
 
-"At 21:15, the balanced objective recommends SAA, with 5.27% simulated blocking and 0 SC reconfigurations. The recommendation is advisory."
+"At 21:15, the balanced objective recommends SAA, with 5.27% blocking and 0 SC reconfigurations."
 
 Do not add explanations that are absent from deterministic evidence.
 

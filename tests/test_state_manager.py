@@ -73,3 +73,24 @@ def test_explicit_standalone_task_does_not_inherit_policy_or_objective():
     )
 
     assert scoped == {}
+
+def test_constraint_followup_keeps_remembered_explicit_constraint_authoritative():
+    memory = {
+        "last_time": "19:00",
+        "last_constraints_raw": {
+            "ran_subcarriers": 2,
+        },
+    }
+
+    previous = ConversationStateManager.memory_for_constraints(
+        "Also reserve one SC for PON.",
+        memory,
+    )
+
+    explicit_current = {"pon_subcarriers": 1}
+    merged = {**previous, **explicit_current}
+
+    assert merged == {
+        "ran_subcarriers": 2,
+        "pon_subcarriers": 1,
+    }

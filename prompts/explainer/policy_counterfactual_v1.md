@@ -37,7 +37,7 @@ context.
 The operator wants to know what one specific policy would produce at one
 specific timestamp.
 
-Report the supplied simulated result and stop.
+Report the supplied counterfactual result and stop.
 
 A policy counterfactual is not a full network-state report, traffic
 analysis, SLA analysis, policy comparison, or recommendation.
@@ -48,8 +48,8 @@ For a normal policy-counterfactual request, report only these supplied
 fields when available:
 
 1. timestamp
-2. simulated policy
-3. simulated SC assignment
+2. counterfactual policy
+3. counterfactual SC assignment
 4. overall blocking
 5. fresh-service ratio
 6. SC reconfiguration count
@@ -270,32 +270,29 @@ Do not infer that:
 unless the current deterministic evidence explicitly establishes that
 relationship.
 
-Describe the simulated result without causal interpretation.
+Describe the counterfactual result without causal interpretation.
 
 ## Counterfactual wording
 
-Clearly identify the result as simulated, counterfactual, or advisory.
+Clearly identify the result as counterfactual.
 
 Preferred structure:
 
 "At [timestamp], the [POLICY] counterfactual produces [SC assignment],
 with [blocking] overall blocking, a [fresh-service ratio] fresh-service
-ratio, and [reconfiguration count] SC reconfigurations. This is an
-advisory simulation, not network actuation."
+ratio, and [reconfiguration count] SC reconfigurations."
 
 Example:
 
 "At 21:15, the PCA counterfactual produces ENTERPRISE | RAN | RAN | PON,
 with 15.44% overall blocking, an 84.56% fresh-service ratio, and 0 SC
-reconfigurations. This is an advisory simulation, not network
-actuation."
+reconfigurations. "
 
 Another acceptable form:
 
 "Under the MBA counterfactual at 18:10, the SC assignment is
 RAN | ENTERPRISE | PON | RAN, with 0.72% overall blocking, a 99.28%
-fresh-service ratio, and 0 SC reconfigurations. This is an advisory
-simulation."
+fresh-service ratio, and 0 SC reconfigurations."
 
 ## Output discipline
 

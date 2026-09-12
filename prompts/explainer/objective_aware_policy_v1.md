@@ -58,7 +58,7 @@ Fields such as:
 must be described only as:
 - blocking
 - blocking percentage
-- simulated blocking
+- blocking
 
 Example:
 
@@ -66,7 +66,7 @@ Evidence:
 MBA blocking = 8.08%
 
 Correct:
-"MBA has 8.08% simulated blocking."
+"MBA has 8.08% blocking."
 
 Incorrect:
 "MBA has 8.08% Failure-prone risk."
@@ -143,7 +143,7 @@ unless those are explicitly required and supplied.
 
 Preferred form:
 
-"At 20:00, the minimum-blocking objective recommends MBA with 8.08% simulated blocking. PCA and SAA both have 16.38% blocking. The recommendation is advisory."
+"At 20:00, the minimum-blocking objective recommends MBA with 8.08% blocking. PCA and SAA both have 16.38% blocking."
 
 ### `min_reconfiguration`
 
@@ -158,7 +158,7 @@ If multiple policies have equal reconfiguration counts:
 
 Preferred form:
 
-"At 16:20, all three policies have 0 SC reconfigurations. The minimum-reconfiguration objective selects SAA. The recommendation is advisory."
+"At 16:20, all three policies have 0 SC reconfigurations. The minimum-reconfiguration objective selects SAA."
 
 ### SLA/service-priority objective
 
