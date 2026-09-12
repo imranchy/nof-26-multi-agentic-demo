@@ -1,43 +1,13 @@
-# Architecture
+# Direct local Mistral tool-routing architecture
 
-The demonstrator separates semantic interaction from numerical network truth.
+The operator path contains no coordinator and no deterministic natural-language router.
 
-```text
-Operator
-   |
-   v
-Mistral semantic coordinator
-(intent, references, objectives, constraints, bounded 1-3 step plan)
-   |
-   +-------------------+-------------------+-------------------+
-   |                   |                   |                   |
-   v                   v                   v                   v
-XGBoost tool       RF SLA tool       PSC policy engine     Temporal tools
-traffic forecast   class/probability  PCA / MBA / SAA      compare/range/risk
-   |                   |                   |                   |
-   +-------------------+-------------------+-------------------+
-                               |
-                               v
-                     deterministic evidence
-                               |
-                         Mistral explanation
-                               |
-                        grounding guardrail
-                         pass / fallback
-```
+1. `MultiAgentRuntime` exposes compact authoritative state and recent conversation history.
+2. `LocalSpecialistAgent` sends that context plus the full function catalog to local `mistral:7b` through Ollama `/api/chat`.
+3. Mistral returns exactly one native `message.tool_calls` function call.
+4. Python validates structured arguments and resolves deterministic state requirements such as inherited time, relative-time arithmetic and SC-constraint merging.
+5. `OperatorTools` executes deterministic ML/network/policy logic.
+6. Mistral explains only returned evidence.
+7. `GuardrailAgent` checks the explanation and replaces unsupported output with a deterministic fallback.
 
-## Trust boundary
-
-Mistral may interpret language and explain evidence. It does not calculate traffic, SLA probabilities, SC allocation, blocking, reconfiguration, or validation metrics. XGBoost and Random Forest are frozen trained models. PCA/MBA/SAA and KPI calculations are deterministic Python. Unsupported numeric or physical-layer statements are rejected by the grounding guardrail.
-
-## Semantic layer
-
-The coordinator supports arbitrary valid five-minute timestamps, two-time comparisons, ranges, relative follow-ups, policy objectives expressed in natural language, SC constraints, recommendation-change questions, evidence/trust questions, and bounded multi-tool plans. `app/semantic/resolver.py` validates obvious timestamp/objective/constraint language and prevents unsafe defaults from silently changing operator intent.
-
-## Policy metadata vs executable policy
-
-`policies/*.yaml` contains declarative metadata. `config/operator_policy.yaml` contains demonstrator recommendation principles and trust rules. `prompts/operator_skill.md` describes LLM behavior. The executable policy truth remains in `app/policy_engine/*.py`.
-
-## Scope
-
-Physical-layer simulation and fault localization are not implemented because no calibrated GNPy configuration or physical telemetry is available. Generic unrelated requests and physical-layer requests use separate out-of-scope responses.
+The function call itself is the semantic routing decision. Any capability labels shown in the UI are display metadata after the tool has already been selected; they do not control routing.

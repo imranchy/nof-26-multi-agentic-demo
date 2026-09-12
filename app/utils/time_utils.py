@@ -6,7 +6,7 @@ from datetime import datetime
 def normalize_time(value: str) -> str | None:
     """Normalize a structured clock value to canonical HH:MM.
 
-    Natural-language time interpretation belongs to the coordinator model. This
+    Natural-language time interpretation belongs to Mistral tool routing. This
     helper only validates common clock representations returned or supplied as
     structured values.
     """

@@ -2,7 +2,7 @@
   "benchmark": "NoF operator semantic benchmark",
   "version": "v1",
   "prompt_versions": {
-    "coordinator": "v1",
+    "tool_router": "v1-direct-tools",
     "explainer": "v1",
     "operator_style": "v1"
   },

@@ -39,7 +39,20 @@ POLICY = {
 TIME = {
     "type": "string",
     "pattern": r"^([01]?\d|2[0-3]):[0-5]\d$|^(0?[1-9]|1[0-2]):[0-5]\d\s?(AM|PM|am|pm)$",
-    "description": "Clock time. Prefer canonical 24-hour HH:MM; Python normalizes valid structured clock forms.",
+    "description": "Absolute clock time. Prefer canonical 24-hour HH:MM. Omit when the user clearly refers to the previously stored time.",
+}
+RELATIVE_OFFSET = {
+    "type": "integer",
+    "minimum": -1440,
+    "maximum": 1440,
+    "description": (
+        "Relative offset in minutes from the authoritative previous timestamp. "
+        "Emit this field ONLY when the current operator utterance explicitly "
+        "expresses a relative clock-time shift such as one hour later or "
+        "30 minutes earlier. Do not use resource-allocation wording such as "
+        "'remaining capacity' or 'remaining two subcarriers' as relative time. "
+        "Do NOT emit 0 for an absolute timestamp. Python performs the arithmetic."
+    ),
 }
 OBJECTIVE = {
     "type": "string",
@@ -47,11 +60,33 @@ OBJECTIVE = {
     "description": _objective_description(),
 }
 SC_COUNT = {"type": "integer", "minimum": 0, "maximum": 4}
+SC_CONSTRAINTS = {
+    "type": "array",
+    "description": (
+        "Only the SC-count constraints explicitly stated by the operator. "
+        "Do not add entries for unconstrained services. If the operator says "
+        "to allocate the remaining capacity, that does not create additional "
+        "constraint entries."
+    ),
+    "items": {
+        "type": "object",
+        "properties": {
+            "service": {"type": "string", "enum": ["enterprise", "ran", "pon"]},
+            "subcarriers": {"type": "integer", "minimum": 0, "maximum": 4},
+        },
+        "required": ["service", "subcarriers"],
+        "additionalProperties": False,
+    },
+}
 METRIC = {
     "type": "string",
     "enum": ["failure_probability", "total_gbps", "blocking", "reconfiguration"],
 }
 SLA_STATE = {"type": "string", "enum": ["normal", "degraded", "failure_prone"]}
+
+
+def _single_time(properties: dict[str, Any] | None = None) -> dict[str, Any]:
+    return {"time": TIME, "relative_time_offset_minutes": RELATIVE_OFFSET, **(properties or {})}
 
 
 def _function_tool(name: str, description: str, properties: dict[str, Any] | None = None) -> dict[str, Any]:
@@ -75,44 +110,50 @@ TOOLS: dict[str, dict[str, Any]] = {
         _function_tool(
             "get_traffic_forecast",
             "Predict offered traffic only at one timestamp: Enterprise, RAN, PON and total Gbps. Use for traffic/load/busy/outlook questions, not complete network state.",
-            {"time": TIME},
+            _single_time(),
         ),
         _function_tool(
             "get_sla_prediction",
             "Predict SLA state and Failure-prone risk at one timestamp. Use for direct SLA/risk questions that do not ask why/explain a stated claim.",
-            {"time": TIME},
+            _single_time(),
         ),
         _function_tool(
             "explain_sla_risk",
             "Explain or correct an SLA-state/risk claim at one timestamp using validated evidence. Use for why/explain/correct-premise questions; do not additionally call get_sla_prediction.",
-            {"time": TIME, "claimed_state": SLA_STATE},
+            _single_time({"claimed_state": SLA_STATE}),
         ),
         _function_tool(
             "get_network_state_at_time",
-            "Return a complete network-state snapshot at one timestamp: traffic, SLA risk/state and SC allocation/policy state. Do not use for a traffic-only, SLA-only or named-policy counterfactual question.",
-            {"time": TIME, "policy": POLICY},
+            "Return a complete network-state snapshot at one timestamp: traffic, SLA risk/state and SC allocation/policy state. Do not use for traffic-only, SLA-only or named-policy counterfactual questions.",
+            _single_time({"policy": POLICY}),
         ),
         _function_tool(
             "compare_policies_at_time",
             "Compare configured policies at one timestamp and choose/recommend according to an optimization objective such as balanced, minimum blocking, minimum reconfiguration, or SLA priority. Optimization preferences are objectives, not hard SC constraints.",
-            {"time": TIME, "objective": OBJECTIVE},
+            _single_time({"objective": OBJECTIVE}),
         ),
         _function_tool(
             "simulate_policy_at_time",
             "Evaluate the counterfactual outcome of one explicitly named policy at one timestamp. Use when the operator asks how PCA/MBA/SAA would perform or what that named policy would produce.",
-            {"time": TIME, "policy": POLICY},
+            _single_time({"policy": POLICY}),
         ),
         _function_tool(
             "analyze_constrained_allocation",
-            "Evaluate explicit hard SC-count constraints such as keep RAN on 2 SCs or reserve 1 SC for PON. Do not use merely because the operator wants fewer reconfigurations, lower blocking, or strict service priority; those are optimization objectives.",
-            {
-                "time": TIME,
-                "enterprise_subcarriers": SC_COUNT,
-                "ran_subcarriers": SC_COUNT,
-                "pon_subcarriers": SC_COUNT,
+            (
+                "Evaluate explicit hard SC-count constraints. Represent operator-stated "
+                "service constraints only in the 'constraints' list. For example, "
+                "'keep RAN on 2 SCs' means constraints=[{'service':'ran','subcarriers':2}]. "
+                "Do not create constraint entries for Enterprise or PON unless the operator "
+                "explicitly constrains them. 'Allocate the remaining' does not create "
+                "additional constraints; deterministic Python allocates unconstrained "
+                "remaining capacity. Optimization preferences such as minimum blocking or "
+                "minimum reconfiguration belong in 'objective', not in the constraints list."
+            ),
+            _single_time({
+                "constraints": SC_CONSTRAINTS,
                 "reference_policy": POLICY,
                 "objective": OBJECTIVE,
-            },
+            }),
         ),
         _function_tool(
             "compare_network_states",
@@ -128,6 +169,23 @@ TOOLS: dict[str, dict[str, Any]] = {
             "summarize_time_range",
             "Summarize a continuous start-to-end time window, including traffic, SLA distribution and policy behavior. Use for an explicit time range/window, not top-k interval discovery.",
             {"start_time": TIME, "end_time": TIME, "objective": OBJECTIVE},
+        ),
+        _function_tool(
+            "request_clarification",
+            (
+                "Ask the operator for essential missing conversational context. "
+                "For a relative clock-time request with no previous timestamp, use "
+                "missing_field='reference_time'. Do not use this merely because a "
+                "network-allocation request refers to remaining capacity or remaining "
+                "subcarriers. If the current request provides an explicit absolute "
+                "timestamp, that timestamp does not require a reference time."
+            ),
+            {
+                "missing_field": {
+                    "type": "string",
+                    "enum": ["reference_time", "time", "policy", "objective", "constraint", "other"],
+                }
+            },
         ),
         _function_tool(
             "decline_physical_layer",

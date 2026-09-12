@@ -73,7 +73,7 @@ def run_case(case: dict[str, Any], forecast_mode: str) -> dict[str, Any]:
     raw_tools = [x.get("tool") for x in raw]
     executed_tools = [x.get("tool") for x in executed]
     expected_args = case.get("expected_args_by_tool", {})
-    coordinator = response.routing_audit.get("coordinator", {})
+    tool_router = response.routing_audit.get("tool_router", {})
     return {
         "id": case["id"],
         "category": case["category"],
@@ -87,8 +87,8 @@ def run_case(case: dict[str, Any], forecast_mode: str) -> dict[str, Any]:
         "raw_arguments_correct": argument_score(raw, expected_args),
         "executed_arguments_correct": argument_score(executed, expected_args),
         "deterministic_correction": bool(response.routing_audit.get("deterministic_correction")),
-        "coordinator_parse_failure": bool(coordinator.get("parse_failed")),
-        "coordinator_fallback_used": bool(coordinator.get("fallback_used")),
+        "tool_router_parse_failure": bool(tool_router.get("parse_failed")),
+        "tool_router_fallback_used": bool(tool_router.get("fallback_used")),
         "raw_explanation_accepted": bool(response.grounding_passed),
         "guardrail_fallback": not response.grounding_passed,
         "final_safe_answer": bool(response.answer.strip()),
@@ -116,8 +116,8 @@ def metrics(rows: list[dict[str, Any]]) -> dict[str, Any]:
         "executed_tool_sequence_accuracy": rate(rows, "executed_tool_sequence_correct"),
         "executed_argument_accuracy": rate(rows, "executed_arguments_correct"),
         "deterministic_correction_rate": rate(rows, "deterministic_correction"),
-        "coordinator_parse_failure_rate": rate(rows, "coordinator_parse_failure"),
-        "coordinator_fallback_rate": rate(rows, "coordinator_fallback_used"),
+        "tool_router_parse_failure_rate": rate(rows, "tool_router_parse_failure"),
+        "tool_router_fallback_rate": rate(rows, "tool_router_fallback_used"),
         "raw_explanation_accept_rate": rate(rows, "raw_explanation_accepted"),
         "guardrail_fallback_rate": rate(rows, "guardrail_fallback"),
         "final_safe_answer_rate": rate(rows, "final_safe_answer"),
@@ -144,7 +144,7 @@ def save(rows: list[dict[str, Any]], label: str, thresholds: dict[str, float]) -
     summary = {
         "benchmark_version": "v1",
         "prompt_versions": {
-            "coordinator": config.prompt_version("coordinator"),
+            "tool_router": config.prompt_version("tool_router"),
             "explainer": config.prompt_version("explainer"),
             "operator_style": config.prompt_version("operator_style"),
         },
@@ -167,7 +167,7 @@ def save(rows: list[dict[str, Any]], label: str, thresholds: dict[str, float]) -
         fields = [
             "id","category","query","setup_query","expected_tools","raw_tools","executed_tools",
             "raw_tool_sequence_correct","raw_arguments_correct","executed_tool_sequence_correct","executed_arguments_correct",
-            "deterministic_correction","coordinator_parse_failure","coordinator_fallback_used","raw_explanation_accepted",
+            "deterministic_correction","tool_router_parse_failure","tool_router_fallback_used","raw_explanation_accepted",
             "guardrail_fallback","final_safe_answer","unsupported_numeric_claim","unsupported_categorical_claim",
             "unsupported_causal_claim","implementation_detail_exposed","grounding_issues","answer",
         ]
@@ -219,8 +219,8 @@ def main() -> None:
                 "id":case["id"],"category":case["category"],"query":case["query"],"setup_query":case.get("setup_query",""),
                 "expected_tools":case.get("expected_tools",[]),"raw_tools":[],"executed_tools":[],
                 "raw_tool_sequence_correct":False,"raw_arguments_correct":False,"executed_tool_sequence_correct":False,
-                "executed_arguments_correct":False,"deterministic_correction":False,"coordinator_parse_failure":False,
-                "coordinator_fallback_used":False,"raw_explanation_accepted":False,"guardrail_fallback":False,
+                "executed_arguments_correct":False,"deterministic_correction":False,"tool_router_parse_failure":False,
+                "tool_router_fallback_used":False,"raw_explanation_accepted":False,"guardrail_fallback":False,
                 "final_safe_answer":False,"unsupported_numeric_claim":False,"unsupported_categorical_claim":False,
                 "unsupported_causal_claim":False,"implementation_detail_exposed":False,
                 "grounding_issues":[f"runtime_error:{type(exc).__name__}"],"answer":"","raw_llm_answer":"","error":str(exc),

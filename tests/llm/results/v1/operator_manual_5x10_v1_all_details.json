@@ -8,30 +8,28 @@
       "get_traffic_forecast"
     ],
     "raw_tools": [
-      "decline_out_of_scope"
+      "get_traffic_forecast"
     ],
     "executed_tools": [
-      "decline_out_of_scope"
+      "get_traffic_forecast"
     ],
-    "raw_tool_sequence_correct": false,
-    "executed_tool_sequence_correct": false,
-    "raw_arguments_correct": false,
-    "executed_arguments_correct": false,
+    "raw_tool_sequence_correct": true,
+    "executed_tool_sequence_correct": true,
+    "raw_arguments_correct": true,
+    "executed_arguments_correct": true,
     "deterministic_correction": false,
-    "coordinator_parse_failure": false,
-    "coordinator_fallback_used": false,
-    "raw_explanation_accepted": false,
-    "guardrail_fallback": true,
+    "tool_router_parse_failure": false,
+    "tool_router_fallback_used": false,
+    "raw_explanation_accepted": true,
+    "guardrail_fallback": false,
     "final_safe_answer": true,
-    "unsupported_numeric_claim": true,
+    "unsupported_numeric_claim": false,
     "unsupported_categorical_claim": false,
     "unsupported_causal_claim": false,
     "implementation_detail_exposed": false,
-    "grounding_issues": [
-      "unsupported_numeric_claim"
-    ],
-    "answer": "That request is outside the network-operations scope of this demonstrator. I can help with traffic forecasts, SLA-risk analysis, timestamp comparisons, SC-allocation policies, operator constraints, and time-range analysis.",
-    "raw_llm_answer": "At 21:15, the predicted traffic is approximately 5.2 Gbps."
+    "grounding_issues": [],
+    "answer": "At 21:15, predicted offered traffic is 88.50 Gbps total: Enterprise 4.66 Gbps, RAN 45.17 Gbps, and PON 38.66 Gbps.",
+    "raw_llm_answer": "At 21:15, predicted offered traffic is 88.50 Gbps total: Enterprise 4.66 Gbps, RAN 45.17 Gbps, and PON 38.66 Gbps."
   },
   {
     "id": "traffic_prediction_02",
@@ -42,31 +40,28 @@
       "get_traffic_forecast"
     ],
     "raw_tools": [
-      "decline_out_of_scope"
+      "get_traffic_forecast"
     ],
     "executed_tools": [
-      "decline_out_of_scope"
+      "get_traffic_forecast"
     ],
-    "raw_tool_sequence_correct": false,
-    "executed_tool_sequence_correct": false,
-    "raw_arguments_correct": false,
-    "executed_arguments_correct": false,
+    "raw_tool_sequence_correct": true,
+    "executed_tool_sequence_correct": true,
+    "raw_arguments_correct": true,
+    "executed_arguments_correct": true,
     "deterministic_correction": false,
-    "coordinator_parse_failure": false,
-    "coordinator_fallback_used": false,
-    "raw_explanation_accepted": false,
-    "guardrail_fallback": true,
+    "tool_router_parse_failure": false,
+    "tool_router_fallback_used": false,
+    "raw_explanation_accepted": true,
+    "guardrail_fallback": false,
     "final_safe_answer": true,
-    "unsupported_numeric_claim": true,
+    "unsupported_numeric_claim": false,
     "unsupported_categorical_claim": false,
     "unsupported_causal_claim": false,
     "implementation_detail_exposed": false,
-    "grounding_issues": [
-      "unsupported_advisory_claim",
-      "unsupported_numeric_claim"
-    ],
-    "answer": "That request is outside the network-operations scope of this demonstrator. I can help with traffic forecasts, SLA-risk analysis, timestamp comparisons, SC-allocation policies, operator constraints, and time-range analysis.",
-    "raw_llm_answer": "At 12:35, the predicted traffic for Enterprise, RAN, and PON are as follows:\n\n- Enterprise: 5.2 Gbps\n- RAN: 3.7 Gbps\n- PON: 2.1 Gbps\n\nThese forecasts are based on deterministic evidence. Please monitor these values closely and adjust policies as necessary to ensure optimal network performance."
+    "grounding_issues": [],
+    "answer": "At 12:35, predicted offered traffic is 73.81 Gbps total: Enterprise 37.49 Gbps, RAN 24.25 Gbps, and PON 12.07 Gbps.",
+    "raw_llm_answer": "At 12:35, predicted offered traffic is 73.81 Gbps total: Enterprise 37.49 Gbps, RAN 24.25 Gbps, and PON 12.07 Gbps."
   },
   {
     "id": "traffic_prediction_03",
@@ -77,30 +72,28 @@
       "get_traffic_forecast"
     ],
     "raw_tools": [
-      "decline_out_of_scope"
+      "get_traffic_forecast"
     ],
     "executed_tools": [
-      "decline_out_of_scope"
+      "get_traffic_forecast"
     ],
-    "raw_tool_sequence_correct": false,
-    "executed_tool_sequence_correct": false,
-    "raw_arguments_correct": false,
-    "executed_arguments_correct": false,
+    "raw_tool_sequence_correct": true,
+    "executed_tool_sequence_correct": true,
+    "raw_arguments_correct": true,
+    "executed_arguments_correct": true,
     "deterministic_correction": false,
-    "coordinator_parse_failure": false,
-    "coordinator_fallback_used": false,
-    "raw_explanation_accepted": false,
-    "guardrail_fallback": true,
+    "tool_router_parse_failure": false,
+    "tool_router_fallback_used": false,
+    "raw_explanation_accepted": true,
+    "guardrail_fallback": false,
     "final_safe_answer": true,
-    "unsupported_numeric_claim": true,
+    "unsupported_numeric_claim": false,
     "unsupported_categorical_claim": false,
     "unsupported_causal_claim": false,
     "implementation_detail_exposed": false,
-    "grounding_issues": [
-      "unsupported_numeric_claim"
-    ],
-    "answer": "That request is outside the network-operations scope of this demonstrator. I can help with traffic forecasts, SLA-risk analysis, timestamp comparisons, SC-allocation policies, operator constraints, and time-range analysis.",
-    "raw_llm_answer": "At 14:05, the expected total load is 12.3 Gbps and the per-service loads are:\n- Service A: 4.5 Gbps\n- Service B: 5.8 Gbps\n- Service C: 2 Gbps"
+    "grounding_issues": [],
+    "answer": "At 14:05, the predicted total offered traffic is 74.53 Gbps: Enterprise 35.69 Gbps, RAN 25.68 Gbps, and PON 13.16 Gbps.",
+    "raw_llm_answer": "At 14:05, the predicted total offered traffic is 74.53 Gbps: Enterprise 35.69 Gbps, RAN 25.68 Gbps, and PON 13.16 Gbps."
   },
   {
     "id": "traffic_prediction_04",
@@ -111,30 +104,28 @@
       "get_traffic_forecast"
     ],
     "raw_tools": [
-      "decline_out_of_scope"
+      "get_traffic_forecast"
     ],
     "executed_tools": [
-      "decline_out_of_scope"
+      "get_traffic_forecast"
     ],
-    "raw_tool_sequence_correct": false,
-    "executed_tool_sequence_correct": false,
-    "raw_arguments_correct": false,
-    "executed_arguments_correct": false,
+    "raw_tool_sequence_correct": true,
+    "executed_tool_sequence_correct": true,
+    "raw_arguments_correct": true,
+    "executed_arguments_correct": true,
     "deterministic_correction": false,
-    "coordinator_parse_failure": false,
-    "coordinator_fallback_used": false,
-    "raw_explanation_accepted": false,
-    "guardrail_fallback": true,
+    "tool_router_parse_failure": false,
+    "tool_router_fallback_used": false,
+    "raw_explanation_accepted": true,
+    "guardrail_fallback": false,
     "final_safe_answer": true,
-    "unsupported_numeric_claim": true,
+    "unsupported_numeric_claim": false,
     "unsupported_categorical_claim": false,
     "unsupported_causal_claim": false,
     "implementation_detail_exposed": false,
-    "grounding_issues": [
-      "unsupported_numeric_claim"
-    ],
-    "answer": "That request is outside the network-operations scope of this demonstrator. I can help with traffic forecasts, SLA-risk analysis, timestamp comparisons, SC-allocation policies, operator constraints, and time-range analysis.",
-    "raw_llm_answer": "Predicted traffic for 05:55 is 3.5 Gbps. The current SLA state is Normal. There is no traffic forecast or SLA state comparison data available at this time."
+    "grounding_issues": [],
+    "answer": "At 05:55, predicted offered traffic is 46.79 Gbps total: Enterprise 16.31 Gbps, RAN 21.54 Gbps, and PON 8.94 Gbps.",
+    "raw_llm_answer": "At 05:55, predicted offered traffic is 46.79 Gbps total: Enterprise 16.31 Gbps, RAN 21.54 Gbps, and PON 8.94 Gbps."
   },
   {
     "id": "traffic_prediction_05",
@@ -145,30 +136,28 @@
       "get_traffic_forecast"
     ],
     "raw_tools": [
-      "decline_out_of_scope"
+      "get_traffic_forecast"
     ],
     "executed_tools": [
-      "decline_out_of_scope"
+      "get_traffic_forecast"
     ],
-    "raw_tool_sequence_correct": false,
-    "executed_tool_sequence_correct": false,
-    "raw_arguments_correct": false,
-    "executed_arguments_correct": false,
+    "raw_tool_sequence_correct": true,
+    "executed_tool_sequence_correct": true,
+    "raw_arguments_correct": true,
+    "executed_arguments_correct": true,
     "deterministic_correction": false,
-    "coordinator_parse_failure": false,
-    "coordinator_fallback_used": false,
-    "raw_explanation_accepted": false,
-    "guardrail_fallback": true,
+    "tool_router_parse_failure": false,
+    "tool_router_fallback_used": false,
+    "raw_explanation_accepted": true,
+    "guardrail_fallback": false,
     "final_safe_answer": true,
-    "unsupported_numeric_claim": true,
+    "unsupported_numeric_claim": false,
     "unsupported_categorical_claim": false,
     "unsupported_causal_claim": false,
     "implementation_detail_exposed": false,
-    "grounding_issues": [
-      "unsupported_numeric_claim"
-    ],
-    "answer": "That request is outside the network-operations scope of this demonstrator. I can help with traffic forecasts, SLA-risk analysis, timestamp comparisons, SC-allocation policies, operator constraints, and time-range analysis.",
-    "raw_llm_answer": "Predicted traffic at 9:30 PM is 12.5 Gbps. This forecast is based on historical data and does not account for real-time events or policy changes. Please monitor the network closely and adjust policies as needed to maintain optimal performance."
+    "grounding_issues": [],
+    "answer": "At 9:30 PM, predicted offered traffic is 88.54 Gbps total: Enterprise 5.01 Gbps, RAN 45.18 Gbps, and PON 38.35 Gbps.",
+    "raw_llm_answer": "At 9:30 PM, predicted offered traffic is 88.54 Gbps total: Enterprise 5.01 Gbps, RAN 45.18 Gbps, and PON 38.35 Gbps."
   },
   {
     "id": "sla_risk_state_01",
@@ -179,18 +168,18 @@
       "get_sla_prediction"
     ],
     "raw_tools": [
-      "decline_out_of_scope"
+      "get_sla_prediction"
     ],
     "executed_tools": [
-      "decline_out_of_scope"
+      "get_sla_prediction"
     ],
-    "raw_tool_sequence_correct": false,
-    "executed_tool_sequence_correct": false,
-    "raw_arguments_correct": false,
-    "executed_arguments_correct": false,
+    "raw_tool_sequence_correct": true,
+    "executed_tool_sequence_correct": true,
+    "raw_arguments_correct": true,
+    "executed_arguments_correct": true,
     "deterministic_correction": false,
-    "coordinator_parse_failure": false,
-    "coordinator_fallback_used": false,
+    "tool_router_parse_failure": false,
+    "tool_router_fallback_used": false,
     "raw_explanation_accepted": true,
     "guardrail_fallback": false,
     "final_safe_answer": true,
@@ -199,8 +188,8 @@
     "unsupported_causal_claim": false,
     "implementation_detail_exposed": false,
     "grounding_issues": [],
-    "answer": "Predicted SLA state at 21:15: Not Available (as the deterministic analysis does not include a forecast for this specific time).",
-    "raw_llm_answer": "Predicted SLA state at 21:15: Not Available (as the deterministic analysis does not include a forecast for this specific time)."
+    "answer": "Predicted SLA state at 21:15 is Failure-prone, with a Failure-prone risk of 88.0%.",
+    "raw_llm_answer": "Predicted SLA state at 21:15 is Failure-prone, with a Failure-prone risk of 88.0%."
   },
   {
     "id": "sla_risk_state_02",
@@ -211,30 +200,28 @@
       "get_sla_prediction"
     ],
     "raw_tools": [
-      "decline_out_of_scope"
+      "get_sla_prediction"
     ],
     "executed_tools": [
-      "decline_out_of_scope"
+      "get_sla_prediction"
     ],
-    "raw_tool_sequence_correct": false,
-    "executed_tool_sequence_correct": false,
-    "raw_arguments_correct": false,
-    "executed_arguments_correct": false,
+    "raw_tool_sequence_correct": true,
+    "executed_tool_sequence_correct": true,
+    "raw_arguments_correct": true,
+    "executed_arguments_correct": true,
     "deterministic_correction": false,
-    "coordinator_parse_failure": false,
-    "coordinator_fallback_used": false,
-    "raw_explanation_accepted": false,
-    "guardrail_fallback": true,
+    "tool_router_parse_failure": false,
+    "tool_router_fallback_used": false,
+    "raw_explanation_accepted": true,
+    "guardrail_fallback": false,
     "final_safe_answer": true,
-    "unsupported_numeric_claim": true,
+    "unsupported_numeric_claim": false,
     "unsupported_categorical_claim": false,
     "unsupported_causal_claim": false,
     "implementation_detail_exposed": false,
-    "grounding_issues": [
-      "unsupported_numeric_claim"
-    ],
-    "answer": "That request is outside the network-operations scope of this demonstrator. I can help with traffic forecasts, SLA-risk analysis, timestamp comparisons, SC-allocation policies, operator constraints, and time-range analysis.",
-    "raw_llm_answer": "The network has a Failure-prone risk of 6.2% at 12:35. No specific policy recommendations are provided in the current evidence. Monitor the network closely for potential issues."
+    "grounding_issues": [],
+    "answer": "Predicted SLA state at 12:35 is Normal. Failure-prone risk is 0%.",
+    "raw_llm_answer": "Predicted SLA state at 12:35 is Normal. Failure-prone risk is 0%."
   },
   {
     "id": "sla_risk_state_03",
@@ -245,30 +232,30 @@
       "get_sla_prediction"
     ],
     "raw_tools": [
-      "decline_out_of_scope"
+      "get_sla_prediction"
     ],
     "executed_tools": [
-      "decline_out_of_scope"
+      "get_sla_prediction"
     ],
-    "raw_tool_sequence_correct": false,
-    "executed_tool_sequence_correct": false,
-    "raw_arguments_correct": false,
-    "executed_arguments_correct": false,
+    "raw_tool_sequence_correct": true,
+    "executed_tool_sequence_correct": true,
+    "raw_arguments_correct": true,
+    "executed_arguments_correct": true,
     "deterministic_correction": false,
-    "coordinator_parse_failure": false,
-    "coordinator_fallback_used": false,
+    "tool_router_parse_failure": false,
+    "tool_router_fallback_used": false,
     "raw_explanation_accepted": false,
     "guardrail_fallback": true,
     "final_safe_answer": true,
-    "unsupported_numeric_claim": true,
+    "unsupported_numeric_claim": false,
     "unsupported_categorical_claim": false,
     "unsupported_causal_claim": false,
     "implementation_detail_exposed": false,
     "grounding_issues": [
-      "unsupported_numeric_claim"
+      "unsupported_advisory_claim"
     ],
-    "answer": "That request is outside the network-operations scope of this demonstrator. I can help with traffic forecasts, SLA-risk analysis, timestamp comparisons, SC-allocation policies, operator constraints, and time-range analysis.",
-    "raw_llm_answer": "At 14:05, the network's Failure-prone risk is 3.5%. No specific policy recommendation is provided in the current evidence. Monitor the network closely for potential issues."
+    "answer": "At 14:05, the predicted SLA state is normal and the Failure-prone risk is 8.0%.",
+    "raw_llm_answer": "At 14:05, the network is predicted to be Normal, with a Failure-prone risk of 8.0%. Monitor closely."
   },
   {
     "id": "sla_risk_state_04",
@@ -279,30 +266,28 @@
       "get_sla_prediction"
     ],
     "raw_tools": [
-      "decline_out_of_scope"
+      "get_sla_prediction"
     ],
     "executed_tools": [
-      "decline_out_of_scope"
+      "get_sla_prediction"
     ],
-    "raw_tool_sequence_correct": false,
-    "executed_tool_sequence_correct": false,
-    "raw_arguments_correct": false,
-    "executed_arguments_correct": false,
+    "raw_tool_sequence_correct": true,
+    "executed_tool_sequence_correct": true,
+    "raw_arguments_correct": true,
+    "executed_arguments_correct": true,
     "deterministic_correction": false,
-    "coordinator_parse_failure": false,
-    "coordinator_fallback_used": false,
-    "raw_explanation_accepted": false,
-    "guardrail_fallback": true,
+    "tool_router_parse_failure": false,
+    "tool_router_fallback_used": false,
+    "raw_explanation_accepted": true,
+    "guardrail_fallback": false,
     "final_safe_answer": true,
-    "unsupported_numeric_claim": true,
+    "unsupported_numeric_claim": false,
     "unsupported_categorical_claim": false,
     "unsupported_causal_claim": false,
     "implementation_detail_exposed": false,
-    "grounding_issues": [
-      "unsupported_numeric_claim"
-    ],
-    "answer": "That request is outside the network-operations scope of this demonstrator. I can help with traffic forecasts, SLA-risk analysis, timestamp comparisons, SC-allocation policies, operator constraints, and time-range analysis.",
-    "raw_llm_answer": "At 16:20, the predicted SLA state is Normal, with a Failure-prone risk of 0.02%. No specific policy recommendation is provided in the current evidence."
+    "grounding_issues": [],
+    "answer": "Predicted SLA state at 16:20 is Normal. Failure-prone risk is 7.0%.",
+    "raw_llm_answer": "Predicted SLA state at 16:20 is Normal. Failure-prone risk is 7.0%."
   },
   {
     "id": "sla_risk_state_05",
@@ -313,30 +298,28 @@
       "explain_sla_risk"
     ],
     "raw_tools": [
-      "decline_out_of_scope"
+      "explain_sla_risk"
     ],
     "executed_tools": [
-      "decline_out_of_scope"
+      "explain_sla_risk"
     ],
-    "raw_tool_sequence_correct": false,
-    "executed_tool_sequence_correct": false,
+    "raw_tool_sequence_correct": true,
+    "executed_tool_sequence_correct": true,
     "raw_arguments_correct": false,
     "executed_arguments_correct": false,
     "deterministic_correction": false,
-    "coordinator_parse_failure": false,
-    "coordinator_fallback_used": false,
-    "raw_explanation_accepted": false,
-    "guardrail_fallback": true,
+    "tool_router_parse_failure": false,
+    "tool_router_fallback_used": false,
+    "raw_explanation_accepted": true,
+    "guardrail_fallback": false,
     "final_safe_answer": true,
-    "unsupported_numeric_claim": true,
+    "unsupported_numeric_claim": false,
     "unsupported_categorical_claim": false,
     "unsupported_causal_claim": false,
     "implementation_detail_exposed": false,
-    "grounding_issues": [
-      "unsupported_numeric_claim"
-    ],
-    "answer": "That request is outside the network-operations scope of this demonstrator. I can help with traffic forecasts, SLA-risk analysis, timestamp comparisons, SC-allocation policies, operator constraints, and time-range analysis.",
-    "raw_llm_answer": "At 05:55, the predicted SLA state is Failure-prone, with a Failure-prone risk of 60%. This indicates potential issues with network performance during that time. However, the deterministic analysis does not provide specific reasons for this classification. It's recommended to monitor the network closely during this timeframe."
+    "grounding_issues": [],
+    "answer": "Predicted SLA state at 05:55 is Normal. Failure-prone risk is 0%. At 05:55, the predicted offered traffic is 46.79 Gbps, with enterprise contributing 16.31 Gbps, RAN contributing 21.54 Gbps, and PON contributing 8.94 Gbps. This is based on the minimum-blocking objective. No causal feature attribution is available; concurrent traffic provides context only.",
+    "raw_llm_answer": "Predicted SLA state at 05:55 is Normal. Failure-prone risk is 0%. At 05:55, the predicted offered traffic is 46.79 Gbps, with enterprise contributing 16.31 Gbps, RAN contributing 21.54 Gbps, and PON contributing 8.94 Gbps. This is based on the minimum-blocking objective. No causal feature attribution is available; concurrent traffic provides context only."
   },
   {
     "id": "full_network_state_01",
@@ -347,31 +330,28 @@
       "get_network_state_at_time"
     ],
     "raw_tools": [
-      "decline_out_of_scope"
+      "get_network_state_at_time"
     ],
     "executed_tools": [
-      "decline_out_of_scope"
+      "get_network_state_at_time"
     ],
-    "raw_tool_sequence_correct": false,
-    "executed_tool_sequence_correct": false,
-    "raw_arguments_correct": false,
-    "executed_arguments_correct": false,
+    "raw_tool_sequence_correct": true,
+    "executed_tool_sequence_correct": true,
+    "raw_arguments_correct": true,
+    "executed_arguments_correct": true,
     "deterministic_correction": false,
-    "coordinator_parse_failure": false,
-    "coordinator_fallback_used": false,
-    "raw_explanation_accepted": false,
-    "guardrail_fallback": true,
+    "tool_router_parse_failure": false,
+    "tool_router_fallback_used": false,
+    "raw_explanation_accepted": true,
+    "guardrail_fallback": false,
     "final_safe_answer": true,
-    "unsupported_numeric_claim": true,
+    "unsupported_numeric_claim": false,
     "unsupported_categorical_claim": false,
     "unsupported_causal_claim": false,
     "implementation_detail_exposed": false,
-    "grounding_issues": [
-      "unsupported_advisory_claim",
-      "unsupported_numeric_claim"
-    ],
-    "answer": "That request is outside the network-operations scope of this demonstrator. I can help with traffic forecasts, SLA-risk analysis, timestamp comparisons, SC-allocation policies, operator constraints, and time-range analysis.",
-    "raw_llm_answer": "At 16:20, the network state is as follows:\n\n- Predicted offered traffic: 5.2 Gbps\n- Served traffic: 4.8 Gbps\n- Blocked traffic: 0.4 Gbps (4.0%)\n- Predicted SLA state: Normal\n\nNo specific policy recommendations are provided in the deterministic evidence. Please monitor the network closely and consider reconfiguration if necessary."
+    "grounding_issues": [],
+    "answer": "At 16:20, the network state is as follows:\n\n- Predicted offered traffic: 75.67 Gbps\n- Predicted SLA state: Normal\n- Failure-prone risk: 7.0%\n- Under the active SAA policy, the SC state is ENTERPRISE | RAN | PON | ENTERPRISE, with 2.73% blocking and no SC reconfigurations.",
+    "raw_llm_answer": "At 16:20, the network state is as follows:\n\n- Predicted offered traffic: 75.67 Gbps\n- Predicted SLA state: Normal\n- Failure-prone risk: 7.0%\n- Under the active SAA policy, the SC state is ENTERPRISE | RAN | PON | ENTERPRISE, with 2.73% blocking and no SC reconfigurations."
   },
   {
     "id": "full_network_state_02",
@@ -382,30 +362,28 @@
       "get_network_state_at_time"
     ],
     "raw_tools": [
-      "decline_out_of_scope"
+      "get_network_state_at_time"
     ],
     "executed_tools": [
-      "decline_out_of_scope"
+      "get_network_state_at_time"
     ],
-    "raw_tool_sequence_correct": false,
-    "executed_tool_sequence_correct": false,
-    "raw_arguments_correct": false,
-    "executed_arguments_correct": false,
+    "raw_tool_sequence_correct": true,
+    "executed_tool_sequence_correct": true,
+    "raw_arguments_correct": true,
+    "executed_arguments_correct": true,
     "deterministic_correction": false,
-    "coordinator_parse_failure": false,
-    "coordinator_fallback_used": false,
-    "raw_explanation_accepted": false,
-    "guardrail_fallback": true,
+    "tool_router_parse_failure": false,
+    "tool_router_fallback_used": false,
+    "raw_explanation_accepted": true,
+    "guardrail_fallback": false,
     "final_safe_answer": true,
-    "unsupported_numeric_claim": true,
+    "unsupported_numeric_claim": false,
     "unsupported_categorical_claim": false,
     "unsupported_causal_claim": false,
     "implementation_detail_exposed": false,
-    "grounding_issues": [
-      "unsupported_numeric_claim"
-    ],
-    "answer": "That request is outside the network-operations scope of this demonstrator. I can help with traffic forecasts, SLA-risk analysis, timestamp comparisons, SC-allocation policies, operator constraints, and time-range analysis.",
-    "raw_llm_answer": "At 23:10, the network is operating as expected, with no notable issues identified. The predicted offered traffic for this time is 5.2 Gbps, and the served traffic is 5.1 Gbps. The network is currently in a Normal SLA state. No specific policy adjustments are recommended based on the available evidence."
+    "grounding_issues": [],
+    "answer": "At 23:10, the network state is Normal with a 7% Failure-prone risk. Under the active SAA policy, the SC state is RAN | PON | RAN | ENTERPRISE, with no blocking and 0 SC reconfigurations. Predicted offered traffic is 59.61 Gbps, with 4.25 Gbps on Enterprise, 31.1 Gbps on RAN, and 24.26 Gbps on PON. The hub capacity is 400 Gbps, with 16 subcarriers.",
+    "raw_llm_answer": "At 23:10, the network state is Normal with a 7% Failure-prone risk. Under the active SAA policy, the SC state is RAN | PON | RAN | ENTERPRISE, with no blocking and 0 SC reconfigurations. Predicted offered traffic is 59.61 Gbps, with 4.25 Gbps on Enterprise, 31.1 Gbps on RAN, and 24.26 Gbps on PON. The hub capacity is 400 Gbps, with 16 subcarriers."
   },
   {
     "id": "full_network_state_03",
@@ -416,30 +394,28 @@
       "get_network_state_at_time"
     ],
     "raw_tools": [
-      "decline_out_of_scope"
+      "get_network_state_at_time"
     ],
     "executed_tools": [
-      "decline_out_of_scope"
+      "get_network_state_at_time"
     ],
-    "raw_tool_sequence_correct": false,
-    "executed_tool_sequence_correct": false,
-    "raw_arguments_correct": false,
-    "executed_arguments_correct": false,
+    "raw_tool_sequence_correct": true,
+    "executed_tool_sequence_correct": true,
+    "raw_arguments_correct": true,
+    "executed_arguments_correct": true,
     "deterministic_correction": false,
-    "coordinator_parse_failure": false,
-    "coordinator_fallback_used": false,
-    "raw_explanation_accepted": false,
-    "guardrail_fallback": true,
+    "tool_router_parse_failure": false,
+    "tool_router_fallback_used": false,
+    "raw_explanation_accepted": true,
+    "guardrail_fallback": false,
     "final_safe_answer": true,
-    "unsupported_numeric_claim": true,
+    "unsupported_numeric_claim": false,
     "unsupported_categorical_claim": false,
     "unsupported_causal_claim": false,
     "implementation_detail_exposed": false,
-    "grounding_issues": [
-      "unsupported_numeric_claim"
-    ],
-    "answer": "That request is outside the network-operations scope of this demonstrator. I can help with traffic forecasts, SLA-risk analysis, timestamp comparisons, SC-allocation policies, operator constraints, and time-range analysis.",
-    "raw_llm_answer": "At 07:45, the predicted traffic is 5.2 Gbps, with a Failure-prone risk of 0.03%. The SC allocation state is provisioned at 6.0 Gbps. The SLA state is Normal."
+    "grounding_issues": [],
+    "answer": "At 07:45, the predicted total offered traffic is 59.85 Gbps. The predicted SLA state is Normal with 0% Failure-prone risk. Under the active SAA policy, the SC state is ENTERPRISE | RAN | PON | ENTERPRISE, with 0% blocking and 0 SC reconfigurations.",
+    "raw_llm_answer": "At 07:45, the predicted total offered traffic is 59.85 Gbps. The predicted SLA state is Normal with 0% Failure-prone risk. Under the active SAA policy, the SC state is ENTERPRISE | RAN | PON | ENTERPRISE, with 0% blocking and 0 SC reconfigurations."
   },
   {
     "id": "full_network_state_04",
@@ -450,31 +426,28 @@
       "get_network_state_at_time"
     ],
     "raw_tools": [
-      "decline_out_of_scope"
+      "get_network_state_at_time"
     ],
     "executed_tools": [
-      "decline_out_of_scope"
+      "get_network_state_at_time"
     ],
-    "raw_tool_sequence_correct": false,
-    "executed_tool_sequence_correct": false,
-    "raw_arguments_correct": false,
-    "executed_arguments_correct": false,
+    "raw_tool_sequence_correct": true,
+    "executed_tool_sequence_correct": true,
+    "raw_arguments_correct": true,
+    "executed_arguments_correct": true,
     "deterministic_correction": false,
-    "coordinator_parse_failure": false,
-    "coordinator_fallback_used": false,
-    "raw_explanation_accepted": false,
-    "guardrail_fallback": true,
+    "tool_router_parse_failure": false,
+    "tool_router_fallback_used": false,
+    "raw_explanation_accepted": true,
+    "guardrail_fallback": false,
     "final_safe_answer": true,
-    "unsupported_numeric_claim": true,
+    "unsupported_numeric_claim": false,
     "unsupported_categorical_claim": false,
     "unsupported_causal_claim": false,
     "implementation_detail_exposed": false,
-    "grounding_issues": [
-      "unsupported_advisory_claim",
-      "unsupported_numeric_claim"
-    ],
-    "answer": "That request is outside the network-operations scope of this demonstrator. I can help with traffic forecasts, SLA-risk analysis, timestamp comparisons, SC-allocation policies, operator constraints, and time-range analysis.",
-    "raw_llm_answer": "At 12:35, the predicted traffic is 12.35 Gbps. The network is currently in a Normal SLA state. The traffic forecast does not indicate any significant changes within the current time range. There are no SC constraints or policy analyses (PCA/MBA/SAA) provided in the evidence. No action is required at this time."
+    "grounding_issues": [],
+    "answer": "At 12:35, the network state is Normal with a Failure-prone risk of 0%. Under the active SAA policy, the SC state is ENTERPRISE | RAN | ENTERPRISE | PON, with 0% blocking and 0 SC reconfigurations. Predicted offered traffic is 73.81 Gbps, with 37.49 Gbps on enterprise, 24.25 Gbps on RAN, and 12.07 Gbps on PON. The overall blocking is 0%.",
+    "raw_llm_answer": "At 12:35, the network state is Normal with a Failure-prone risk of 0%. Under the active SAA policy, the SC state is ENTERPRISE | RAN | ENTERPRISE | PON, with 0% blocking and 0 SC reconfigurations. Predicted offered traffic is 73.81 Gbps, with 37.49 Gbps on enterprise, 24.25 Gbps on RAN, and 12.07 Gbps on PON. The overall blocking is 0%."
   },
   {
     "id": "full_network_state_05",
@@ -485,30 +458,28 @@
       "get_network_state_at_time"
     ],
     "raw_tools": [
-      "decline_out_of_scope"
+      "get_network_state_at_time"
     ],
     "executed_tools": [
-      "decline_out_of_scope"
+      "get_network_state_at_time"
     ],
-    "raw_tool_sequence_correct": false,
-    "executed_tool_sequence_correct": false,
-    "raw_arguments_correct": false,
-    "executed_arguments_correct": false,
+    "raw_tool_sequence_correct": true,
+    "executed_tool_sequence_correct": true,
+    "raw_arguments_correct": true,
+    "executed_arguments_correct": true,
     "deterministic_correction": false,
-    "coordinator_parse_failure": false,
-    "coordinator_fallback_used": false,
-    "raw_explanation_accepted": false,
-    "guardrail_fallback": true,
+    "tool_router_parse_failure": false,
+    "tool_router_fallback_used": false,
+    "raw_explanation_accepted": true,
+    "guardrail_fallback": false,
     "final_safe_answer": true,
-    "unsupported_numeric_claim": true,
+    "unsupported_numeric_claim": false,
     "unsupported_categorical_claim": false,
     "unsupported_causal_claim": false,
     "implementation_detail_exposed": false,
-    "grounding_issues": [
-      "unsupported_numeric_claim"
-    ],
-    "answer": "That request is outside the network-operations scope of this demonstrator. I can help with traffic forecasts, SLA-risk analysis, timestamp comparisons, SC-allocation policies, operator constraints, and time-range analysis.",
-    "raw_llm_answer": "At 20:00, under the MBA policy, the network state is as follows:\n\n- Predicted offered traffic: 5.2 Gbps\n- Predicted served traffic: 5.1 Gbps\n- Predicted blocking: 1.5%\n- Predicted SLA state: Normal\n\nNo specific action is required at this time. However, it's always advisable to monitor network performance closely."
+    "grounding_issues": [],
+    "answer": "At 20:00, under MBA, predicted offered traffic is 91.77 Gbps, with a Predicted SLA state of Degraded and a Failure-prone risk of 42%. Under the active SAA policy, the SC state is RAN | PON | RAN | PON, with 8.08% blocking and 1 SC reconfiguration.",
+    "raw_llm_answer": "At 20:00, under MBA, predicted offered traffic is 91.77 Gbps, with a Predicted SLA state of Degraded and a Failure-prone risk of 42%. Under the active SAA policy, the SC state is RAN | PON | RAN | PON, with 8.08% blocking and 1 SC reconfiguration."
   },
   {
     "id": "policy_comparison_balanced_01",
@@ -519,30 +490,28 @@
       "compare_policies_at_time"
     ],
     "raw_tools": [
-      "decline_out_of_scope"
+      "compare_policies_at_time"
     ],
     "executed_tools": [
-      "decline_out_of_scope"
+      "compare_policies_at_time"
     ],
-    "raw_tool_sequence_correct": false,
-    "executed_tool_sequence_correct": false,
+    "raw_tool_sequence_correct": true,
+    "executed_tool_sequence_correct": true,
     "raw_arguments_correct": false,
     "executed_arguments_correct": false,
     "deterministic_correction": false,
-    "coordinator_parse_failure": false,
-    "coordinator_fallback_used": false,
-    "raw_explanation_accepted": false,
-    "guardrail_fallback": true,
+    "tool_router_parse_failure": false,
+    "tool_router_fallback_used": false,
+    "raw_explanation_accepted": true,
+    "guardrail_fallback": false,
     "final_safe_answer": true,
-    "unsupported_numeric_claim": true,
+    "unsupported_numeric_claim": false,
     "unsupported_categorical_claim": false,
     "unsupported_causal_claim": false,
     "implementation_detail_exposed": false,
-    "grounding_issues": [
-      "unsupported_numeric_claim"
-    ],
-    "answer": "That request is outside the network-operations scope of this demonstrator. I can help with traffic forecasts, SLA-risk analysis, timestamp comparisons, SC-allocation policies, operator constraints, and time-range analysis.",
-    "raw_llm_answer": "At 18:10, the analysis compared PCA, MBA, and SAA. Here's a summary of the findings:\n\n- PCA: Predicted offered traffic: 5.2 Gbps, Predicted SLA state: Normal, Failure-prone risk: 0.02%\n- MBA: Predicted offered traffic: 5.5 Gbps, Predicted SLA state: Degraded, Failure-prone risk: 0.04%\n- SAA: Predicted offered traffic: 5.0 Gbps, Predicted SLA state: Normal, Failure-prone risk: 0.01%\n\nBased on the minimum-blocking objective, the analysis recommends using SAA at 18:10."
+    "grounding_issues": [],
+    "answer": "At 18:10, the SLA-priority objective recommends SAA with a blocking rate of 0.72%. Both MBA and PCA have the same blocking rate under this objective. No reconfiguration is required for any of the policies.",
+    "raw_llm_answer": "At 18:10, the SLA-priority objective recommends SAA with a blocking rate of 0.72%. Both MBA and PCA have the same blocking rate under this objective. No reconfiguration is required for any of the policies."
   },
   {
     "id": "policy_comparison_balanced_02",
@@ -553,30 +522,28 @@
       "compare_policies_at_time"
     ],
     "raw_tools": [
-      "decline_out_of_scope"
+      "compare_policies_at_time"
     ],
     "executed_tools": [
-      "decline_out_of_scope"
+      "compare_policies_at_time"
     ],
-    "raw_tool_sequence_correct": false,
-    "executed_tool_sequence_correct": false,
-    "raw_arguments_correct": false,
-    "executed_arguments_correct": false,
+    "raw_tool_sequence_correct": true,
+    "executed_tool_sequence_correct": true,
+    "raw_arguments_correct": true,
+    "executed_arguments_correct": true,
     "deterministic_correction": false,
-    "coordinator_parse_failure": false,
-    "coordinator_fallback_used": false,
-    "raw_explanation_accepted": false,
-    "guardrail_fallback": true,
+    "tool_router_parse_failure": false,
+    "tool_router_fallback_used": false,
+    "raw_explanation_accepted": true,
+    "guardrail_fallback": false,
     "final_safe_answer": true,
-    "unsupported_numeric_claim": true,
+    "unsupported_numeric_claim": false,
     "unsupported_categorical_claim": false,
     "unsupported_causal_claim": false,
     "implementation_detail_exposed": false,
-    "grounding_issues": [
-      "unsupported_numeric_claim"
-    ],
-    "answer": "That request is outside the network-operations scope of this demonstrator. I can help with traffic forecasts, SLA-risk analysis, timestamp comparisons, SC-allocation policies, operator constraints, and time-range analysis.",
-    "raw_llm_answer": "At 12:35, the balanced objective recommends the active SAA policy for optimal network performance. The predicted offered traffic is 1.2 Gbps, with a predicted SLA state of Normal. No specific policy change is recommended based on the provided evidence."
+    "grounding_issues": [],
+    "answer": "At 12:35, the balanced objective recommends SAA. SAA, MBA, and PCA all have 0% blocking. The recommended policy for this timestamp is SAA, with no SC reconfigurations.",
+    "raw_llm_answer": "At 12:35, the balanced objective recommends SAA. SAA, MBA, and PCA all have 0% blocking. The recommended policy for this timestamp is SAA, with no SC reconfigurations."
   },
   {
     "id": "policy_comparison_balanced_03",
@@ -587,30 +554,28 @@
       "compare_policies_at_time"
     ],
     "raw_tools": [
-      "decline_out_of_scope"
+      "compare_policies_at_time"
     ],
     "executed_tools": [
-      "decline_out_of_scope"
+      "compare_policies_at_time"
     ],
-    "raw_tool_sequence_correct": false,
-    "executed_tool_sequence_correct": false,
-    "raw_arguments_correct": false,
-    "executed_arguments_correct": false,
+    "raw_tool_sequence_correct": true,
+    "executed_tool_sequence_correct": true,
+    "raw_arguments_correct": true,
+    "executed_arguments_correct": true,
     "deterministic_correction": false,
-    "coordinator_parse_failure": false,
-    "coordinator_fallback_used": false,
-    "raw_explanation_accepted": false,
-    "guardrail_fallback": true,
+    "tool_router_parse_failure": false,
+    "tool_router_fallback_used": false,
+    "raw_explanation_accepted": true,
+    "guardrail_fallback": false,
     "final_safe_answer": true,
-    "unsupported_numeric_claim": true,
+    "unsupported_numeric_claim": false,
     "unsupported_categorical_claim": false,
     "unsupported_causal_claim": false,
     "implementation_detail_exposed": false,
-    "grounding_issues": [
-      "unsupported_numeric_claim"
-    ],
-    "answer": "That request is outside the network-operations scope of this demonstrator. I can help with traffic forecasts, SLA-risk analysis, timestamp comparisons, SC-allocation policies, operator constraints, and time-range analysis.",
-    "raw_llm_answer": "At 16:20, the balanced objective recommends Strategy B, offering a predicted SLA state of Normal with a predicted offered traffic of 5.2 Gbps and a Failure-prone risk of 0.02%. Strategy A offers a predicted SLA state of Degraded with a predicted offered traffic of 5.5 Gbps and a Failure-prone risk of 0.04%. Strategy C offers a predicted SLA state of Failure-prone with a predicted offered traffic of 5.8 Gbps and a Failure-prone risk of 0.06%."
+    "grounding_issues": [],
+    "answer": "At 16:20, the balanced objective recommends SAA. SAA has 2.73% blocking and 0 SC reconfigurations. MBA has 2.73% blocking and 0 SC reconfigurations as well, while the balanced objective selects SAA. PCA has 26.59% blocking and 0 SC reconfigurations.",
+    "raw_llm_answer": "At 16:20, the balanced objective recommends SAA. SAA has 2.73% blocking and 0 SC reconfigurations. MBA has 2.73% blocking and 0 SC reconfigurations as well, while the balanced objective selects SAA. PCA has 26.59% blocking and 0 SC reconfigurations."
   },
   {
     "id": "policy_comparison_balanced_04",
@@ -621,18 +586,18 @@
       "compare_policies_at_time"
     ],
     "raw_tools": [
-      "decline_out_of_scope"
+      "get_network_state_at_time"
     ],
     "executed_tools": [
-      "decline_out_of_scope"
+      "get_network_state_at_time"
     ],
     "raw_tool_sequence_correct": false,
     "executed_tool_sequence_correct": false,
     "raw_arguments_correct": false,
     "executed_arguments_correct": false,
-    "deterministic_correction": false,
-    "coordinator_parse_failure": false,
-    "coordinator_fallback_used": false,
+    "deterministic_correction": true,
+    "tool_router_parse_failure": false,
+    "tool_router_fallback_used": false,
     "raw_explanation_accepted": true,
     "guardrail_fallback": false,
     "final_safe_answer": true,
@@ -641,8 +606,8 @@
     "unsupported_causal_claim": false,
     "implementation_detail_exposed": false,
     "grounding_issues": [],
-    "answer": "At 09:30, the best policy is not determinable from the provided evidence. The traffic forecast, SLA state, and policy analysis are not supplied. Please ensure all necessary data is available for accurate policy recommendations.",
-    "raw_llm_answer": "At 09:30, the best policy is not determinable from the provided evidence. The traffic forecast, SLA state, and policy analysis are not supplied. Please ensure all necessary data is available for accurate policy recommendations."
+    "answer": "At 09:30, the network state is Normal with a Failure-prone risk of 0%. Under the active SAA policy, the SC state is ENTERPRISE | RAN | ENTERPRISE | PON, with 0% blocking and 0 SC reconfigurations. Predicted offered traffic is 69.71 Gbps, with 39.82 Gbps on enterprise, 21.37 Gbps on RAN, and 8.52 Gbps on PON.",
+    "raw_llm_answer": "At 09:30, the network state is Normal with a Failure-prone risk of 0%. Under the active SAA policy, the SC state is ENTERPRISE | RAN | ENTERPRISE | PON, with 0% blocking and 0 SC reconfigurations. Predicted offered traffic is 69.71 Gbps, with 39.82 Gbps on enterprise, 21.37 Gbps on RAN, and 8.52 Gbps on PON."
   },
   {
     "id": "policy_comparison_balanced_05",
@@ -653,30 +618,26 @@
       "compare_policies_at_time"
     ],
     "raw_tools": [
-      "decline_out_of_scope"
+      "compare_network_states"
     ],
-    "executed_tools": [
-      "decline_out_of_scope"
-    ],
+    "executed_tools": [],
     "raw_tool_sequence_correct": false,
     "executed_tool_sequence_correct": false,
     "raw_arguments_correct": false,
     "executed_arguments_correct": false,
-    "deterministic_correction": false,
-    "coordinator_parse_failure": false,
-    "coordinator_fallback_used": false,
-    "raw_explanation_accepted": false,
-    "guardrail_fallback": true,
+    "deterministic_correction": true,
+    "tool_router_parse_failure": false,
+    "tool_router_fallback_used": false,
+    "raw_explanation_accepted": true,
+    "guardrail_fallback": false,
     "final_safe_answer": true,
-    "unsupported_numeric_claim": true,
+    "unsupported_numeric_claim": false,
     "unsupported_categorical_claim": false,
     "unsupported_causal_claim": false,
     "implementation_detail_exposed": false,
-    "grounding_issues": [
-      "unsupported_numeric_claim"
-    ],
-    "answer": "That request is outside the network-operations scope of this demonstrator. I can help with traffic forecasts, SLA-risk analysis, timestamp comparisons, SC-allocation policies, operator constraints, and time-range analysis.",
-    "raw_llm_answer": "For 20:00, the balanced objective recommends using the Self-Adaptive Algorithm (SAA) policy. Here are the key details:\n\n- Predicted offered traffic: 12.5 Gbps\n- Predicted SLA state: Normal\n- Failure-prone risk: 0.02%\n\nThis recommendation is based on deterministic evidence. No further action is required unless the SLA state changes or the risk increases."
+    "grounding_issues": [],
+    "answer": "I could not safely resolve the requested parameters. Please restate the time, policy, range, or constraint explicitly.",
+    "raw_llm_answer": ""
   },
   {
     "id": "objective_aware_policy_01",
@@ -687,30 +648,28 @@
       "compare_policies_at_time"
     ],
     "raw_tools": [
-      "decline_out_of_scope"
+      "get_network_state_at_time"
     ],
     "executed_tools": [
-      "decline_out_of_scope"
+      "get_network_state_at_time"
     ],
     "raw_tool_sequence_correct": false,
     "executed_tool_sequence_correct": false,
     "raw_arguments_correct": false,
     "executed_arguments_correct": false,
     "deterministic_correction": false,
-    "coordinator_parse_failure": false,
-    "coordinator_fallback_used": false,
-    "raw_explanation_accepted": false,
-    "guardrail_fallback": true,
+    "tool_router_parse_failure": false,
+    "tool_router_fallback_used": false,
+    "raw_explanation_accepted": true,
+    "guardrail_fallback": false,
     "final_safe_answer": true,
-    "unsupported_numeric_claim": true,
+    "unsupported_numeric_claim": false,
     "unsupported_categorical_claim": false,
     "unsupported_causal_claim": false,
     "implementation_detail_exposed": false,
-    "grounding_issues": [
-      "unsupported_numeric_claim"
-    ],
-    "answer": "That request is outside the network-operations scope of this demonstrator. I can help with traffic forecasts, SLA-risk analysis, timestamp comparisons, SC-allocation policies, operator constraints, and time-range analysis.",
-    "raw_llm_answer": "At 18:10, the policy with the lowest blocking is the one under the active SAA policy. The predicted blocking is 0.02 Gbps."
+    "grounding_issues": [],
+    "answer": "At 18:10, the network state under MBA shows predicted offered traffic of 83.54 Gbps, with a predicted SLA state of Degraded and a Failure-prone risk of 18%. Under the MBA policy, the SC state is RAN | ENTERPRISE | PON | RAN, with 0.72% blocking and no SC reconfigurations.",
+    "raw_llm_answer": "At 18:10, the network state under MBA shows predicted offered traffic of 83.54 Gbps, with a predicted SLA state of Degraded and a Failure-prone risk of 18%. Under the MBA policy, the SC state is RAN | ENTERPRISE | PON | RAN, with 0.72% blocking and no SC reconfigurations."
   },
   {
     "id": "objective_aware_policy_02",
@@ -721,18 +680,16 @@
       "compare_policies_at_time"
     ],
     "raw_tools": [
-      "decline_out_of_scope"
+      "analyze_constrained_allocation"
     ],
-    "executed_tools": [
-      "decline_out_of_scope"
-    ],
+    "executed_tools": [],
     "raw_tool_sequence_correct": false,
     "executed_tool_sequence_correct": false,
     "raw_arguments_correct": false,
     "executed_arguments_correct": false,
-    "deterministic_correction": false,
-    "coordinator_parse_failure": false,
-    "coordinator_fallback_used": false,
+    "deterministic_correction": true,
+    "tool_router_parse_failure": false,
+    "tool_router_fallback_used": false,
     "raw_explanation_accepted": true,
     "guardrail_fallback": false,
     "final_safe_answer": true,
@@ -741,8 +698,8 @@
     "unsupported_causal_claim": false,
     "implementation_detail_exposed": false,
     "grounding_issues": [],
-    "answer": "At 14:05, the most stable policy with minimal controller changes is the stability objective. This policy aims to minimize reconfiguration and prioritizes network stability. However, the current evidence does not provide a specific traffic forecast or SLA state for this policy at the requested time. It's recommended to monitor the network closely and adjust policies as needed based on real-time data.",
-    "raw_llm_answer": "At 14:05, the most stable policy with minimal controller changes is the stability objective. This policy aims to minimize reconfiguration and prioritizes network stability. However, the current evidence does not provide a specific traffic forecast or SLA state for this policy at the requested time. It's recommended to monitor the network closely and adjust policies as needed based on real-time data."
+    "answer": "I could not safely resolve the requested parameters. Please restate the time, policy, range, or constraint explicitly.",
+    "raw_llm_answer": ""
   },
   {
     "id": "objective_aware_policy_03",
@@ -753,18 +710,18 @@
       "compare_policies_at_time"
     ],
     "raw_tools": [
-      "decline_out_of_scope"
+      "get_network_state_at_time"
     ],
     "executed_tools": [
-      "decline_out_of_scope"
+      "get_network_state_at_time"
     ],
     "raw_tool_sequence_correct": false,
     "executed_tool_sequence_correct": false,
     "raw_arguments_correct": false,
     "executed_arguments_correct": false,
     "deterministic_correction": false,
-    "coordinator_parse_failure": false,
-    "coordinator_fallback_used": false,
+    "tool_router_parse_failure": false,
+    "tool_router_fallback_used": false,
     "raw_explanation_accepted": true,
     "guardrail_fallback": false,
     "final_safe_answer": true,
@@ -773,8 +730,8 @@
     "unsupported_causal_claim": false,
     "implementation_detail_exposed": false,
     "grounding_issues": [],
-    "answer": "At 23:10, the policy should prioritize strict service priority. This recommendation is based on the deterministic evidence provided. However, please note that this analysis does not include traffic forecast, SLA state comparison, time-range analysis, or SC constraints. For a comprehensive view, consider integrating these capabilities into your analysis.",
-    "raw_llm_answer": "At 23:10, the policy should prioritize strict service priority. This recommendation is based on the deterministic evidence provided. However, please note that this analysis does not include traffic forecast, SLA state comparison, time-range analysis, or SC constraints. For a comprehensive view, consider integrating these capabilities into your analysis."
+    "answer": "At 23:10, the predicted total offered traffic is 59.61 Gbps. The predicted SLA state is Normal with a 7.0% Failure-prone risk. Under the active PCA policy, the SC state is ENTERPRISE | RAN | RAN | PON, with 0.0% blocking and 0 SC reconfigurations.",
+    "raw_llm_answer": "At 23:10, the predicted total offered traffic is 59.61 Gbps. The predicted SLA state is Normal with a 7.0% Failure-prone risk. Under the active PCA policy, the SC state is ENTERPRISE | RAN | RAN | PON, with 0.0% blocking and 0 SC reconfigurations."
   },
   {
     "id": "objective_aware_policy_04",
@@ -785,30 +742,28 @@
       "compare_policies_at_time"
     ],
     "raw_tools": [
-      "decline_out_of_scope"
+      "get_network_state_at_time"
     ],
     "executed_tools": [
-      "decline_out_of_scope"
+      "get_network_state_at_time"
     ],
     "raw_tool_sequence_correct": false,
     "executed_tool_sequence_correct": false,
     "raw_arguments_correct": false,
     "executed_arguments_correct": false,
     "deterministic_correction": false,
-    "coordinator_parse_failure": false,
-    "coordinator_fallback_used": false,
-    "raw_explanation_accepted": false,
-    "guardrail_fallback": true,
+    "tool_router_parse_failure": false,
+    "tool_router_fallback_used": false,
+    "raw_explanation_accepted": true,
+    "guardrail_fallback": false,
     "final_safe_answer": true,
-    "unsupported_numeric_claim": true,
+    "unsupported_numeric_claim": false,
     "unsupported_categorical_claim": false,
     "unsupported_causal_claim": false,
     "implementation_detail_exposed": false,
-    "grounding_issues": [
-      "unsupported_numeric_claim"
-    ],
-    "answer": "That request is outside the network-operations scope of this demonstrator. I can help with traffic forecasts, SLA-risk analysis, timestamp comparisons, SC-allocation policies, operator constraints, and time-range analysis.",
-    "raw_llm_answer": "At 20:00, the system is forecasting a high offered traffic of 1.2 Gbps. Given the current configuration, the predicted SLA state is Degraded with a Failure-prone risk of 15%. No specific policy recommendation is provided in the deterministic evidence. It's advisable to monitor the network closely and consider potential reconfigurations to maintain optimal performance."
+    "grounding_issues": [],
+    "answer": "At 20:00, predicted offered traffic is 91.77 Gbps and the predicted SLA state is Degraded with a Failure-prone risk of 42%. Under the active SAA policy, the SC state is RAN | PON | RAN | ENTERPRISE, with 16.38% blocking and 0 SC reconfigurations.",
+    "raw_llm_answer": "At 20:00, predicted offered traffic is 91.77 Gbps and the predicted SLA state is Degraded with a Failure-prone risk of 42%. Under the active SAA policy, the SC state is RAN | PON | RAN | ENTERPRISE, with 16.38% blocking and 0 SC reconfigurations."
   },
   {
     "id": "objective_aware_policy_05",
@@ -819,30 +774,26 @@
       "compare_policies_at_time"
     ],
     "raw_tools": [
-      "decline_out_of_scope"
+      "request_clarification"
     ],
-    "executed_tools": [
-      "decline_out_of_scope"
-    ],
+    "executed_tools": [],
     "raw_tool_sequence_correct": false,
     "executed_tool_sequence_correct": false,
     "raw_arguments_correct": false,
     "executed_arguments_correct": false,
     "deterministic_correction": false,
-    "coordinator_parse_failure": false,
-    "coordinator_fallback_used": false,
-    "raw_explanation_accepted": false,
-    "guardrail_fallback": true,
+    "tool_router_parse_failure": false,
+    "tool_router_fallback_used": false,
+    "raw_explanation_accepted": true,
+    "guardrail_fallback": false,
     "final_safe_answer": true,
     "unsupported_numeric_claim": false,
     "unsupported_categorical_claim": false,
     "unsupported_causal_claim": false,
     "implementation_detail_exposed": false,
-    "grounding_issues": [
-      "unsupported_advisory_claim"
-    ],
-    "answer": "That request is outside the network-operations scope of this demonstrator. I can help with traffic forecasts, SLA-risk analysis, timestamp comparisons, SC-allocation policies, operator constraints, and time-range analysis.",
-    "raw_llm_answer": "At 16:20, the predicted SLA state is Normal. The active SAA policy prioritizes avoiding unnecessary SC changes. No traffic forecast or SC constraints analysis was provided in this deterministic evidence. Please monitor the network closely and consider reconfiguration if necessary."
+    "grounding_issues": [],
+    "answer": "Please provide the missing policy before I continue.",
+    "raw_llm_answer": ""
   },
   {
     "id": "policy_counterfactual_01",
@@ -853,18 +804,18 @@
       "simulate_policy_at_time"
     ],
     "raw_tools": [
-      "decline_out_of_scope"
+      "simulate_policy_at_time"
     ],
     "executed_tools": [
-      "decline_out_of_scope"
+      "simulate_policy_at_time"
     ],
-    "raw_tool_sequence_correct": false,
-    "executed_tool_sequence_correct": false,
-    "raw_arguments_correct": false,
-    "executed_arguments_correct": false,
+    "raw_tool_sequence_correct": true,
+    "executed_tool_sequence_correct": true,
+    "raw_arguments_correct": true,
+    "executed_arguments_correct": true,
     "deterministic_correction": false,
-    "coordinator_parse_failure": false,
-    "coordinator_fallback_used": false,
+    "tool_router_parse_failure": false,
+    "tool_router_fallback_used": false,
     "raw_explanation_accepted": false,
     "guardrail_fallback": true,
     "final_safe_answer": true,
@@ -875,8 +826,8 @@
     "grounding_issues": [
       "unsupported_numeric_claim"
     ],
-    "answer": "That request is outside the network-operations scope of this demonstrator. I can help with traffic forecasts, SLA-risk analysis, timestamp comparisons, SC-allocation policies, operator constraints, and time-range analysis.",
-    "raw_llm_answer": "At 21:15, using PCA will result in the following:\n\n- Predicted offered traffic: 12.5 Gbps\n- Predicted SLA state: Normal\n\nPlease note that this response does not include traffic forecasts or SLA state predictions outside the scope of the provided evidence. For a comprehensive analysis, consider running a full simulation or adjusting the time range of the current analysis."
+    "answer": "At 21:15, PCA produces ENTERPRISE | RAN | RAN | PON, with 15.44% overall blocking, 84.56% fresh-service ratio, and 0 SC reconfiguration(s).",
+    "raw_llm_answer": "At 21:15, the PCA counterfactual produces ENTERPRISE | RAN | RAN | PON, with 15.44% overall blocking and an 84.56% fresh-service ratio. This policy assignment serves 4.66 Gbps of enterprise traffic, 45.17 Gbps of RAN traffic, and 25.00 Gbps of PON traffic, while blocking 13.66 Gbps of PON traffic. No SC reconfigurations are required under this policy."
   },
   {
     "id": "policy_counterfactual_02",
@@ -887,30 +838,28 @@
       "simulate_policy_at_time"
     ],
     "raw_tools": [
-      "decline_out_of_scope"
+      "simulate_policy_at_time"
     ],
     "executed_tools": [
-      "decline_out_of_scope"
+      "simulate_policy_at_time"
     ],
-    "raw_tool_sequence_correct": false,
-    "executed_tool_sequence_correct": false,
-    "raw_arguments_correct": false,
-    "executed_arguments_correct": false,
+    "raw_tool_sequence_correct": true,
+    "executed_tool_sequence_correct": true,
+    "raw_arguments_correct": true,
+    "executed_arguments_correct": true,
     "deterministic_correction": false,
-    "coordinator_parse_failure": false,
-    "coordinator_fallback_used": false,
-    "raw_explanation_accepted": false,
-    "guardrail_fallback": true,
+    "tool_router_parse_failure": false,
+    "tool_router_fallback_used": false,
+    "raw_explanation_accepted": true,
+    "guardrail_fallback": false,
     "final_safe_answer": true,
-    "unsupported_numeric_claim": true,
+    "unsupported_numeric_claim": false,
     "unsupported_categorical_claim": false,
     "unsupported_causal_claim": false,
     "implementation_detail_exposed": false,
-    "grounding_issues": [
-      "unsupported_numeric_claim"
-    ],
-    "answer": "That request is outside the network-operations scope of this demonstrator. I can help with traffic forecasts, SLA-risk analysis, timestamp comparisons, SC-allocation policies, operator constraints, and time-range analysis.",
-    "raw_llm_answer": "At 18:10, the Multi-Bandwidth Allocation (MBA) system is forecasted to handle a predicted offered traffic of 5.2 Gbps. The predicted SLA state is Normal. However, as this response is based on deterministic evidence, it's recommended to monitor the network closely for any potential changes."
+    "grounding_issues": [],
+    "answer": "At 18:10, the MBA counterfactual produces a SC assignment of RAN | ENTERPRISE | PON | RAN, with 0.72% overall blocking and a 99.28% fresh-service ratio. The policy simulation does not recommend any SC reconfigurations.",
+    "raw_llm_answer": "At 18:10, the MBA counterfactual produces a SC assignment of RAN | ENTERPRISE | PON | RAN, with 0.72% overall blocking and a 99.28% fresh-service ratio. The policy simulation does not recommend any SC reconfigurations."
   },
   {
     "id": "policy_counterfactual_03",
@@ -921,31 +870,28 @@
       "simulate_policy_at_time"
     ],
     "raw_tools": [
-      "decline_out_of_scope"
+      "simulate_policy_at_time"
     ],
     "executed_tools": [
-      "decline_out_of_scope"
+      "simulate_policy_at_time"
     ],
-    "raw_tool_sequence_correct": false,
-    "executed_tool_sequence_correct": false,
-    "raw_arguments_correct": false,
-    "executed_arguments_correct": false,
+    "raw_tool_sequence_correct": true,
+    "executed_tool_sequence_correct": true,
+    "raw_arguments_correct": true,
+    "executed_arguments_correct": true,
     "deterministic_correction": false,
-    "coordinator_parse_failure": false,
-    "coordinator_fallback_used": false,
-    "raw_explanation_accepted": false,
-    "guardrail_fallback": true,
+    "tool_router_parse_failure": false,
+    "tool_router_fallback_used": false,
+    "raw_explanation_accepted": true,
+    "guardrail_fallback": false,
     "final_safe_answer": true,
-    "unsupported_numeric_claim": true,
+    "unsupported_numeric_claim": false,
     "unsupported_categorical_claim": false,
     "unsupported_causal_claim": false,
     "implementation_detail_exposed": false,
-    "grounding_issues": [
-      "unsupported_advisory_claim",
-      "unsupported_numeric_claim"
-    ],
-    "answer": "That request is outside the network-operations scope of this demonstrator. I can help with traffic forecasts, SLA-risk analysis, timestamp comparisons, SC-allocation policies, operator constraints, and time-range analysis.",
-    "raw_llm_answer": "At 09:30, under the active SAA policy, the predicted offered traffic is 5.2 Gbps, with a predicted SLA state of Normal. The SC constraints are within limits. No policy change is recommended based on the deterministic evidence."
+    "grounding_issues": [],
+    "answer": "At 09:30, under the SAA policy, the SC assignment would be ENTERPRISE | RAN | ENTERPRISE | PON, with 0.0% overall blocking and a 100.0% fresh-service ratio. No SC reconfigurations are required.",
+    "raw_llm_answer": "At 09:30, under the SAA policy, the SC assignment would be ENTERPRISE | RAN | ENTERPRISE | PON, with 0.0% overall blocking and a 100.0% fresh-service ratio. No SC reconfigurations are required."
   },
   {
     "id": "policy_counterfactual_04",
@@ -956,30 +902,28 @@
       "simulate_policy_at_time"
     ],
     "raw_tools": [
-      "decline_out_of_scope"
+      "get_network_state_at_time"
     ],
     "executed_tools": [
-      "decline_out_of_scope"
+      "get_network_state_at_time"
     ],
     "raw_tool_sequence_correct": false,
     "executed_tool_sequence_correct": false,
     "raw_arguments_correct": false,
     "executed_arguments_correct": false,
     "deterministic_correction": false,
-    "coordinator_parse_failure": false,
-    "coordinator_fallback_used": false,
-    "raw_explanation_accepted": false,
-    "guardrail_fallback": true,
+    "tool_router_parse_failure": false,
+    "tool_router_fallback_used": false,
+    "raw_explanation_accepted": true,
+    "guardrail_fallback": false,
     "final_safe_answer": true,
-    "unsupported_numeric_claim": true,
+    "unsupported_numeric_claim": false,
     "unsupported_categorical_claim": false,
     "unsupported_causal_claim": false,
     "implementation_detail_exposed": false,
-    "grounding_issues": [
-      "unsupported_numeric_claim"
-    ],
-    "answer": "That request is outside the network-operations scope of this demonstrator. I can help with traffic forecasts, SLA-risk analysis, timestamp comparisons, SC-allocation policies, operator constraints, and time-range analysis.",
-    "raw_llm_answer": "At 14:05, the predicted offered traffic is 12.5 Gbps. The PCA simulation does not provide an SLA state or traffic forecast beyond this time. No policy analysis or SC constraints are included in the provided evidence."
+    "grounding_issues": [],
+    "answer": "At 14:05, under PCA, predicted offered traffic is 74.53 Gbps, with a Predicted SLA state of Normal and a Failure-prone risk of 8.0%. Under the PCA policy, the SC state is ENTERPRISE | ENTERPRISE | RAN | RAN, with 17.66% blocking and no SC reconfigurations.",
+    "raw_llm_answer": "At 14:05, under PCA, predicted offered traffic is 74.53 Gbps, with a Predicted SLA state of Normal and a Failure-prone risk of 8.0%. Under the PCA policy, the SC state is ENTERPRISE | ENTERPRISE | RAN | RAN, with 17.66% blocking and no SC reconfigurations."
   },
   {
     "id": "policy_counterfactual_05",
@@ -990,31 +934,28 @@
       "simulate_policy_at_time"
     ],
     "raw_tools": [
-      "decline_out_of_scope"
+      "simulate_policy_at_time"
     ],
     "executed_tools": [
-      "decline_out_of_scope"
+      "simulate_policy_at_time"
     ],
-    "raw_tool_sequence_correct": false,
-    "executed_tool_sequence_correct": false,
-    "raw_arguments_correct": false,
-    "executed_arguments_correct": false,
+    "raw_tool_sequence_correct": true,
+    "executed_tool_sequence_correct": true,
+    "raw_arguments_correct": true,
+    "executed_arguments_correct": true,
     "deterministic_correction": false,
-    "coordinator_parse_failure": false,
-    "coordinator_fallback_used": false,
-    "raw_explanation_accepted": false,
-    "guardrail_fallback": true,
+    "tool_router_parse_failure": false,
+    "tool_router_fallback_used": false,
+    "raw_explanation_accepted": true,
+    "guardrail_fallback": false,
     "final_safe_answer": true,
-    "unsupported_numeric_claim": true,
+    "unsupported_numeric_claim": false,
     "unsupported_categorical_claim": false,
     "unsupported_causal_claim": false,
     "implementation_detail_exposed": false,
-    "grounding_issues": [
-      "unsupported_advisory_claim",
-      "unsupported_numeric_claim"
-    ],
-    "answer": "That request is outside the network-operations scope of this demonstrator. I can help with traffic forecasts, SLA-risk analysis, timestamp comparisons, SC-allocation policies, operator constraints, and time-range analysis.",
-    "raw_llm_answer": "At 20:00, under the active SAA policy, the predicted offered traffic is 12.5 Gbps. The predicted SLA state is Normal, with a Failure-prone risk of 0.02%. No policy change is recommended based on the deterministic evidence."
+    "grounding_issues": [],
+    "answer": "At 20:00, under the SAA policy, the SC assignment would be RAN | PON | RAN | ENTERPRISE, with an overall blocking of 16.38%. The fresh-service ratio would be 83.62%. No SC reconfigurations would be required.",
+    "raw_llm_answer": "At 20:00, under the SAA policy, the SC assignment would be RAN | PON | RAN | ENTERPRISE, with an overall blocking of 16.38%. The fresh-service ratio would be 83.62%. No SC reconfigurations would be required."
   },
   {
     "id": "sc_constraints_01",
@@ -1025,30 +966,28 @@
       "analyze_constrained_allocation"
     ],
     "raw_tools": [
-      "decline_out_of_scope"
+      "analyze_constrained_allocation"
     ],
     "executed_tools": [
-      "decline_out_of_scope"
+      "analyze_constrained_allocation"
     ],
-    "raw_tool_sequence_correct": false,
-    "executed_tool_sequence_correct": false,
+    "raw_tool_sequence_correct": true,
+    "executed_tool_sequence_correct": true,
     "raw_arguments_correct": false,
-    "executed_arguments_correct": false,
+    "executed_arguments_correct": true,
     "deterministic_correction": false,
-    "coordinator_parse_failure": false,
-    "coordinator_fallback_used": false,
-    "raw_explanation_accepted": false,
-    "guardrail_fallback": true,
+    "tool_router_parse_failure": false,
+    "tool_router_fallback_used": false,
+    "raw_explanation_accepted": true,
+    "guardrail_fallback": false,
     "final_safe_answer": true,
-    "unsupported_numeric_claim": true,
+    "unsupported_numeric_claim": false,
     "unsupported_categorical_claim": false,
     "unsupported_causal_claim": false,
     "implementation_detail_exposed": false,
-    "grounding_issues": [
-      "unsupported_numeric_claim"
-    ],
-    "answer": "That request is outside the network-operations scope of this demonstrator. I can help with traffic forecasts, SLA-risk analysis, timestamp comparisons, SC-allocation policies, operator constraints, and time-range analysis.",
-    "raw_llm_answer": "At the specified time, the RAN will be configured to operate on 2 subcarriers. The remaining 2 subcarriers will be allocated based on the current traffic forecast. The predicted SLA state for this configuration is not determined by the provided evidence. Please ensure that the RAN operates within SC constraints and monitor the network closely during this time."
+    "grounding_issues": [],
+    "answer": "At 21:15, the RAN constraint with 2 subcarriers is feasible. Under the balanced objective, the resulting SC assignment is RAN | PON | RAN | PON, with 5.27% overall blocking and no SC reconfigurations.",
+    "raw_llm_answer": "At 21:15, the RAN constraint with 2 subcarriers is feasible. Under the balanced objective, the resulting SC assignment is RAN | PON | RAN | PON, with 5.27% overall blocking and no SC reconfigurations."
   },
   {
     "id": "sc_constraints_02",
@@ -1059,30 +998,28 @@
       "analyze_constrained_allocation"
     ],
     "raw_tools": [
-      "decline_out_of_scope"
+      "analyze_constrained_allocation"
     ],
     "executed_tools": [
-      "decline_out_of_scope"
+      "analyze_constrained_allocation"
     ],
-    "raw_tool_sequence_correct": false,
-    "executed_tool_sequence_correct": false,
+    "raw_tool_sequence_correct": true,
+    "executed_tool_sequence_correct": true,
     "raw_arguments_correct": false,
-    "executed_arguments_correct": false,
+    "executed_arguments_correct": true,
     "deterministic_correction": false,
-    "coordinator_parse_failure": false,
-    "coordinator_fallback_used": false,
-    "raw_explanation_accepted": false,
-    "guardrail_fallback": true,
+    "tool_router_parse_failure": false,
+    "tool_router_fallback_used": false,
+    "raw_explanation_accepted": true,
+    "guardrail_fallback": false,
     "final_safe_answer": true,
-    "unsupported_numeric_claim": true,
+    "unsupported_numeric_claim": false,
     "unsupported_categorical_claim": false,
     "unsupported_causal_claim": false,
     "implementation_detail_exposed": false,
-    "grounding_issues": [
-      "unsupported_numeric_claim"
-    ],
-    "answer": "That request is outside the network-operations scope of this demonstrator. I can help with traffic forecasts, SLA-risk analysis, timestamp comparisons, SC-allocation policies, operator constraints, and time-range analysis.",
-    "raw_llm_answer": "At 09:30, allocate one SC to Enterprise and optimize remaining capacity.\n- Predicted offered traffic: 5.2 Gbps\n- Predicted SLA state: Normal\n- No blocking expected\n- Failure-prone risk: 0.0%\n\nThis response is based on deterministic evidence. No further action is required unless explicitly advised."
+    "grounding_issues": [],
+    "answer": "At 09:30, the Enterprise=1-SC constraint is feasible. Under the balanced objective, the resulting SC assignment is ENTERPRISE | RAN | IDLE | PON, with 21.26% overall blocking and 1 SC reconfiguration.",
+    "raw_llm_answer": "At 09:30, the Enterprise=1-SC constraint is feasible. Under the balanced objective, the resulting SC assignment is ENTERPRISE | RAN | IDLE | PON, with 21.26% overall blocking and 1 SC reconfiguration."
   },
   {
     "id": "sc_constraints_03",
@@ -1093,30 +1030,26 @@
       "analyze_constrained_allocation"
     ],
     "raw_tools": [
-      "decline_out_of_scope"
+      "analyze_constrained_allocation"
     ],
-    "executed_tools": [
-      "decline_out_of_scope"
-    ],
-    "raw_tool_sequence_correct": false,
+    "executed_tools": [],
+    "raw_tool_sequence_correct": true,
     "executed_tool_sequence_correct": false,
     "raw_arguments_correct": false,
     "executed_arguments_correct": false,
-    "deterministic_correction": false,
-    "coordinator_parse_failure": false,
-    "coordinator_fallback_used": false,
-    "raw_explanation_accepted": false,
-    "guardrail_fallback": true,
+    "deterministic_correction": true,
+    "tool_router_parse_failure": false,
+    "tool_router_fallback_used": false,
+    "raw_explanation_accepted": true,
+    "guardrail_fallback": false,
     "final_safe_answer": true,
-    "unsupported_numeric_claim": true,
+    "unsupported_numeric_claim": false,
     "unsupported_categorical_claim": false,
     "unsupported_causal_claim": false,
     "implementation_detail_exposed": false,
-    "grounding_issues": [
-      "unsupported_numeric_claim"
-    ],
-    "answer": "That request is outside the network-operations scope of this demonstrator. I can help with traffic forecasts, SLA-risk analysis, timestamp comparisons, SC-allocation policies, operator constraints, and time-range analysis.",
-    "raw_llm_answer": "For the 07:45 time slot, the recommended SC allocation is as follows:\n\n- Enterprise: 1 SC\n- RAN: 2 SC\n\nThis allocation is based on the deterministic evidence provided. Please ensure that the network is configured accordingly."
+    "grounding_issues": [],
+    "answer": "I could not safely resolve the requested parameters. Please restate the time, policy, range, or constraint explicitly.",
+    "raw_llm_answer": ""
   },
   {
     "id": "sc_constraints_04",
@@ -1127,31 +1060,28 @@
       "analyze_constrained_allocation"
     ],
     "raw_tools": [
-      "decline_out_of_scope"
+      "analyze_constrained_allocation"
     ],
     "executed_tools": [
-      "decline_out_of_scope"
+      "analyze_constrained_allocation"
     ],
-    "raw_tool_sequence_correct": false,
-    "executed_tool_sequence_correct": false,
+    "raw_tool_sequence_correct": true,
+    "executed_tool_sequence_correct": true,
     "raw_arguments_correct": false,
-    "executed_arguments_correct": false,
+    "executed_arguments_correct": true,
     "deterministic_correction": false,
-    "coordinator_parse_failure": false,
-    "coordinator_fallback_used": false,
-    "raw_explanation_accepted": false,
-    "guardrail_fallback": true,
+    "tool_router_parse_failure": false,
+    "tool_router_fallback_used": false,
+    "raw_explanation_accepted": true,
+    "guardrail_fallback": false,
     "final_safe_answer": true,
-    "unsupported_numeric_claim": true,
+    "unsupported_numeric_claim": false,
     "unsupported_categorical_claim": false,
     "unsupported_causal_claim": false,
     "implementation_detail_exposed": false,
-    "grounding_issues": [
-      "unsupported_advisory_claim",
-      "unsupported_numeric_claim"
-    ],
-    "answer": "That request is outside the network-operations scope of this demonstrator. I can help with traffic forecasts, SLA-risk analysis, timestamp comparisons, SC-allocation policies, operator constraints, and time-range analysis.",
-    "raw_llm_answer": "The predicted traffic for the PON on the two SCs is 10.5 Gbps and 11.2 Gbps respectively. As of the current time, the SLA state for both SCs is Normal. There is no deterministic analysis available for this PON at the moment. Please monitor the traffic closely and consider reconfiguration if necessary."
+    "grounding_issues": [],
+    "answer": "At 14:05, the PON=2-SC constraint is feasible. The resulting SC assignment is ENTERPRISE | RAN | PON | PON under the balanced objective, with 15.25% overall blocking and 1 SC reconfiguration.",
+    "raw_llm_answer": "At 14:05, the PON=2-SC constraint is feasible. The resulting SC assignment is ENTERPRISE | RAN | PON | PON under the balanced objective, with 15.25% overall blocking and 1 SC reconfiguration."
   },
   {
     "id": "sc_constraints_05",
@@ -1162,30 +1092,26 @@
       "analyze_constrained_allocation"
     ],
     "raw_tools": [
-      "decline_out_of_scope"
+      "analyze_constrained_allocation"
     ],
-    "executed_tools": [
-      "decline_out_of_scope"
-    ],
-    "raw_tool_sequence_correct": false,
+    "executed_tools": [],
+    "raw_tool_sequence_correct": true,
     "executed_tool_sequence_correct": false,
     "raw_arguments_correct": false,
     "executed_arguments_correct": false,
-    "deterministic_correction": false,
-    "coordinator_parse_failure": false,
-    "coordinator_fallback_used": false,
-    "raw_explanation_accepted": false,
-    "guardrail_fallback": true,
+    "deterministic_correction": true,
+    "tool_router_parse_failure": false,
+    "tool_router_fallback_used": false,
+    "raw_explanation_accepted": true,
+    "guardrail_fallback": false,
     "final_safe_answer": true,
-    "unsupported_numeric_claim": true,
+    "unsupported_numeric_claim": false,
     "unsupported_categorical_claim": false,
     "unsupported_causal_claim": false,
     "implementation_detail_exposed": false,
-    "grounding_issues": [
-      "unsupported_numeric_claim"
-    ],
-    "answer": "That request is outside the network-operations scope of this demonstrator. I can help with traffic forecasts, SLA-risk analysis, timestamp comparisons, SC-allocation policies, operator constraints, and time-range analysis.",
-    "raw_llm_answer": "At 16:20, reserve one SC for PON. For the remaining capacity, the system recommends minimizing blocking.\n\n- Predicted offered traffic: 12.5 Gbps\n- Predicted SLA state: Normal\n- Failure-prone risk: 0.02%\n\nThis recommendation is based on the minimum-blocking objective. No additional action is required unless the SLA state changes or blocking increases."
+    "grounding_issues": [],
+    "answer": "I could not safely resolve the requested parameters. Please restate the time, policy, range, or constraint explicitly.",
+    "raw_llm_answer": ""
   },
   {
     "id": "temporal_comparison_01",
@@ -1196,18 +1122,18 @@
       "compare_network_states"
     ],
     "raw_tools": [
-      "decline_out_of_scope"
+      "compare_network_states"
     ],
     "executed_tools": [
-      "decline_out_of_scope"
+      "compare_network_states"
     ],
-    "raw_tool_sequence_correct": false,
-    "executed_tool_sequence_correct": false,
-    "raw_arguments_correct": false,
-    "executed_arguments_correct": false,
+    "raw_tool_sequence_correct": true,
+    "executed_tool_sequence_correct": true,
+    "raw_arguments_correct": true,
+    "executed_arguments_correct": true,
     "deterministic_correction": false,
-    "coordinator_parse_failure": false,
-    "coordinator_fallback_used": false,
+    "tool_router_parse_failure": false,
+    "tool_router_fallback_used": false,
     "raw_explanation_accepted": false,
     "guardrail_fallback": true,
     "final_safe_answer": true,
@@ -1216,10 +1142,11 @@
     "unsupported_causal_claim": false,
     "implementation_detail_exposed": false,
     "grounding_issues": [
+      "unsupported_advisory_claim",
       "unsupported_numeric_claim"
     ],
-    "answer": "That request is outside the network-operations scope of this demonstrator. I can help with traffic forecasts, SLA-risk analysis, timestamp comparisons, SC-allocation policies, operator constraints, and time-range analysis.",
-    "raw_llm_answer": "At 18:10, the network had a predicted offered traffic of 5.2 Gbps with a predicted SLA state of Normal and a Failure-prone risk of 0.02%.\n\nAt 21:15, the network had a predicted offered traffic of 5.5 Gbps with a predicted SLA state of Normal and a Failure-prone risk of 0.01%.\n\nThe traffic increased by 0.3 Gbps between the two time periods."
+    "answer": "From 18:10 to 21:15, predicted total traffic changes by +4.96 Gbps and Failure-prone risk by +70.0 percentage points. Under SAA, blocking changes by +4.55 percentage points.",
+    "raw_llm_answer": "Between 18:10 and 21:15, the network experienced changes in traffic and Failure-prone risk. Failure-prone risk increased by 70 percentage points, and blocking increased by 4.55 percentage points. Predicted offered traffic also increased by 4.96 Gbps. The network moved from a degraded SLA state at 18:10 to a failure-prone SLA state at 21:15. No reconfiguration was recommended."
   },
   {
     "id": "temporal_comparison_02",
@@ -1230,18 +1157,18 @@
       "compare_network_states"
     ],
     "raw_tools": [
-      "decline_out_of_scope"
+      "compare_network_states"
     ],
     "executed_tools": [
-      "decline_out_of_scope"
+      "compare_network_states"
     ],
-    "raw_tool_sequence_correct": false,
-    "executed_tool_sequence_correct": false,
-    "raw_arguments_correct": false,
-    "executed_arguments_correct": false,
+    "raw_tool_sequence_correct": true,
+    "executed_tool_sequence_correct": true,
+    "raw_arguments_correct": true,
+    "executed_arguments_correct": true,
     "deterministic_correction": false,
-    "coordinator_parse_failure": false,
-    "coordinator_fallback_used": false,
+    "tool_router_parse_failure": false,
+    "tool_router_fallback_used": false,
     "raw_explanation_accepted": false,
     "guardrail_fallback": true,
     "final_safe_answer": true,
@@ -1252,8 +1179,8 @@
     "grounding_issues": [
       "unsupported_numeric_claim"
     ],
-    "answer": "That request is outside the network-operations scope of this demonstrator. I can help with traffic forecasts, SLA-risk analysis, timestamp comparisons, SC-allocation policies, operator constraints, and time-range analysis.",
-    "raw_llm_answer": "Between 09:30 and 14:05, the predicted offered traffic increased by approximately 1.5 Gbps. The SLA state transitioned from Normal to Degraded. The active SAA policy recommends adjustments to ensure optimal network performance."
+    "answer": "From 09:30 to 14:05, predicted total traffic changes by +4.82 Gbps and Failure-prone risk by +8.0 percentage points. Under PCA, blocking changes by +17.66 percentage points.",
+    "raw_llm_answer": "Between 09:30 and 14:05, the predicted offered traffic increased by 4.82 Gbps. The Failure-prone risk also increased by 8.0 percentage points, while blocking increased by 17.66 percentage points. Both SLA states remained normal."
   },
   {
     "id": "temporal_comparison_03",
@@ -1264,30 +1191,26 @@
       "compare_network_states"
     ],
     "raw_tools": [
-      "decline_out_of_scope"
+      "request_clarification"
     ],
-    "executed_tools": [
-      "decline_out_of_scope"
-    ],
+    "executed_tools": [],
     "raw_tool_sequence_correct": false,
     "executed_tool_sequence_correct": false,
     "raw_arguments_correct": false,
     "executed_arguments_correct": false,
     "deterministic_correction": false,
-    "coordinator_parse_failure": false,
-    "coordinator_fallback_used": false,
-    "raw_explanation_accepted": false,
-    "guardrail_fallback": true,
+    "tool_router_parse_failure": false,
+    "tool_router_fallback_used": false,
+    "raw_explanation_accepted": true,
+    "guardrail_fallback": false,
     "final_safe_answer": true,
-    "unsupported_numeric_claim": true,
+    "unsupported_numeric_claim": false,
     "unsupported_categorical_claim": false,
     "unsupported_causal_claim": false,
     "implementation_detail_exposed": false,
-    "grounding_issues": [
-      "unsupported_numeric_claim"
-    ],
-    "answer": "That request is outside the network-operations scope of this demonstrator. I can help with traffic forecasts, SLA-risk analysis, timestamp comparisons, SC-allocation policies, operator constraints, and time-range analysis.",
-    "raw_llm_answer": "At the specified time range, traffic increased from 1.2 Gbps at 15:15 to 1.5 Gbps at 19:45. The SLA risk also increased, with a Failure-prone risk of 0.02%. No policy recommendations are provided in the deterministic evidence. Monitor the network closely."
+    "grounding_issues": [],
+    "answer": "Which time should I use as the reference?",
+    "raw_llm_answer": ""
   },
   {
     "id": "temporal_comparison_04",
@@ -1298,18 +1221,16 @@
       "compare_network_states"
     ],
     "raw_tools": [
-      "decline_out_of_scope"
+      "request_clarification"
     ],
-    "executed_tools": [
-      "decline_out_of_scope"
-    ],
+    "executed_tools": [],
     "raw_tool_sequence_correct": false,
     "executed_tool_sequence_correct": false,
     "raw_arguments_correct": false,
     "executed_arguments_correct": false,
     "deterministic_correction": false,
-    "coordinator_parse_failure": false,
-    "coordinator_fallback_used": false,
+    "tool_router_parse_failure": false,
+    "tool_router_fallback_used": false,
     "raw_explanation_accepted": true,
     "guardrail_fallback": false,
     "final_safe_answer": true,
@@ -1318,8 +1239,8 @@
     "unsupported_causal_claim": false,
     "implementation_detail_exposed": false,
     "grounding_issues": [],
-    "answer": "Based on the provided evidence, I cannot compare the network state at 20:00 and 05:55 as the deterministic analysis does not include traffic forecast or SLA state for these specific times. However, I can provide the predicted offered traffic and SLA state for the current time if needed.",
-    "raw_llm_answer": "Based on the provided evidence, I cannot compare the network state at 20:00 and 05:55 as the deterministic analysis does not include traffic forecast or SLA state for these specific times. However, I can provide the predicted offered traffic and SLA state for the current time if needed."
+    "answer": "Which time should I use as the reference?",
+    "raw_llm_answer": ""
   },
   {
     "id": "temporal_comparison_05",
@@ -1330,18 +1251,16 @@
       "compare_network_states"
     ],
     "raw_tools": [
-      "decline_out_of_scope"
+      "request_clarification"
     ],
-    "executed_tools": [
-      "decline_out_of_scope"
-    ],
+    "executed_tools": [],
     "raw_tool_sequence_correct": false,
     "executed_tool_sequence_correct": false,
     "raw_arguments_correct": false,
     "executed_arguments_correct": false,
     "deterministic_correction": false,
-    "coordinator_parse_failure": false,
-    "coordinator_fallback_used": false,
+    "tool_router_parse_failure": false,
+    "tool_router_fallback_used": false,
     "raw_explanation_accepted": true,
     "guardrail_fallback": false,
     "final_safe_answer": true,
@@ -1350,8 +1269,8 @@
     "unsupported_causal_claim": false,
     "implementation_detail_exposed": false,
     "grounding_issues": [],
-    "answer": "Based on the provided evidence, I'm unable to determine which network state looks healthier between the two snapshots at 23:10 and 12:35. The evidence does not include traffic forecast, SLA state, timestamp comparison, policy analysis, SC constraints, or time-range analysis for this time range. Please provide more detailed evidence for a comprehensive analysis.",
-    "raw_llm_answer": "Based on the provided evidence, I'm unable to determine which network state looks healthier between the two snapshots at 23:10 and 12:35. The evidence does not include traffic forecast, SLA state, timestamp comparison, policy analysis, SC constraints, or time-range analysis for this time range. Please provide more detailed evidence for a comprehensive analysis."
+    "answer": "Which time should I use as the reference?",
+    "raw_llm_answer": ""
   },
   {
     "id": "range_risk_discovery_01",
@@ -1362,18 +1281,18 @@
       "find_risk_intervals"
     ],
     "raw_tools": [
-      "decline_out_of_scope"
+      "find_risk_intervals"
     ],
     "executed_tools": [
-      "decline_out_of_scope"
+      "find_risk_intervals"
     ],
-    "raw_tool_sequence_correct": false,
-    "executed_tool_sequence_correct": false,
-    "raw_arguments_correct": false,
-    "executed_arguments_correct": false,
+    "raw_tool_sequence_correct": true,
+    "executed_tool_sequence_correct": true,
+    "raw_arguments_correct": true,
+    "executed_arguments_correct": true,
     "deterministic_correction": false,
-    "coordinator_parse_failure": false,
-    "coordinator_fallback_used": false,
+    "tool_router_parse_failure": false,
+    "tool_router_fallback_used": false,
     "raw_explanation_accepted": false,
     "guardrail_fallback": true,
     "final_safe_answer": true,
@@ -1382,11 +1301,11 @@
     "unsupported_causal_claim": false,
     "implementation_detail_exposed": false,
     "grounding_issues": [
-      "unsupported_advisory_claim",
+      "risk_unit_confusion",
       "unsupported_numeric_claim"
     ],
-    "answer": "That request is outside the network-operations scope of this demonstrator. I can help with traffic forecasts, SLA-risk analysis, timestamp comparisons, SC-allocation policies, operator constraints, and time-range analysis.",
-    "raw_llm_answer": "The three highest-risk intervals today, based on the deterministic analysis, are as follows:\n\n- 08:00-09:00 with a Failure-prone risk of 6.2%\n- 12:00-13:00 with a Failure-prone risk of 5.8%\n- 17:00-18:00 with a Failure-prone risk of 5.5%\n\nIt is advisable to monitor these intervals closely and consider potential reconfigurations to maintain optimal network performance."
+    "answer": "The 3 highest Failure-prone-risk intervals are 21:15, 21:20, 21:25. The highest supplied risk is 88.0%.",
+    "raw_llm_answer": "For a ranked Failure-prone-risk request, the three highest-ranked intervals are 21:15, 21:20, and 21:25, each with 88% Failure-prone risk.\n\nFor a time-range summary, from 18:00 to 22:00, 49 five-minute intervals were analysed. Mean predicted traffic was 88.57 Gbps, with a peak of 95.69 Gbps at 19:05. The highest Failure-prone risk occurred at 21:15. Under the balanced objective, SAA was recommended most often in the range."
   },
   {
     "id": "range_risk_discovery_02",
@@ -1397,30 +1316,28 @@
       "find_risk_intervals"
     ],
     "raw_tools": [
-      "decline_out_of_scope"
+      "find_risk_intervals"
     ],
     "executed_tools": [
-      "decline_out_of_scope"
+      "find_risk_intervals"
     ],
-    "raw_tool_sequence_correct": false,
-    "executed_tool_sequence_correct": false,
-    "raw_arguments_correct": false,
-    "executed_arguments_correct": false,
+    "raw_tool_sequence_correct": true,
+    "executed_tool_sequence_correct": true,
+    "raw_arguments_correct": true,
+    "executed_arguments_correct": true,
     "deterministic_correction": false,
-    "coordinator_parse_failure": false,
-    "coordinator_fallback_used": false,
-    "raw_explanation_accepted": false,
-    "guardrail_fallback": true,
+    "tool_router_parse_failure": false,
+    "tool_router_fallback_used": false,
+    "raw_explanation_accepted": true,
+    "guardrail_fallback": false,
     "final_safe_answer": true,
-    "unsupported_numeric_claim": true,
+    "unsupported_numeric_claim": false,
     "unsupported_categorical_claim": false,
     "unsupported_causal_claim": false,
     "implementation_detail_exposed": false,
-    "grounding_issues": [
-      "unsupported_numeric_claim"
-    ],
-    "answer": "That request is outside the network-operations scope of this demonstrator. I can help with traffic forecasts, SLA-risk analysis, timestamp comparisons, SC-allocation policies, operator constraints, and time-range analysis.",
-    "raw_llm_answer": "Blocking peaks at 12:00 PM, with a Failure-prone risk of 3.5%. This risk is expected to remain high until 3:00 PM. It's recommended to monitor traffic and network conditions during these hours."
+    "grounding_issues": [],
+    "answer": "For the day-ahead period, the highest blocking peak occurs at 20:00 with a ratio of 16.38%. This is under the active SAA policy.",
+    "raw_llm_answer": "For the day-ahead period, the highest blocking peak occurs at 20:00 with a ratio of 16.38%. This is under the active SAA policy."
   },
   {
     "id": "range_risk_discovery_03",
@@ -1431,18 +1348,18 @@
       "find_risk_intervals"
     ],
     "raw_tools": [
-      "decline_out_of_scope"
+      "find_risk_intervals"
     ],
     "executed_tools": [
-      "decline_out_of_scope"
+      "find_risk_intervals"
     ],
-    "raw_tool_sequence_correct": false,
-    "executed_tool_sequence_correct": false,
-    "raw_arguments_correct": false,
-    "executed_arguments_correct": false,
+    "raw_tool_sequence_correct": true,
+    "executed_tool_sequence_correct": true,
+    "raw_arguments_correct": true,
+    "executed_arguments_correct": true,
     "deterministic_correction": false,
-    "coordinator_parse_failure": false,
-    "coordinator_fallback_used": false,
+    "tool_router_parse_failure": false,
+    "tool_router_fallback_used": false,
     "raw_explanation_accepted": true,
     "guardrail_fallback": false,
     "final_safe_answer": true,
@@ -1451,8 +1368,8 @@
     "unsupported_causal_claim": false,
     "implementation_detail_exposed": false,
     "grounding_issues": [],
-    "answer": "Based on the deterministic analysis, the SC with the most reconfiguration across today's intervals is not specified in the provided evidence. The analysis supports traffic forecast, SLA state, timestamp comparison, policy analysis, SC constraints, and time-range analysis, but not the specific request for SC reconfiguration across intervals.",
-    "raw_llm_answer": "Based on the deterministic analysis, the SC with the most reconfiguration across today's intervals is not specified in the provided evidence. The analysis supports traffic forecast, SLA state, timestamp comparison, policy analysis, SC constraints, and time-range analysis, but not the specific request for SC reconfiguration across intervals."
+    "answer": "For the requested intervals, the three intervals with the highest SC reconfiguration under the SAA policy are:\n\n- 17:00 with 3 reconfigurations\n- 19:00 with 3 reconfigurations\n- 06:00 with 2 reconfigurations\n\nThe recommendation is based on deterministic evidence.",
+    "raw_llm_answer": "For the requested intervals, the three intervals with the highest SC reconfiguration under the SAA policy are:\n\n- 17:00 with 3 reconfigurations\n- 19:00 with 3 reconfigurations\n- 06:00 with 2 reconfigurations\n\nThe recommendation is based on deterministic evidence."
   },
   {
     "id": "range_risk_discovery_04",
@@ -1463,18 +1380,18 @@
       "summarize_time_range"
     ],
     "raw_tools": [
-      "decline_out_of_scope"
+      "summarize_time_range"
     ],
     "executed_tools": [
-      "decline_out_of_scope"
+      "summarize_time_range"
     ],
-    "raw_tool_sequence_correct": false,
-    "executed_tool_sequence_correct": false,
+    "raw_tool_sequence_correct": true,
+    "executed_tool_sequence_correct": true,
     "raw_arguments_correct": false,
-    "executed_arguments_correct": false,
+    "executed_arguments_correct": true,
     "deterministic_correction": false,
-    "coordinator_parse_failure": false,
-    "coordinator_fallback_used": false,
+    "tool_router_parse_failure": false,
+    "tool_router_fallback_used": false,
     "raw_explanation_accepted": false,
     "guardrail_fallback": true,
     "final_safe_answer": true,
@@ -1483,11 +1400,10 @@
     "unsupported_causal_claim": false,
     "implementation_detail_exposed": false,
     "grounding_issues": [
-      "unsupported_advisory_claim",
       "unsupported_numeric_claim"
     ],
-    "answer": "That request is outside the network-operations scope of this demonstrator. I can help with traffic forecasts, SLA-risk analysis, timestamp comparisons, SC-allocation policies, operator constraints, and time-range analysis.",
-    "raw_llm_answer": "Network Summary for 18:00-22:00:\n\n- Predicted Offered Traffic: 12.5 Gbps\n- Predicted Served Traffic: 11.8 Gbps\n- Blocked Traffic: 0.7 Gbps (5.6%)\n- Predicted SLA State: Degraded\n\nThe active SAA policy is currently in effect. The balanced objective recommends no policy change at this time. Please monitor closely."
+    "answer": "From 18:00 to 22:00, 49 five-minute intervals were analysed. Mean load is 88.57 Gbps; peak load is 95.69 Gbps at 19:05. The highest Failure-prone risk occurs at 21:15. Under the balanced objective, SAA is recommended most often in this range.",
+    "raw_llm_answer": "From 18:00 to 22:00, 49 five-minute intervals were analyzed. Mean predicted traffic was 88.57 Gbps, with a peak of 95.69 Gbps at 19:05. The highest Failure-prone risk occurred at 21:15. Under the balanced objective, SAA was recommended most often in the range."
   },
   {
     "id": "range_risk_discovery_05",
@@ -1498,18 +1414,18 @@
       "summarize_time_range"
     ],
     "raw_tools": [
-      "decline_out_of_scope"
+      "summarize_time_range"
     ],
     "executed_tools": [
-      "decline_out_of_scope"
+      "summarize_time_range"
     ],
-    "raw_tool_sequence_correct": false,
-    "executed_tool_sequence_correct": false,
-    "raw_arguments_correct": false,
-    "executed_arguments_correct": false,
+    "raw_tool_sequence_correct": true,
+    "executed_tool_sequence_correct": true,
+    "raw_arguments_correct": true,
+    "executed_arguments_correct": true,
     "deterministic_correction": false,
-    "coordinator_parse_failure": false,
-    "coordinator_fallback_used": false,
+    "tool_router_parse_failure": false,
+    "tool_router_fallback_used": false,
     "raw_explanation_accepted": false,
     "guardrail_fallback": true,
     "final_safe_answer": true,
@@ -1520,8 +1436,8 @@
     "grounding_issues": [
       "unsupported_numeric_claim"
     ],
-    "answer": "That request is outside the network-operations scope of this demonstrator. I can help with traffic forecasts, SLA-risk analysis, timestamp comparisons, SC-allocation policies, operator constraints, and time-range analysis.",
-    "raw_llm_answer": "From 19:00 to 23:00, the predicted offered traffic is 12.5 Gbps. The predicted SLA state is Normal. The active policy is minimizing blocking, with a failure-prone risk of 0.02%. No policy changes are recommended based on the provided evidence."
+    "answer": "From 19:00 to 23:00, 49 five-minute intervals were analysed. Mean load is 85.29 Gbps; peak load is 95.69 Gbps at 19:05. The highest Failure-prone risk occurs at 21:15. Under the min blocking objective, MBA is recommended most often in this range.",
+    "raw_llm_answer": "From 19:00 to 23:00, a total of 49 five-minute intervals were analyzed. The mean predicted traffic was 85.29 Gbps, with a peak of 95.69 Gbps at 19:05. The highest Failure-prone risk occurred at 21:15. Under the minimum-blocking objective, SAA was recommended most often in the range."
   },
   {
     "id": "conversational_context_01",
@@ -1531,15 +1447,19 @@
     "expected_tools": [
       "get_network_state_at_time"
     ],
-    "raw_tools": [],
-    "executed_tools": [],
-    "raw_tool_sequence_correct": false,
-    "executed_tool_sequence_correct": false,
-    "raw_arguments_correct": false,
-    "executed_arguments_correct": false,
+    "raw_tools": [
+      "get_network_state_at_time"
+    ],
+    "executed_tools": [
+      "get_network_state_at_time"
+    ],
+    "raw_tool_sequence_correct": true,
+    "executed_tool_sequence_correct": true,
+    "raw_arguments_correct": true,
+    "executed_arguments_correct": true,
     "deterministic_correction": false,
-    "coordinator_parse_failure": false,
-    "coordinator_fallback_used": false,
+    "tool_router_parse_failure": false,
+    "tool_router_fallback_used": false,
     "raw_explanation_accepted": true,
     "guardrail_fallback": false,
     "final_safe_answer": true,
@@ -1548,8 +1468,8 @@
     "unsupported_causal_claim": false,
     "implementation_detail_exposed": false,
     "grounding_issues": [],
-    "answer": "Please specify the reference time (HH:MM) for that follow-up.",
-    "raw_llm_answer": ""
+    "answer": "At 19:10, predicted offered traffic is 95.17 Gbps and the predicted SLA state is Failure-prone with 53.0% Failure-prone risk. Under the active SAA policy, the SC state is RAN | PON | RAN | ENTERPRISE, with 11.86% blocking and 0 SC reconfigurations.",
+    "raw_llm_answer": "At 19:10, predicted offered traffic is 95.17 Gbps and the predicted SLA state is Failure-prone with 53.0% Failure-prone risk. Under the active SAA policy, the SC state is RAN | PON | RAN | ENTERPRISE, with 11.86% blocking and 0 SC reconfigurations."
   },
   {
     "id": "conversational_context_02",
@@ -1559,15 +1479,17 @@
     "expected_tools": [
       "get_traffic_forecast"
     ],
-    "raw_tools": [],
+    "raw_tools": [
+      "request_clarification"
+    ],
     "executed_tools": [],
     "raw_tool_sequence_correct": false,
     "executed_tool_sequence_correct": false,
     "raw_arguments_correct": false,
     "executed_arguments_correct": false,
     "deterministic_correction": false,
-    "coordinator_parse_failure": false,
-    "coordinator_fallback_used": false,
+    "tool_router_parse_failure": false,
+    "tool_router_fallback_used": false,
     "raw_explanation_accepted": true,
     "guardrail_fallback": false,
     "final_safe_answer": true,
@@ -1576,7 +1498,7 @@
     "unsupported_causal_claim": false,
     "implementation_detail_exposed": false,
     "grounding_issues": [],
-    "answer": "Please specify the reference time (HH:MM) for that follow-up.",
+    "answer": "Which time should I use as the reference?",
     "raw_llm_answer": ""
   },
   {
@@ -1587,15 +1509,19 @@
     "expected_tools": [
       "get_sla_prediction"
     ],
-    "raw_tools": [],
-    "executed_tools": [],
-    "raw_tool_sequence_correct": false,
-    "executed_tool_sequence_correct": false,
-    "raw_arguments_correct": false,
-    "executed_arguments_correct": false,
+    "raw_tools": [
+      "get_sla_prediction"
+    ],
+    "executed_tools": [
+      "get_sla_prediction"
+    ],
+    "raw_tool_sequence_correct": true,
+    "executed_tool_sequence_correct": true,
+    "raw_arguments_correct": true,
+    "executed_arguments_correct": true,
     "deterministic_correction": false,
-    "coordinator_parse_failure": false,
-    "coordinator_fallback_used": false,
+    "tool_router_parse_failure": false,
+    "tool_router_fallback_used": false,
     "raw_explanation_accepted": true,
     "guardrail_fallback": false,
     "final_safe_answer": true,
@@ -1604,8 +1530,8 @@
     "unsupported_causal_claim": false,
     "implementation_detail_exposed": false,
     "grounding_issues": [],
-    "answer": "Please specify the reference time (HH:MM) for that follow-up.",
-    "raw_llm_answer": ""
+    "answer": "At 08:15, the predicted SLA state is Normal, with a Failure-prone risk of 0%.",
+    "raw_llm_answer": "At 08:15, the predicted SLA state is Normal, with a Failure-prone risk of 0%."
   },
   {
     "id": "conversational_context_04",
@@ -1616,30 +1542,28 @@
       "simulate_policy_at_time"
     ],
     "raw_tools": [
-      "decline_out_of_scope"
+      "get_network_state_at_time"
     ],
     "executed_tools": [
-      "decline_out_of_scope"
+      "get_network_state_at_time"
     ],
     "raw_tool_sequence_correct": false,
     "executed_tool_sequence_correct": false,
     "raw_arguments_correct": false,
     "executed_arguments_correct": false,
     "deterministic_correction": false,
-    "coordinator_parse_failure": false,
-    "coordinator_fallback_used": false,
-    "raw_explanation_accepted": false,
-    "guardrail_fallback": true,
+    "tool_router_parse_failure": false,
+    "tool_router_fallback_used": false,
+    "raw_explanation_accepted": true,
+    "guardrail_fallback": false,
     "final_safe_answer": true,
     "unsupported_numeric_claim": false,
     "unsupported_categorical_claim": false,
     "unsupported_causal_claim": false,
     "implementation_detail_exposed": false,
-    "grounding_issues": [
-      "unsupported_advisory_claim"
-    ],
-    "answer": "That request is outside the network-operations scope of this demonstrator. I can help with traffic forecasts, SLA-risk analysis, timestamp comparisons, SC-allocation policies, operator constraints, and time-range analysis.",
-    "raw_llm_answer": "Based on the provided evidence, the Predicted SLA state under PCA is Normal. The forecasted traffic for the given time range is not provided in the evidence. I recommend using the PCA policy for this time range. Please monitor the network closely and consider reconfiguration if necessary to ensure optimal performance."
+    "grounding_issues": [],
+    "answer": "At 18:30, under PCA, predicted offered traffic is 82.23 Gbps and the predicted SLA state is Degraded with a Failure-prone risk of 20%. Under the PCA policy, the SC state is ENTERPRISE | RAN | RAN | PON, with 0.81% blocking and no SC reconfigurations.",
+    "raw_llm_answer": "At 18:30, under PCA, predicted offered traffic is 82.23 Gbps and the predicted SLA state is Degraded with a Failure-prone risk of 20%. Under the PCA policy, the SC state is ENTERPRISE | RAN | RAN | PON, with 0.81% blocking and no SC reconfigurations."
   },
   {
     "id": "conversational_context_05",
@@ -1650,18 +1574,18 @@
       "analyze_constrained_allocation"
     ],
     "raw_tools": [
-      "decline_out_of_scope"
+      "analyze_constrained_allocation"
     ],
     "executed_tools": [
-      "decline_out_of_scope"
+      "analyze_constrained_allocation"
     ],
-    "raw_tool_sequence_correct": false,
-    "executed_tool_sequence_correct": false,
+    "raw_tool_sequence_correct": true,
+    "executed_tool_sequence_correct": true,
     "raw_arguments_correct": false,
-    "executed_arguments_correct": false,
+    "executed_arguments_correct": true,
     "deterministic_correction": false,
-    "coordinator_parse_failure": false,
-    "coordinator_fallback_used": false,
+    "tool_router_parse_failure": false,
+    "tool_router_fallback_used": false,
     "raw_explanation_accepted": true,
     "guardrail_fallback": false,
     "final_safe_answer": true,
@@ -1670,7 +1594,7 @@
     "unsupported_causal_claim": false,
     "implementation_detail_exposed": false,
     "grounding_issues": [],
-    "answer": "One SC has been reserved for the PON. No traffic forecast, SLA state, or blocking information is available in the current evidence.",
-    "raw_llm_answer": "One SC has been reserved for the PON. No traffic forecast, SLA state, or blocking information is available in the current evidence."
+    "answer": "At 19:00, the PON=1-SC constraint is feasible under the balanced objective. The resulting SC assignment is RAN | ENTERPRISE | PON | RAN, with 11.96% overall blocking and no SC reconfigurations.",
+    "raw_llm_answer": "At 19:00, the PON=1-SC constraint is feasible under the balanced objective. The resulting SC assignment is RAN | ENTERPRISE | PON | RAN, with 11.96% overall blocking and no SC reconfigurations."
   }
 ]

@@ -84,7 +84,7 @@ if query:
             st.markdown(response.answer)
             audit = {
                 "prompt_versions": {
-                    "coordinator": "v1",
+                    "tool_router": "v1-direct-tools",
                     "explainer": "v1",
                 },
                 "tool_plan": [{"tool": step.tool_name, "arguments": step.arguments} for step in response.plan.steps],

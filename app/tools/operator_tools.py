@@ -14,7 +14,7 @@ POLICIES = config.policy_ids()
 
 
 class OperatorTools:
-    """Deterministic analytical capabilities exposed to the semantic coordinator."""
+    """Deterministic analytical capabilities exposed to Mistral through function calling."""
 
     def __init__(self, frame: pd.DataFrame, forecast_mode: str = "live") -> None:
         self.frame = frame.sort_values("minute_of_day").reset_index(drop=True).copy()

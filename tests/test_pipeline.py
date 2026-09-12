@@ -35,7 +35,7 @@ def test_specialist_pipeline_is_consistent():
 def test_runtime_initializes_current_components_without_llm_call():
     """
     Runtime construction should prepare deterministic tools and memory
-    without requiring a coordinator LLM call.
+    without requiring a live Mistral tool-routing call.
     """
     runtime = MultiAgentRuntime(use_llm=False)
 
@@ -135,24 +135,18 @@ def test_constrained_subcarrier_allocation_uses_current_tool():
     assert fallback
 
 
-def test_followup_constraint_merge_uses_structured_context_not_language_phrases():
-    from app.schemas import ContextInterpretation
-
+def test_followup_constraint_merge_uses_authoritative_state_not_language_phrases():
     runtime = MultiAgentRuntime(use_llm=False)
     runtime.memory.update({
         "last_time": "19:00",
         "last_constraints_raw": {"ran_subcarriers": 2},
     })
-    context = ContextInterpretation(
-        relation="followup",
-        inherit=["time", "constraints"],
-    )
-    context_memory = runtime.state_manager.scoped_memory(context, runtime.memory)
+    state = runtime.state_manager.compact_state(runtime.memory)
 
     args = runtime._normalize_tool_arguments(
         "analyze_constrained_allocation",
         {"pon_subcarriers": 1},
-        context_memory,
+        state,
     )
 
     assert args["ran_subcarriers"] == 2
@@ -161,20 +155,28 @@ def test_followup_constraint_merge_uses_structured_context_not_language_phrases(
     assert args["time"] == "19:00"
 
 
-def test_relative_followup_time_overrides_model_time_with_python_arithmetic():
-    from app.schemas import ContextInterpretation
-
+def test_relative_followup_time_is_python_arithmetic_from_structured_offset():
     runtime = MultiAgentRuntime(use_llm=False)
     runtime.memory.update({"last_time": "09:00", "last_tool": "get_traffic_forecast"})
-    context = ContextInterpretation(
-        relation="followup",
-        inherit=["intent", "time"],
-        relative_time_offset_minutes=60,
-    )
-    context_memory = runtime.state_manager.scoped_memory(context, runtime.memory)
+    state = runtime.state_manager.compact_state(runtime.memory)
     args = runtime._normalize_tool_arguments(
         "get_traffic_forecast",
-        {"time": "09:00"},
-        context_memory,
+        {"relative_time_offset_minutes": 60},
+        state,
     )
     assert args["time"] == "10:00"
+    assert "relative_time_offset_minutes" not in args
+
+
+def test_relative_followup_without_reference_time_is_rejected():
+    runtime = MultiAgentRuntime(use_llm=False)
+    try:
+        runtime._normalize_tool_arguments(
+            "get_traffic_forecast",
+            {"relative_time_offset_minutes": 60},
+            {},
+        )
+    except ValueError as exc:
+        assert "previous reference time" in str(exc)
+    else:
+        raise AssertionError("relative time without prior state must be rejected")

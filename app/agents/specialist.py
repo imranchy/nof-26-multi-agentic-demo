@@ -9,20 +9,18 @@ from app.agents.tool_catalog import ALL_TOOL_NAMES, tool_schemas
 
 
 class LocalSpecialistAgent:
-    """Local Mistral raw function-calling selector.
+    """Direct local Mistral tool router.
 
-    Mistral selects exactly one registered local function and its structured
-    arguments using Mistral 7B v0.3's raw function-calling protocol.
+    Primary path:
+        Ollama native tool calling.
 
-    Python remains responsible for:
-    - validation
-    - inherited state
-    - precedence
-    - clock arithmetic
-    - constraint merging
-    - deterministic network execution
+    Recovery path:
+        Mistral structured-output repair when the local model identifies
+        the capability correctly but does not emit Ollama's tool_calls
+        envelope.
 
-    No operator-language phrase routing is implemented here.
+    Mistral always decides which capability to use.
+    Python only validates the structured decision.
     """
 
     def __init__(self, use_llm: bool = True) -> None:
@@ -39,329 +37,481 @@ class LocalSpecialistAgent:
         if not self.use_llm:
             raise RuntimeError("LLM tool selection is disabled.")
 
-        allowed_tools = tuple(allowed_tools_override or ALL_TOOL_NAMES)
+        allowed_tools = tuple(
+            allowed_tools_override or ALL_TOOL_NAMES
+        )
 
         if not allowed_tools:
-            raise ValueError("At least one local tool must be available.")
-
-        inherited_lock = (
-            context_memory.get("last_tool")
-            if len(allowed_tools) == 1
-            and context_memory.get("last_tool") in allowed_tools
-            else None
-        )
+            raise ValueError(
+                "At least one local tool must be available."
+            )
 
         tools = tool_schemas(allowed_tools)
 
+        #
+        # Keep this intentionally short.
+        # The detailed semantics already live in each tool description.
+        #
         system_prompt = """
-You are the function-selection layer of a local optical-network operations assistant.
+You are a network-operations tool router.
 
-Your only task is to select exactly one available function.
+For every supported operator request, call exactly one supplied function.
+Use the function descriptions and schemas to select the most specific capability.
 
-The operator request may be:
-- English
-- Italian
-- Portuguese
-- code-switched technical language
+The request may be English, Italian, Portuguese, or code-switched.
 
-Use the semantic meaning of the request, not literal phrase matching.
+For analyze_constrained_allocation:
 
-Capability rules:
+- Represent explicit operator SC-count constraints only in the `constraints` list.
+- Each constraint contains `service` and `subcarriers`.
+- Add an entry only when the operator explicitly constrains that service.
+- Do not add entries for unconstrained services.
+- "Allocate the remaining" does not create additional constraints.
+- Python deterministically allocates unconstrained remaining capacity.
 
-- Traffic/load/forecast at one timestamp:
-  get_traffic_forecast
+Example:
+Operator: "Keep RAN on 2 subcarriers and allocate the remaining two."
+Correct: constraints = [{"service": "ran", "subcarriers": 2}]
 
-- Direct SLA state or Failure-prone risk:
-  get_sla_prediction
+Relative-time context rules:
 
-- Explain, verify or correct an SLA state/risk claim:
-  explain_sla_risk
+- A relative-time request such as "one hour later", "after that",
+  "at that time", or equivalent Italian/Portuguese wording requires
+  an existing reference timestamp in Operational state or Recent conversation.
 
-- Complete network snapshot at one timestamp:
-  get_network_state_at_time
+- If a valid previous reference timestamp exists, choose the appropriate
+  analytical function and represent the relative relationship using
+  relative_time_offset_minutes when supported.
 
-- Compare policies or choose the best policy according to an objective:
-  compare_policies_at_time
+- If no valid previous reference timestamp exists, do NOT choose an
+  analytical network function.
 
-- Evaluate what one explicitly named policy would produce:
-  simulate_policy_at_time
+- Instead call request_clarification with:
+  missing_field = "reference_time"
 
-- Evaluate explicit hard SC-count reservations or assignments:
-  analyze_constrained_allocation
+- Never invent, assume, or default a reference timestamp for a
+  relative-time request.
 
-- Compare network conditions at two timestamps:
-  compare_network_states
+Resource-allocation wording is NOT relative-time wording:
 
-- Find highest/worst/top-k intervals:
-  find_risk_intervals
+- Words such as "remaining", "the rest", "left over", "remaining capacity",
+  "remaining two SCs", or "allocate what is left" refer to network resources,
+  not to clock time.
+- Never request a reference timestamp because the operator says "remaining",
+  "the rest", or similar resource-allocation language.
+- If the current request contains an explicit absolute timestamp such as 21:15,
+  use that timestamp directly unless the operator separately asks for a time
+  relative to another timestamp.
 
-- Summarize one continuous start-to-end time range:
-  summarize_time_range
+If Recent conversation is empty and Operational state has no previous timestamp,
+a context-only utterance such as "And one hour later?" must not be mapped to an
+analytical network function. Use request_clarification with
+missing_field="reference_time".
 
-Important distinctions:
-
-- An optimization preference is NOT a hard SC-count constraint.
-- Minimum blocking, fewest reconfigurations, stability, or SLA priority are policy objectives.
-- Explicit assignments such as RAN=2 SCs or reserve 1 SC for PON are hard constraints.
-- A named-policy hypothetical is a counterfactual, not a complete network snapshot.
-- A broader function is not equivalent to the specifically requested function.
-- A relative-time follow-up does not automatically imply comparison.
-- Do not calculate network values.
-- Do not perform clock arithmetic.
-- Do not answer the operator in prose.
-- Do not invent timestamps, policies, objectives, SC counts, or network values.
-- Call exactly one function.
+Do not answer the network question yourself.
+Do not calculate network results.
+Do not invent missing operational values.
+Use request_clarification when essential context is unavailable.
 """.strip()
 
         user_content = f"""
-Validated context state eligible for this turn:
+Operational state:
 {json.dumps(context_memory, ensure_ascii=False)}
 
-Inherited capability lock:
-{json.dumps(inherited_lock, ensure_ascii=False)}
-
-Recent structured conversation history:
+Recent conversation:
 {json.dumps(conversation_history[-4:], ensure_ascii=False)}
 
-Current operator request:
+Operator request:
 {query}
-
-Select exactly one available function.
-
-Include only arguments that are explicit in the current operator request.
-Validated inherited values and defaults are applied later by deterministic Python.
 """.strip()
 
-        attempts: list[dict[str, Any]] = []
-
-        for attempt_no in (1, 2):
-            attempt_instruction = user_content
-
-            if attempt_no == 2:
-                attempt_instruction += """
-
-Your previous response was not a valid function call.
-Return exactly one function call using the required Mistral tool-call protocol.
-Do not answer in prose.
-"""
-
-            raw_prompt = self._build_raw_prompt(
-                tools=tools,
-                system_prompt=system_prompt,
-                user_content=attempt_instruction,
-            )
-
-            payload = {
-                "model": config.OLLAMA_MODEL,
-                "prompt": raw_prompt,
-                "raw": True,
-                "stream": False,
-                "options": {
-                    "temperature": 0,
-                    "num_predict": 220,
+        native_payload = {
+            "model": config.OLLAMA_MODEL,
+            "messages": [
+                {
+                    "role": "system",
+                    "content": system_prompt,
                 },
-            }
+                {
+                    "role": "user",
+                    "content": user_content,
+                },
+            ],
+            "tools": tools,
+            "stream": False,
+            "options": {
+                "temperature": 0,
+                "num_predict": 192,
+            },
+        }
 
+        #
+        # Stage 1:
+        # Normal Ollama native tool calling.
+        #
+        native_body = self._post_chat(native_payload)
+
+        message = native_body.get("message", {})
+
+        if not isinstance(message, dict):
+            message = {}
+
+        tool_calls = message.get("tool_calls", [])
+        content = str(message.get("content", "") or "").strip()
+
+        if tool_calls:
             try:
-                request = Request(
-                    f"{config.OLLAMA_URL}/api/generate",
-                    data=json.dumps(payload).encode("utf-8"),
-                    headers={"Content-Type": "application/json"},
-                )
-
-                with urlopen(request, timeout=90) as response:
-                    body = json.loads(response.read())
-
-                raw_text = str(body.get("response", "")).strip()
-
-                tool_name, arguments = self._parse_raw_tool_call(
-                    raw_text=raw_text,
-                    allowed_tools=allowed_tools,
+                name, arguments = (
+                    self._validate_native_tool_calls(
+                        tool_calls,
+                        allowed_tools,
+                    )
                 )
 
                 self.last_audit = {
-                    "mode": "mistral_raw_function_calling",
-                    "attempts": attempts
-                    + [
-                        {
-                            "attempt": attempt_no,
-                            "ok": True,
-                            "raw": raw_text,
-                            "tool": tool_name,
-                            "arguments": arguments,
-                        }
-                    ],
+                    "prompt_version": "v2-direct-tools",
+                    "mode": "ollama_native_tool_calling",
+                    "native_success": True,
+                    "repair_used": False,
                     "parse_failed": False,
                     "fallback_used": False,
+                    "tool": name,
+                    "arguments": arguments,
+                    "content": content,
+                    "tool_calls": tool_calls,
                 }
 
-                return tool_name, arguments
+                return name, arguments
 
             except Exception as exc:
-                attempts.append(
-                    {
-                        "attempt": attempt_no,
-                        "ok": False,
-                        "error": f"{type(exc).__name__}: {exc}",
-                    }
+                native_error = (
+                    f"{type(exc).__name__}: {exc}"
                 )
+        else:
+            native_error = (
+                "Ollama returned no native tool_calls"
+            )
 
-        self.last_audit = {
-            "mode": "mistral_raw_function_calling",
-            "attempts": attempts,
-            "parse_failed": True,
-            "fallback_used": True,
+        #
+        # Stage 2:
+        # Mistral itself repairs/serializes its decision into a strict
+        # schema. Python does NOT infer intent from the operator query.
+        #
+        try:
+            name, arguments, repair_body = (
+                self._structured_tool_repair(
+                    query=query,
+                    context_memory=context_memory,
+                    conversation_history=conversation_history,
+                    allowed_tools=allowed_tools,
+                    tools=tools,
+                    native_content=content,
+                )
+            )
+
+            self.last_audit = {
+                "prompt_version": "v2-direct-tools",
+                "mode": "ollama_native_with_structured_repair",
+                "native_success": False,
+                "repair_used": True,
+                "parse_failed": False,
+                "fallback_used": False,
+                "native_error": native_error,
+                "native_content": content,
+                "native_tool_calls": tool_calls,
+                "tool": name,
+                "arguments": arguments,
+                "repair_response": repair_body,
+            }
+
+            return name, arguments
+
+        except Exception as repair_exc:
+            self.last_audit = {
+                "prompt_version": "v2-direct-tools",
+                "mode": "ollama_native_with_structured_repair",
+                "native_success": False,
+                "repair_used": True,
+                "parse_failed": True,
+                "fallback_used": True,
+                "native_error": native_error,
+                "native_content": content,
+                "native_tool_calls": tool_calls,
+                "repair_error": (
+                    f"{type(repair_exc).__name__}: "
+                    f"{repair_exc}"
+                ),
+                "raw_response": native_body,
+            }
+
+            raise RuntimeError(
+                "Mistral did not return one valid tool decision"
+            ) from repair_exc
+
+    def _structured_tool_repair(
+        self,
+        query: str,
+        context_memory: dict[str, Any],
+        conversation_history: list[dict[str, Any]],
+        allowed_tools: tuple[str, ...],
+        tools: list[dict[str, Any]],
+        native_content: str,
+    ) -> tuple[str, dict[str, Any], dict[str, Any]]:
+        """Ask Mistral to serialize its own tool decision.
+
+        This is not deterministic routing. Mistral still chooses the
+        function. Python only enforces the output schema.
+        """
+
+        schema = {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "enum": list(allowed_tools),
+                },
+                "arguments": {
+                    "type": "object",
+                },
+            },
+            "required": [
+                "name",
+                "arguments",
+            ],
+            "additionalProperties": False,
         }
 
-        raise RuntimeError(
-            "Mistral did not return one valid raw function call"
+        compact_catalog = []
+
+        for tool in tools:
+            function = tool.get("function", {})
+
+            compact_catalog.append(
+                {
+                    "name": function.get("name"),
+                    "description": function.get(
+                        "description",
+                        "",
+                    ),
+                    "parameters": function.get(
+                        "parameters",
+                        {},
+                    ),
+                }
+            )
+
+        repair_prompt = f"""
+Select exactly one network function for the operator request.
+
+Return only the structured object required by the response schema.
+
+Available functions:
+{json.dumps(compact_catalog, ensure_ascii=False)}
+
+Operational state:
+{json.dumps(context_memory, ensure_ascii=False)}
+
+Recent conversation:
+{json.dumps(conversation_history[-4:], ensure_ascii=False)}
+
+Operator request:
+{query}
+
+Your previous attempted tool output was:
+{native_content or "(none)"}
+
+Decide the function yourself from the operator request and available
+function descriptions. Re-evaluate the request from scratch; do not blindly copy
+the previous attempted output if it violates the tool descriptions or context rules.
+
+Context rules:
+- Relative-time expressions such as "one hour later", "30 minutes earlier",
+  or "at that time" require a real previous reference timestamp.
+- If Recent conversation and Operational state contain no previous timestamp and
+  the request depends only on relative time, choose request_clarification with
+  missing_field="reference_time".
+- Never put a phrase such as "one hour later" into an absolute `time` field.
+- If the request contains an explicit absolute timestamp such as 21:15, use it directly.
+- Resource-allocation wording such as "remaining capacity", "remaining two
+  subcarriers", "the rest", or "allocate what is left" is NOT relative-time
+  language and must never trigger request_clarification(reference_time).
+
+For analyze_constrained_allocation:
+- Use the `constraints` array.
+- Include only services explicitly constrained by the current operator request.
+- Never add zero-valued entries for unconstrained services.
+- Never infer how remaining capacity should be allocated.
+- "Allocate the remaining" is an instruction for deterministic Python, not an
+  additional constraint.
+
+Do not emit relative_time_offset_minutes=0 for an absolute-time request. Use that
+field only when the current operator request actually expresses a relative time shift.
+Do not calculate network results.
+Do not answer the operator in prose.
+Do not invent missing values.
+""".strip()
+
+        payload = {
+            "model": config.OLLAMA_MODEL,
+            "messages": [
+                {
+                    "role": "user",
+                    "content": repair_prompt,
+                }
+            ],
+            "format": schema,
+            "stream": False,
+            "options": {
+                "temperature": 0,
+                "num_predict": 192,
+            },
+        }
+
+        body = self._post_chat(payload)
+
+        message = body.get("message", {})
+
+        if not isinstance(message, dict):
+            raise ValueError(
+                "structured repair returned no message"
+            )
+
+        raw = str(
+            message.get("content", "") or ""
+        ).strip()
+
+        if not raw:
+            raise ValueError(
+                "structured repair returned empty content"
+            )
+
+        try:
+            decision = json.loads(raw)
+        except json.JSONDecodeError as exc:
+            raise ValueError(
+                f"invalid structured repair JSON: {exc}"
+            ) from exc
+
+        if not isinstance(decision, dict):
+            raise ValueError(
+                "structured repair result must be an object"
+            )
+
+        name = str(
+            decision.get("name", "")
+        ).strip()
+
+        if name not in allowed_tools:
+            raise ValueError(
+                f"tool {name!r} is not available"
+            )
+
+        arguments = decision.get(
+            "arguments",
+            {},
         )
+
+        if arguments is None:
+            arguments = {}
+
+        if not isinstance(arguments, dict):
+            raise ValueError(
+                "structured arguments must be an object"
+            )
+
+        return name, dict(arguments), body
+
+    @staticmethod
+    def _post_chat(
+        payload: dict[str, Any],
+    ) -> dict[str, Any]:
+        request = Request(
+            f"{config.OLLAMA_URL}/api/chat",
+            data=json.dumps(payload).encode("utf-8"),
+            headers={
+                "Content-Type": "application/json",
+            },
+        )
+
+        with urlopen(
+            request,
+            timeout=90,
+        ) as response:
+            body = json.loads(
+                response.read()
+            )
+
+        if not isinstance(body, dict):
+            raise ValueError(
+                "Ollama returned an invalid response"
+            )
+
+        return body
 
     @staticmethod
     def _validate_native_tool_calls(
         tool_calls: list[dict[str, Any]],
         allowed_tools: tuple[str, ...],
     ) -> tuple[str, dict[str, Any]]:
-        """Validate one function call from Ollama's generic tool-call shape.
-
-        Retained for compatibility with existing tests and older adapters.
-        The active mistral:7b runtime path uses _parse_raw_tool_call().
-        """
-
         if not isinstance(tool_calls, list):
-            raise ValueError("tool_calls must be a list")
+            raise ValueError(
+                "tool_calls must be a list"
+            )
 
         if len(tool_calls) != 1:
-            raise ValueError("exactly one tool call is required")
-
-        call = tool_calls[0]
-
-        if not isinstance(call, dict):
-            raise ValueError("tool call must be an object")
-
-        function = call.get("function")
-
-        if not isinstance(function, dict):
-            raise ValueError("tool call must contain a function object")
-
-        name = str(function.get("name", "")).strip()
-
-        if not name:
-            raise ValueError("function name is required")
-
-        if name not in allowed_tools:
-            raise ValueError(
-                f"tool {name!r} is not available for this turn"
-            )
-
-        arguments = function.get("arguments", {})
-
-        if isinstance(arguments, str):
-            try:
-                arguments = json.loads(arguments or "{}")
-            except json.JSONDecodeError as exc:
-                raise ValueError(
-                    f"invalid function arguments JSON: {exc}"
-                ) from exc
-
-        if arguments is None:
-            arguments = {}
-
-        if not isinstance(arguments, dict):
-            raise ValueError("function arguments must be an object")
-
-        return name, dict(arguments)
-
-    @staticmethod
-    def _build_raw_prompt(
-        tools: list[dict[str, Any]],
-        system_prompt: str,
-        user_content: str,
-    ) -> str:
-        """Build Mistral 7B v0.3 raw function-calling prompt."""
-
-        tools_json = json.dumps(
-            tools,
-            ensure_ascii=False,
-            separators=(",", ":"),
-        )
-
-        return (
-            f"[AVAILABLE_TOOLS] {tools_json}[/AVAILABLE_TOOLS]"
-            f"[INST] {system_prompt}\n\n{user_content} [/INST]"
-        )
-
-    @staticmethod
-    def _parse_raw_tool_call(
-        raw_text: str,
-        allowed_tools: tuple[str, ...],
-    ) -> tuple[str, dict[str, Any]]:
-        """Parse Mistral's [TOOL_CALLS] structured protocol.
-
-        This parses only the model's machine-readable function-call protocol.
-        It does not parse or interpret operator language.
-        """
-
-        if not raw_text:
-            raise ValueError("empty Mistral response")
-
-        marker = "[TOOL_CALLS]"
-
-        if marker not in raw_text:
-            raise ValueError(
-                "Mistral response did not contain [TOOL_CALLS]"
-            )
-
-        payload_text = raw_text.split(marker, 1)[1].strip()
-
-        # Some model/template variants may append EOS-like content.
-        if "</s>" in payload_text:
-            payload_text = payload_text.split("</s>", 1)[0].strip()
-
-        decoder = json.JSONDecoder()
-
-        try:
-            calls, _ = decoder.raw_decode(payload_text)
-        except json.JSONDecodeError as exc:
-            raise ValueError(
-                f"invalid TOOL_CALLS JSON: {exc}"
-            ) from exc
-
-        if not isinstance(calls, list):
-            raise ValueError(
-                "TOOL_CALLS payload must be a list"
-            )
-
-        if len(calls) != 1:
             raise ValueError(
                 "exactly one tool call is required"
             )
 
-        call = calls[0]
+        call = tool_calls[0]
 
         if not isinstance(call, dict):
             raise ValueError(
                 "tool call must be an object"
             )
 
-        name = str(call.get("name", "")).strip()
+        function = call.get("function")
+
+        if not isinstance(function, dict):
+            raise ValueError(
+                "tool call must contain a function object"
+            )
+
+        name = str(
+            function.get("name", "")
+        ).strip()
+
+        if not name:
+            raise ValueError(
+                "function name is required"
+            )
 
         if name not in allowed_tools:
             raise ValueError(
-                f"tool {name!r} is not available for this turn"
+                f"tool {name!r} is not available"
             )
 
-        arguments = call.get("arguments", {})
+        arguments = function.get(
+            "arguments",
+            {},
+        )
 
         if isinstance(arguments, str):
-            arguments = json.loads(arguments or "{}")
+            try:
+                arguments = json.loads(
+                    arguments or "{}"
+                )
+            except json.JSONDecodeError as exc:
+                raise ValueError(
+                    "invalid function arguments JSON"
+                ) from exc
 
         if arguments is None:
             arguments = {}
 
         if not isinstance(arguments, dict):
             raise ValueError(
-                "tool arguments must be an object"
+                "function arguments must be an object"
             )
 
         return name, dict(arguments)

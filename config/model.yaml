@@ -11,11 +11,11 @@ sla_classifier:
   limitation: Simulator-derived surrogate evaluated with a random interval split from one scenario day; not evidence of production generalization.
 
 llm:
-  role: coordinator_and_explainer
+  role: tool_router_and_explainer
   source_of_truth: false
   numeric_network_values_must_come_from_tools: true
 
 prompt_versions:
-  coordinator: v2
+  tool_router: v1-direct-tools
   explainer: v1
   operator_style: v1

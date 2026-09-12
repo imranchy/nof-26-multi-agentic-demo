@@ -1,11 +1,8 @@
 prompts:
 
-  coordinator:
-    version: v3-local-handoff
-    base: coordinator/base_v1.md
-    modules:
-      - coordinator/local_handoffs_v1.md
-      - coordinator/conversational_context_v1.md
+  tool_router:
+    version: v1-direct-tools
+    base: tool_router/base_v1.md
 
   explainer:
     version: v1

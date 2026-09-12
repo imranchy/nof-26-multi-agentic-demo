@@ -1,241 +1,146 @@
 # NoF 2026 Multi-Agent Digital Twin Demo
 
-Local demonstrator for semantic operator interaction with predictive traffic/SLA state and deterministic PSC subcarrier-allocation policies in a coherent P2MP metro-access network.
-
-## v1 scope
-
-The application combines the frozen prediction models already shipped with the original repository, deterministic PCA/MBA/SAA policy replay, operator SC constraints, temporal analysis, Mistral semantic orchestration, conversational memory, and deterministic grounding guardrails.
-
-Physical-layer analysis, GNPy, RAG, and physical network actuation are intentionally out of scope until calibrated physical-layer parameters and authoritative operational documents are available.
-
-## Operator-facing design
-
-Operators ask natural questions such as:
-
-- `What traffic do you expect at 21:15?`
-- `What is the predicted SLA state at 21:15?`
-- `What is happening on the network at 21:15?`
-- `Which allocation policy would you use at 21:15?`
-- `Minimize blocking at 21:15.`
-- `What happens if we use PCA instead?`
-- `Keep RAN on 2 subcarriers and allocate the remaining two.`
-- `Was 18:10 healthier than 21:15?`
-- `Summarize the network from 18:00 to 22:00.`
-- follow-up: `What about an hour later?`
-
-Normal operator answers do not require or expose ML implementation names. The UI reports **predicted SLA state + Failure-prone risk** rather than a separate classifier-confidence score.
+Fully local operator-facing demonstrator for predictive traffic/SLA analysis and deterministic PSC subcarrier-allocation policies in a coherent P2MP metro-access network.
 
 ## Architecture
 
-The demo remains fully local. Mistral runs through Ollama and owns multilingual language understanding, conversational context interpretation, native function selection, structured function arguments, and evidence explanation. Python remains the source of truth for state transitions and network computation.
-
-1. The local Mistral context coordinator interprets English, Italian, Portuguese, or code-switched requests and emits only a schema-constrained context relation/inheritance contract.
-2. The same local Mistral model receives the actual registered function schemas through Ollama native tool calling and selects exactly one function plus explicit arguments.
-3. The selected function identifies the specialist domain (traffic, SLA, policy, network analysis, or scope).
-4. Python applies explicit > inherited > default precedence, relative-time arithmetic, constraint merging, enum/range validation, and feasibility checks.
-5. Deterministic traffic/SLA models and PCA/MBA/SAA policy code execute locally. Policy metadata and optimization objectives are declarative configuration, not generated code.
-6. Mistral explains only returned evidence; grounding guardrails retain deterministic fallback behavior.
-
-There is no Python phrase list or regex router for operator intent, follow-up wording, objectives, policies, or SC constraints. The custom specialist `steps` JSON planner has also been removed in favor of the model's native function-calling interface.
+The runtime deliberately has one language-routing path:
 
 ```text
-Operator (EN / IT / PT)
-        ↓
-Local Mistral Context Coordinator
-structured conversational contract
-        ↓
-Local Mistral Native Tool Calling
-function name + explicit arguments
-        ↓
+Operator (English / Italian / Portuguese)
+        |
+        v
+Local Mistral 7B through Ollama /api/chat
+conversation + compact authoritative state + function schemas
+        |
+        v
+Native tool call: function name + structured arguments
+        |
+        v
 Deterministic Python
-state + arithmetic + validation + network execution
-        ↓
+validation + time arithmetic + state + ML/network/policy execution
+        |
+        v
 Mistral grounded explanation
-        ↓
-Grounding guardrail / fallback
+        |
+        v
+Grounding guardrail / deterministic fallback
 ```
 
-### Structured follow-up contract
+There is no coordinator, deterministic intent router, phrase list, regex router, or Python agent-handoff decision in the operator path. Mistral chooses the supported function directly. Python remains authoritative only for deterministic computation, validation, state, feasibility and safety.
 
-For conversational turns, Mistral decides whether intent/time/policy/objective/constraints are inherited. Python never interprets the operator's wording. When `intent` is inherited, Python restricts the native function-calling stage to the previously executed function. This prevents a time-only follow-up from silently changing analytical intent while preserving an explicit intent switch such as traffic → SLA.
+## Supported operator capabilities
 
-If Mistral references state that does not exist, Python requests clarification instead of guessing.
+- traffic/load forecast at one timestamp
+- SLA state / Failure-prone risk
+- SLA-risk explanation
+- complete network-state snapshot
+- policy comparison and objective-aware selection
+- named-policy counterfactual simulation
+- explicit SC-allocation constraints
+- two-time network comparison
+- ranked day-ahead risk/load/blocking/reconfiguration intervals
+- continuous time-range summary
+- conversational follow-ups using compact stored state
 
-See `docs/ARCHITECTURE_LOCAL_HANDOFF.md` and `UPGRADE_NATIVE_MISTRAL_TOOL_CALLING.md`.
+Policy IDs and objective vocabularies are configuration-driven. PCA/MBA/SAA execution, subcarrier feasibility, time arithmetic, ML inference and policy scoring remain deterministic Python operations.
 
-## Prompt versioning
+## Local setup
 
-NoF v1 keeps prompts outside application code:
-
-- `prompts/coordinator/*.md`
-- `prompts/explainer/*.md`
-- `prompts/operator_style_v1.md`
-- `config/prompts.yaml`
-
-This allows prompt changes to be evaluated independently of the model and network logic. The coordinator prompt is versioned as `v3-local-handoff`; explainer/operator-style prompts remain independently versioned.
-
-## Failure-prone risk
-
-The Failure-prone risk shown in the dashboard is the probability assigned to the simulator-derived `failure_prone` SLA state by the frozen SLA-state surrogate. Training labels are derived from simulator blocking ratio; the frozen threshold and model limitations are recorded in `models/sla_random_forest.metadata.json`.
-
-See `docs/RISK_SCORE.md` for the exact interpretation. It is not a physical-layer fault probability and is not presented as generic model confidence.
-
-## Windows setup
-
-From the repository root:
-
-```powershell
-python -m venv .venv
-.\.venv\Scripts\Activate.ps1
-python -m pip install -r requirements.txt
-```
-
-Ollama must be installed and the local model available:
-
-```powershell
-ollama pull mistral:7b
-```
-
-Or use:
+Recommended on Windows:
 
 ```powershell
 .\setup_windows.bat
 ```
 
-Do not run `train_models.bat` unless you intentionally want to regenerate the original frozen models.
+Or manually:
 
-## Deterministic validation
+```powershell
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+python -m pip install -r requirements.txt
+ollama pull mistral:7b
+```
 
-Before testing Mistral:
+The `.venv/` directory is intentionally ignored by Git and should be created locally.
+
+## Verify the repository
 
 ```powershell
 python -m pytest -q
 python -m tests.llm.validate_gold
 ```
 
-`validate_demo.bat` runs the deterministic tests, validates the v1 gold query set, rebuilds ML/policy validation artifacts, and verifies the local installation.
-
-## Mistral evaluation without running the app
-
-The benchmark is under `tests/llm/`; Streamlit does not need to be running.
-
-### v1 operator benchmark
-
-`tests/llm/query_sets/operator_10_categories_v1.json`
-
-- 10 categories
-- 10 natural-language variants per category
-- 100 queries total
-
-Recommended workflow:
+## Live single-query smoke test
 
 ```powershell
-python -m tests.llm.validate_gold
-python -m tests.llm.evaluate --category traffic_prediction
-python -m tests.llm.evaluate --category sla_risk_state
-# ...continue category by category...
-python -m tests.llm.evaluate --all
+python -c "from app.runtime import MultiAgentRuntime; import pprint; r=MultiAgentRuntime(); x=r.ask('What traffic do you expect at 21:15?'); print('TOOL:', x.plan.tool_name); print('ARGS:', x.plan.arguments); pprint.pp(x.routing_audit)"
 ```
 
-Windows shortcuts:
+Expected tool:
+
+```text
+get_traffic_forecast
+```
+
+## LLM evaluation
+
+50-query development suite:
 
 ```powershell
-.\test_llm_category.bat traffic_prediction
-.\test_llm_all.bat
-.\test_llm_adversarial.bat
+python tests\llm\evaluate.py --query-set operator_manual_5x10_v1.json --all
 ```
 
-Results are written to:
-
-`tests/llm/results/v1/`
-
-The application does **not** display benchmark scores. These files are intended for analysis and poster figures/tables.
-
-### Adversarial/hallucination tests
-
-A separate 20-query set tests out-of-domain routing, physical-layer scope, false premises, instruction attempts to invent values, and grounded execution:
+100-query held-out suite:
 
 ```powershell
-python -m tests.llm.evaluate_adversarial
+python tests\llm\evaluate.py --query-set operator_10_categories_v1.json --all
 ```
 
-## Future fine-tuning
-
-No fine-tuning is used in v1. If Mistral is fine-tuned later, preserve the base model and train a separate LoRA/QLoRA adapter on a **different training set**. Do not train on the 100-query v1 benchmark; it should remain held out for before/after comparison.
-
-See `tests/llm/future_training/README.md`.
-
-## Run the application
+Multilingual conversational suite:
 
 ```powershell
-.\launch_demo.bat
+python tests\llm\evaluate.py --query-set operator_multilingual_context_v1.json --all
 ```
 
-The UI is a single operator page with:
+Generated benchmark results are written under `tests/llm/results/` and are ignored by Git.
 
-- active simulated policy / SC configuration
-- day-ahead traffic forecast
-- Failure-prone risk timeline
-- free-form operator assistant
-- optional technical trace (off by default)
+## Run the demo
 
-## Repository map
+```powershell
+python launcher.py
+```
+
+or:
+
+```powershell
+streamlit run app/ui.py
+```
+
+The repository keeps `demo queries.docx` as the live demonstration query sheet and `Imran_NoF_26.pptx` as the presentation deck.
+
+## Main repository layout
 
 ```text
 app/
-  agents/              local context coordinator, native tool catalog/caller, explainer, guardrails
-  policy_engine/       deterministic PCA/MBA/SAA and metrics
-  semantic/            deterministic semantic normalization/safety
-  tools/               operator analytical capabilities
-  runtime.py           orchestration/memory
-  ui.py                Streamlit application
+  agents/
+    specialist.py      direct Mistral/Ollama native tool router
+    tool_catalog.py    function schemas exposed to Mistral
+    explanation.py     grounded operator-facing response generation
+    guardrail.py       evidence-grounding validation
+  policy_engine/       deterministic PCA/MBA/SAA execution and metrics
+  semantic/            structured value normalization/validation only
+  tools/               deterministic operator analytical functions
+  runtime.py           direct tool-call orchestration and conversation state
+  state_manager.py     compact authoritative state + time arithmetic
+  ui.py                Streamlit demo UI
 
-config/
-  network.yaml
-  sla.yaml
-  recommendation.yaml
-  operator_policy.yaml
-  model.yaml
-  prompts.yaml
-
-policies/
-  pca.yaml
-  mba.yaml
-  saa.yaml
-
-prompts/
-  coordinator/          routing/context modules
-  explainer/            category-grounded explanation modules
-  operator_style_v1.md
-
-tests/
-  deterministic pytest suite
-  llm/
-    query_sets/
-    results/
-    future_training/
-
-validation/
-  results/              ML and deterministic policy validation artifacts
+config/                 network/model/prompt/objective configuration
+policies/               declarative PCA/MBA/SAA metadata
+prompts/                direct tool-router + grounded explainer prompts
+tests/                  deterministic tests and LLM benchmarks
+models/                  frozen traffic/SLA models
+validation/              deterministic validation artifacts
 ```
 
-For detailed evaluation methodology see `docs/EVALUATION_V1.md`; for architecture see `docs/ARCHITECTURE_V1.md`.
-
-## Multilingual semantic coordinator
-
-The coordinator now treats natural-language understanding as an LLM concern and
-keeps deterministic Python focused on validation, state transitions, temporal
-arithmetic, constraint merging, and network execution. Operator requests may be
-written in English, Italian, Portuguese, or code-switch between those languages
-and networking terminology. Mistral maps them to the same canonical structured
-contract before execution.
-
-The runtime no longer uses Python phrase lists or regex-based operator intent,
-objective, follow-up, policy, or SC-constraint parsing. Relative time is emitted
-as a structured minute offset and applied deterministically in Python.
-
-Run the multilingual conversational-context benchmark with:
-
-```bash
-python tests/llm/evaluate.py --query-set operator_multilingual_context_v1.json --all
-```
+Physical-layer analysis, GNPy, live network actuation and RAG remain intentionally out of scope for this demonstrator.

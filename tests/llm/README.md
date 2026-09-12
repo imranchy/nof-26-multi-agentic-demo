@@ -1,41 +1,33 @@
-# Mistral semantic and hallucination tests
+# NoF local Mistral evaluation
 
-These tests run without Streamlit. Ollama must be running with `mistral:7b` available.
+The benchmark exercises the direct local Mistral function-calling architecture without Streamlit.
 
-The v1 operational benchmark contains **10 operator capabilities x 10 paraphrases = 100 queries**. Validation/evidence are not operator query categories; grounding and guardrails are measured internally.
+For every operator turn, Mistral receives the complete supported function catalog plus recent conversation history and compact authoritative state. It selects one function. Python validates/resolves arguments and executes deterministic network logic; the evidence is then explained by Mistral and checked by the grounding guardrail.
 
-## Recommended workflow
+There is no coordinator or deterministic intent router in the benchmark path.
 
-1. Validate the static gold set:
-   `python -m tests.llm.validate_gold`
-2. Run one category:
-   `python -m tests.llm.evaluate --category traffic_prediction`
-3. Review the JSON/CSV output under `tests/llm/results/v1/`.
-4. Repeat category-by-category.
-5. Once categories are acceptable, run the complete benchmark:
-   `python -m tests.llm.evaluate --all`
-6. Run adversarial/hallucination tests separately:
-   `python -m tests.llm.evaluate_adversarial`
+## Development suite
 
-The report separates raw Mistral routing from guardrailed execution. This is intentional: raw LLM quality and complete-system reliability are different results.
+```powershell
+python tests\llm\evaluate.py --query-set operator_manual_5x10_v1.json --all
+```
 
-## Local multilingual handoff benchmark
+This runs 10 categories x 5 manually verified queries.
 
-The local-agent architecture can be exercised without Streamlit. The coordinator first
-selects a specialist handoff and conversational inheritance contract; the specialist
-then emits its bounded structured capability call. Both stages use the local Ollama
-Mistral model.
+## Gold suite
 
-Italian and Portuguese conversational-context cases are in:
+```powershell
+python tests\llm\evaluate.py --query-set operator_10_categories_v1.json --all
+```
 
-`tests/llm/query_sets/operator_multilingual_context_v1.json`
+This runs 10 categories x 10 queries. Keep this set held out from future fine-tuning.
 
-Run:
+## Multilingual conversational suite
 
 ```powershell
 python tests\llm\evaluate.py --query-set operator_multilingual_context_v1.json --all
 ```
 
-The evaluator continues to record the raw specialist-proposed tool sequence and the
-final executed sequence so agent routing errors remain observable rather than hidden by
-Python language heuristics.
+This exercises Italian and Portuguese conversational references against the same language-independent tool/state interface.
+
+Results are written to `tests/llm/results/v1/` and are intentionally not shipped pre-populated in clean distributions.

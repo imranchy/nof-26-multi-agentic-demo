@@ -133,46 +133,18 @@ def prompt_version(role: str) -> str:
     )
 
 
-def coordinator_prompt() -> str:
-    """
-    Build the complete coordinator prompt.
-
-    The coordinator must see all routing modules because the
-    operator's intent is not known until Mistral interprets
-    the request.
-    """
-    spec = _prompt_spec("coordinator")
-
-    parts: list[str] = []
-
+def tool_router_prompt() -> str:
+    """Build the direct Mistral tool-selection prompt."""
+    spec = _prompt_spec("tool_router")
     base_path = spec.get("base")
-
     if not base_path:
-        raise KeyError(
-            "Coordinator prompt configuration is missing 'base'."
-        )
-
-    parts.append(
-        _read_prompt(base_path)
-    )
-
-    for module_path in spec.get("modules", []):
-        parts.append(
-            _read_prompt(module_path)
-        )
+        raise KeyError("Tool-router prompt configuration is missing 'base'.")
+    parts = [_read_prompt(base_path)]
 
     style_spec = _prompt_spec("operator_style")
     style_file = style_spec.get("file")
-
-    if not style_file:
-        raise KeyError(
-            "Operator style prompt configuration is missing 'file'."
-        )
-
-    parts.append(
-        _read_prompt(style_file)
-    )
-
+    if style_file:
+        parts.append(_read_prompt(style_file))
     return "\n\n".join(parts)
 
 
@@ -216,7 +188,7 @@ def explainer_prompt(
     """
     Build the explainer prompt.
 
-    Unlike the coordinator, the explainer knows which deterministic
+    The explainer knows which deterministic
     evidence category was produced. Therefore it receives only the
     relevant specialist prompt module.
     """
@@ -268,7 +240,7 @@ def operator_prompt() -> str:
     Backward-compatible alias for older code that still imports
     operator_prompt().
     """
-    return coordinator_prompt()
+    return tool_router_prompt()
 
 
 def network_parameters() -> dict[str, Any]:
