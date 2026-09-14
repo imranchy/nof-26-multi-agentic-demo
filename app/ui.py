@@ -19,10 +19,9 @@ frame = runtime.frame
 highest_risk = frame.loc[frame.failure_probability.idxmax()]
 
 st.title("Multi-Agent Digital Twin for SLA Management")
-st.caption("NoF 2026 demonstrator · predictive network state + deterministic PCA/MBA/SAA control analysis + Mistral semantic orchestration")
 
 c1, c2, c3, c4 = st.columns(4)
-c1.metric("Simulated active policy", runtime.tools.controller["active_policy"])
+c1.metric("Active policy", runtime.tools.controller["active_policy"])
 c2.metric("SC capacity", f"{runtime.tools.network['subcarrier_capacity_gbps']} Gbps")
 c3.metric("SCs per access node", str(runtime.tools.network["subcarriers_per_leaf"]))
 c4.metric("Highest-risk interval", str(highest_risk.time))
@@ -48,13 +47,11 @@ with right:
     fig.update_layout(height=330, xaxis_title="Time", yaxis_range=[0, 100])
     fig.update_xaxes(nticks=10)
     st.plotly_chart(fig, use_container_width=True)
-    st.caption("Risk is the predicted probability of the simulator-derived Failure-prone SLA state; it is not a generic model-confidence score.")
 
 st.divider()
 head1, head2, head3 = st.columns([5, 1, 1])
 with head1:
     st.subheader("Operator assistant")
-    st.caption("Ask naturally about traffic, SLA risk, network state, policy trade-offs, SC constraints, timestamps, or time ranges.")
 with head2:
     show_trace = st.toggle("Technical trace", value=False)
 with head3:
@@ -103,4 +100,4 @@ if query:
             st.error(text)
             st.session_state.messages.append({"role": "assistant", "content": text})
 
-st.caption("v1 scope: predicted traffic/SLA risk, temporal analysis, PCA/MBA/SAA policy replay, and operator SC constraints. Physical-layer analysis, GNPy, RAG, and network actuation are intentionally out of scope.")
+st.caption("Developed in Collaboraion with POLITO, NOKIA Officers in Portugal and Munich. Funded my MSCA under the NESTOR Project")
