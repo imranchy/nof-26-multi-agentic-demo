@@ -139,12 +139,14 @@ def tool_router_prompt() -> str:
     base_path = spec.get("base")
     if not base_path:
         raise KeyError("Tool-router prompt configuration is missing 'base'.")
+
     parts = [_read_prompt(base_path)]
 
-    style_spec = _prompt_spec("operator_style")
-    style_file = style_spec.get("file")
-    if style_file:
-        parts.append(_read_prompt(style_file))
+    examples_path = spec.get("examples")
+    if examples_path:
+        parts.append(_read_prompt(examples_path))
+
+    # Operator-facing answer style belongs to the explainer, not the router.
     return "\n\n".join(parts)
 
 

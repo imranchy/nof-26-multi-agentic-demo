@@ -1,8 +1,9 @@
 prompts:
 
   tool_router:
-    version: v1-direct-tools
-    base: tool_router/base_v1.md
+    version: v3-english-contrastive
+    base: tool_router/base_v3.md
+    examples: tool_router/few_shot_router_v3.md
 
   explainer:
     version: v1

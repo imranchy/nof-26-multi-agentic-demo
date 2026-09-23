@@ -1,0 +1,1119 @@
+{
+  "benchmark": "NoF multilingual 12-category routing suite",
+  "version": "v1",
+  "languages": [
+    "English",
+    "Italian",
+    "Portuguese",
+    "German",
+    "French",
+    "Spanish"
+  ],
+  "total_queries": 72,
+  "cases": [
+    {
+      "id": "en_traffic_prediction_01",
+      "language": "English",
+      "category": "traffic_prediction",
+      "setup_query": "",
+      "query": "Expected load at 22:05?",
+      "expected_tools": [
+        "get_traffic_forecast"
+      ],
+      "expected_args_by_tool": {
+        "get_traffic_forecast": {
+          "time": "22:05"
+        }
+      }
+    },
+    {
+      "id": "en_sla_risk_state_02",
+      "language": "English",
+      "category": "sla_risk_state",
+      "setup_query": "",
+      "query": "How risky is the SLA at 11:25?",
+      "expected_tools": [
+        "get_sla_prediction"
+      ],
+      "expected_args_by_tool": {
+        "get_sla_prediction": {
+          "time": "11:25"
+        }
+      }
+    },
+    {
+      "id": "en_full_network_state_03",
+      "language": "English",
+      "category": "full_network_state",
+      "setup_query": "",
+      "query": "Give me the operator snapshot for 15:40.",
+      "expected_tools": [
+        "get_network_state_at_time"
+      ],
+      "expected_args_by_tool": {
+        "get_network_state_at_time": {
+          "time": "15:40"
+        }
+      }
+    },
+    {
+      "id": "en_policy_comparison_balanced_04",
+      "language": "English",
+      "category": "policy_comparison_balanced",
+      "setup_query": "",
+      "query": "Choose the overall allocation strategy at 17:35.",
+      "expected_tools": [
+        "compare_policies_at_time"
+      ],
+      "expected_args_by_tool": {
+        "compare_policies_at_time": {
+          "time": "17:35"
+        }
+      }
+    },
+    {
+      "id": "en_objective_aware_policy_05",
+      "language": "English",
+      "category": "objective_aware_policy",
+      "setup_query": "",
+      "query": "At 19:25, favor the lowest blocking.",
+      "expected_tools": [
+        "compare_policies_at_time"
+      ],
+      "expected_args_by_tool": {
+        "compare_policies_at_time": {
+          "time": "19:25",
+          "objective": "min_blocking"
+        }
+      }
+    },
+    {
+      "id": "en_policy_counterfactual_06",
+      "language": "English",
+      "category": "policy_counterfactual",
+      "setup_query": "",
+      "query": "Show the MBA outcome at 13:50.",
+      "expected_tools": [
+        "simulate_policy_at_time"
+      ],
+      "expected_args_by_tool": {
+        "simulate_policy_at_time": {
+          "time": "13:50",
+          "policy": "MBA"
+        }
+      }
+    },
+    {
+      "id": "en_sc_constraints_07",
+      "language": "English",
+      "category": "sc_constraints",
+      "setup_query": "",
+      "query": "Reserve 1 SC for PON at 10:45.",
+      "expected_tools": [
+        "analyze_constrained_allocation"
+      ],
+      "expected_args_by_tool": {
+        "analyze_constrained_allocation": {
+          "time": "10:45",
+          "pon_subcarriers": 1
+        }
+      }
+    },
+    {
+      "id": "en_conversational_context_08",
+      "language": "English",
+      "category": "conversational_context",
+      "setup_query": "What traffic is forecast at 10:45?",
+      "query": "At that same time, show the SLA risk.",
+      "expected_tools": [
+        "get_sla_prediction"
+      ],
+      "expected_args_by_tool": {
+        "get_sla_prediction": {
+          "time": "10:45"
+        }
+      }
+    },
+    {
+      "id": "en_temporal_comparison_09",
+      "language": "English",
+      "category": "temporal_comparison",
+      "setup_query": "",
+      "query": "What changed between 13:20 and 19:25?",
+      "expected_tools": [
+        "compare_network_states"
+      ],
+      "expected_args_by_tool": {
+        "compare_network_states": {
+          "time_a": "13:20",
+          "time_b": "19:25"
+        }
+      }
+    },
+    {
+      "id": "en_range_risk_discovery_10",
+      "language": "English",
+      "category": "range_risk_discovery",
+      "setup_query": "",
+      "query": "Show the two busiest intervals.",
+      "expected_tools": [
+        "find_risk_intervals"
+      ],
+      "expected_args_by_tool": {
+        "find_risk_intervals": {
+          "metric": "total_gbps",
+          "top_k": 2
+        }
+      }
+    },
+    {
+      "id": "en_range_summary_11",
+      "language": "English",
+      "category": "range_summary",
+      "setup_query": "",
+      "query": "Give me a network summary from 17:00 to 20:30.",
+      "expected_tools": [
+        "summarize_time_range"
+      ],
+      "expected_args_by_tool": {
+        "summarize_time_range": {
+          "start_time": "17:00",
+          "end_time": "20:30"
+        }
+      }
+    },
+    {
+      "id": "en_out_of_scope_12",
+      "language": "English",
+      "category": "out_of_scope",
+      "setup_query": "",
+      "query": "Book a hotel for tonight.",
+      "expected_tools": [
+        "decline_out_of_scope"
+      ],
+      "expected_args_by_tool": {
+        "decline_out_of_scope": {}
+      }
+    },
+    {
+      "id": "it_traffic_prediction_01",
+      "language": "Italian",
+      "category": "traffic_prediction",
+      "setup_query": "",
+      "query": "Carico previsto alle 22:05?",
+      "expected_tools": [
+        "get_traffic_forecast"
+      ],
+      "expected_args_by_tool": {
+        "get_traffic_forecast": {
+          "time": "22:05"
+        }
+      }
+    },
+    {
+      "id": "it_sla_risk_state_02",
+      "language": "Italian",
+      "category": "sla_risk_state",
+      "setup_query": "",
+      "query": "Quanto è alto il rischio SLA alle 11:25?",
+      "expected_tools": [
+        "get_sla_prediction"
+      ],
+      "expected_args_by_tool": {
+        "get_sla_prediction": {
+          "time": "11:25"
+        }
+      }
+    },
+    {
+      "id": "it_full_network_state_03",
+      "language": "Italian",
+      "category": "full_network_state",
+      "setup_query": "",
+      "query": "Dammi una fotografia completa della rete alle 15:40.",
+      "expected_tools": [
+        "get_network_state_at_time"
+      ],
+      "expected_args_by_tool": {
+        "get_network_state_at_time": {
+          "time": "15:40"
+        }
+      }
+    },
+    {
+      "id": "it_policy_comparison_balanced_04",
+      "language": "Italian",
+      "category": "policy_comparison_balanced",
+      "setup_query": "",
+      "query": "Scegli la strategia di allocazione complessiva alle 17:35.",
+      "expected_tools": [
+        "compare_policies_at_time"
+      ],
+      "expected_args_by_tool": {
+        "compare_policies_at_time": {
+          "time": "17:35"
+        }
+      }
+    },
+    {
+      "id": "it_objective_aware_policy_05",
+      "language": "Italian",
+      "category": "objective_aware_policy",
+      "setup_query": "",
+      "query": "Alle 19:25, privilegia il blocking più basso.",
+      "expected_tools": [
+        "compare_policies_at_time"
+      ],
+      "expected_args_by_tool": {
+        "compare_policies_at_time": {
+          "time": "19:25",
+          "objective": "min_blocking"
+        }
+      }
+    },
+    {
+      "id": "it_policy_counterfactual_06",
+      "language": "Italian",
+      "category": "policy_counterfactual",
+      "setup_query": "",
+      "query": "Mostra il risultato con MBA alle 13:50.",
+      "expected_tools": [
+        "simulate_policy_at_time"
+      ],
+      "expected_args_by_tool": {
+        "simulate_policy_at_time": {
+          "time": "13:50",
+          "policy": "MBA"
+        }
+      }
+    },
+    {
+      "id": "it_sc_constraints_07",
+      "language": "Italian",
+      "category": "sc_constraints",
+      "setup_query": "",
+      "query": "Riserva 1 SC per PON alle 10:45.",
+      "expected_tools": [
+        "analyze_constrained_allocation"
+      ],
+      "expected_args_by_tool": {
+        "analyze_constrained_allocation": {
+          "time": "10:45",
+          "pon_subcarriers": 1
+        }
+      }
+    },
+    {
+      "id": "it_conversational_context_08",
+      "language": "Italian",
+      "category": "conversational_context",
+      "setup_query": "Che traffico prevedi alle 10:45?",
+      "query": "A quella stessa ora, mostrami il rischio SLA.",
+      "expected_tools": [
+        "get_sla_prediction"
+      ],
+      "expected_args_by_tool": {
+        "get_sla_prediction": {
+          "time": "10:45"
+        }
+      }
+    },
+    {
+      "id": "it_temporal_comparison_09",
+      "language": "Italian",
+      "category": "temporal_comparison",
+      "setup_query": "",
+      "query": "Cosa cambia tra le 13:20 e le 19:25?",
+      "expected_tools": [
+        "compare_network_states"
+      ],
+      "expected_args_by_tool": {
+        "compare_network_states": {
+          "time_a": "13:20",
+          "time_b": "19:25"
+        }
+      }
+    },
+    {
+      "id": "it_range_risk_discovery_10",
+      "language": "Italian",
+      "category": "range_risk_discovery",
+      "setup_query": "",
+      "query": "Mostra i due intervalli più trafficati.",
+      "expected_tools": [
+        "find_risk_intervals"
+      ],
+      "expected_args_by_tool": {
+        "find_risk_intervals": {
+          "metric": "total_gbps",
+          "top_k": 2
+        }
+      }
+    },
+    {
+      "id": "it_range_summary_11",
+      "language": "Italian",
+      "category": "range_summary",
+      "setup_query": "",
+      "query": "Fammi un riepilogo della rete dalle 17:00 alle 20:30.",
+      "expected_tools": [
+        "summarize_time_range"
+      ],
+      "expected_args_by_tool": {
+        "summarize_time_range": {
+          "start_time": "17:00",
+          "end_time": "20:30"
+        }
+      }
+    },
+    {
+      "id": "it_out_of_scope_12",
+      "language": "Italian",
+      "category": "out_of_scope",
+      "setup_query": "",
+      "query": "Prenota un albergo per stasera.",
+      "expected_tools": [
+        "decline_out_of_scope"
+      ],
+      "expected_args_by_tool": {
+        "decline_out_of_scope": {}
+      }
+    },
+    {
+      "id": "pt_traffic_prediction_01",
+      "language": "Portuguese",
+      "category": "traffic_prediction",
+      "setup_query": "",
+      "query": "Carga prevista às 22:05?",
+      "expected_tools": [
+        "get_traffic_forecast"
+      ],
+      "expected_args_by_tool": {
+        "get_traffic_forecast": {
+          "time": "22:05"
+        }
+      }
+    },
+    {
+      "id": "pt_sla_risk_state_02",
+      "language": "Portuguese",
+      "category": "sla_risk_state",
+      "setup_query": "",
+      "query": "Qual é o nível de risco SLA às 11:25?",
+      "expected_tools": [
+        "get_sla_prediction"
+      ],
+      "expected_args_by_tool": {
+        "get_sla_prediction": {
+          "time": "11:25"
+        }
+      }
+    },
+    {
+      "id": "pt_full_network_state_03",
+      "language": "Portuguese",
+      "category": "full_network_state",
+      "setup_query": "",
+      "query": "Dê-me uma visão completa da rede às 15:40.",
+      "expected_tools": [
+        "get_network_state_at_time"
+      ],
+      "expected_args_by_tool": {
+        "get_network_state_at_time": {
+          "time": "15:40"
+        }
+      }
+    },
+    {
+      "id": "pt_policy_comparison_balanced_04",
+      "language": "Portuguese",
+      "category": "policy_comparison_balanced",
+      "setup_query": "",
+      "query": "Escolha a estratégia de alocação geral às 17:35.",
+      "expected_tools": [
+        "compare_policies_at_time"
+      ],
+      "expected_args_by_tool": {
+        "compare_policies_at_time": {
+          "time": "17:35"
+        }
+      }
+    },
+    {
+      "id": "pt_objective_aware_policy_05",
+      "language": "Portuguese",
+      "category": "objective_aware_policy",
+      "setup_query": "",
+      "query": "Às 19:25, priorize o menor bloqueio.",
+      "expected_tools": [
+        "compare_policies_at_time"
+      ],
+      "expected_args_by_tool": {
+        "compare_policies_at_time": {
+          "time": "19:25",
+          "objective": "min_blocking"
+        }
+      }
+    },
+    {
+      "id": "pt_policy_counterfactual_06",
+      "language": "Portuguese",
+      "category": "policy_counterfactual",
+      "setup_query": "",
+      "query": "Mostre o resultado com MBA às 13:50.",
+      "expected_tools": [
+        "simulate_policy_at_time"
+      ],
+      "expected_args_by_tool": {
+        "simulate_policy_at_time": {
+          "time": "13:50",
+          "policy": "MBA"
+        }
+      }
+    },
+    {
+      "id": "pt_sc_constraints_07",
+      "language": "Portuguese",
+      "category": "sc_constraints",
+      "setup_query": "",
+      "query": "Reserve 1 SC para PON às 10:45.",
+      "expected_tools": [
+        "analyze_constrained_allocation"
+      ],
+      "expected_args_by_tool": {
+        "analyze_constrained_allocation": {
+          "time": "10:45",
+          "pon_subcarriers": 1
+        }
+      }
+    },
+    {
+      "id": "pt_conversational_context_08",
+      "language": "Portuguese",
+      "category": "conversational_context",
+      "setup_query": "Que tráfego é previsto às 10:45?",
+      "query": "Nesse mesmo horário, mostre o risco SLA.",
+      "expected_tools": [
+        "get_sla_prediction"
+      ],
+      "expected_args_by_tool": {
+        "get_sla_prediction": {
+          "time": "10:45"
+        }
+      }
+    },
+    {
+      "id": "pt_temporal_comparison_09",
+      "language": "Portuguese",
+      "category": "temporal_comparison",
+      "setup_query": "",
+      "query": "O que mudou entre 13:20 e 19:25?",
+      "expected_tools": [
+        "compare_network_states"
+      ],
+      "expected_args_by_tool": {
+        "compare_network_states": {
+          "time_a": "13:20",
+          "time_b": "19:25"
+        }
+      }
+    },
+    {
+      "id": "pt_range_risk_discovery_10",
+      "language": "Portuguese",
+      "category": "range_risk_discovery",
+      "setup_query": "",
+      "query": "Mostre os dois intervalos de maior carga.",
+      "expected_tools": [
+        "find_risk_intervals"
+      ],
+      "expected_args_by_tool": {
+        "find_risk_intervals": {
+          "metric": "total_gbps",
+          "top_k": 2
+        }
+      }
+    },
+    {
+      "id": "pt_range_summary_11",
+      "language": "Portuguese",
+      "category": "range_summary",
+      "setup_query": "",
+      "query": "Resuma a rede das 17:00 às 20:30.",
+      "expected_tools": [
+        "summarize_time_range"
+      ],
+      "expected_args_by_tool": {
+        "summarize_time_range": {
+          "start_time": "17:00",
+          "end_time": "20:30"
+        }
+      }
+    },
+    {
+      "id": "pt_out_of_scope_12",
+      "language": "Portuguese",
+      "category": "out_of_scope",
+      "setup_query": "",
+      "query": "Reserve um hotel para esta noite.",
+      "expected_tools": [
+        "decline_out_of_scope"
+      ],
+      "expected_args_by_tool": {
+        "decline_out_of_scope": {}
+      }
+    },
+    {
+      "id": "de_traffic_prediction_01",
+      "language": "German",
+      "category": "traffic_prediction",
+      "setup_query": "",
+      "query": "Erwartete Last um 22:05?",
+      "expected_tools": [
+        "get_traffic_forecast"
+      ],
+      "expected_args_by_tool": {
+        "get_traffic_forecast": {
+          "time": "22:05"
+        }
+      }
+    },
+    {
+      "id": "de_sla_risk_state_02",
+      "language": "German",
+      "category": "sla_risk_state",
+      "setup_query": "",
+      "query": "Wie hoch ist das SLA-Risiko um 11:25?",
+      "expected_tools": [
+        "get_sla_prediction"
+      ],
+      "expected_args_by_tool": {
+        "get_sla_prediction": {
+          "time": "11:25"
+        }
+      }
+    },
+    {
+      "id": "de_full_network_state_03",
+      "language": "German",
+      "category": "full_network_state",
+      "setup_query": "",
+      "query": "Gib mir den vollständigen Netzüberblick um 15:40.",
+      "expected_tools": [
+        "get_network_state_at_time"
+      ],
+      "expected_args_by_tool": {
+        "get_network_state_at_time": {
+          "time": "15:40"
+        }
+      }
+    },
+    {
+      "id": "de_policy_comparison_balanced_04",
+      "language": "German",
+      "category": "policy_comparison_balanced",
+      "setup_query": "",
+      "query": "Wähle die allgemeine Zuweisungsstrategie um 17:35.",
+      "expected_tools": [
+        "compare_policies_at_time"
+      ],
+      "expected_args_by_tool": {
+        "compare_policies_at_time": {
+          "time": "17:35"
+        }
+      }
+    },
+    {
+      "id": "de_objective_aware_policy_05",
+      "language": "German",
+      "category": "objective_aware_policy",
+      "setup_query": "",
+      "query": "Bevorzuge um 19:25 die geringste Blockierung.",
+      "expected_tools": [
+        "compare_policies_at_time"
+      ],
+      "expected_args_by_tool": {
+        "compare_policies_at_time": {
+          "time": "19:25",
+          "objective": "min_blocking"
+        }
+      }
+    },
+    {
+      "id": "de_policy_counterfactual_06",
+      "language": "German",
+      "category": "policy_counterfactual",
+      "setup_query": "",
+      "query": "Zeige das Ergebnis mit MBA um 13:50.",
+      "expected_tools": [
+        "simulate_policy_at_time"
+      ],
+      "expected_args_by_tool": {
+        "simulate_policy_at_time": {
+          "time": "13:50",
+          "policy": "MBA"
+        }
+      }
+    },
+    {
+      "id": "de_sc_constraints_07",
+      "language": "German",
+      "category": "sc_constraints",
+      "setup_query": "",
+      "query": "Reserviere um 10:45 einen SC für PON.",
+      "expected_tools": [
+        "analyze_constrained_allocation"
+      ],
+      "expected_args_by_tool": {
+        "analyze_constrained_allocation": {
+          "time": "10:45",
+          "pon_subcarriers": 1
+        }
+      }
+    },
+    {
+      "id": "de_conversational_context_08",
+      "language": "German",
+      "category": "conversational_context",
+      "setup_query": "Welcher Verkehr wird um 10:45 erwartet?",
+      "query": "Zeige für dieselbe Zeit das SLA-Risiko.",
+      "expected_tools": [
+        "get_sla_prediction"
+      ],
+      "expected_args_by_tool": {
+        "get_sla_prediction": {
+          "time": "10:45"
+        }
+      }
+    },
+    {
+      "id": "de_temporal_comparison_09",
+      "language": "German",
+      "category": "temporal_comparison",
+      "setup_query": "",
+      "query": "Was hat sich zwischen 13:20 und 19:25 geändert?",
+      "expected_tools": [
+        "compare_network_states"
+      ],
+      "expected_args_by_tool": {
+        "compare_network_states": {
+          "time_a": "13:20",
+          "time_b": "19:25"
+        }
+      }
+    },
+    {
+      "id": "de_range_risk_discovery_10",
+      "language": "German",
+      "category": "range_risk_discovery",
+      "setup_query": "",
+      "query": "Zeige die zwei Intervalle mit der höchsten Last.",
+      "expected_tools": [
+        "find_risk_intervals"
+      ],
+      "expected_args_by_tool": {
+        "find_risk_intervals": {
+          "metric": "total_gbps",
+          "top_k": 2
+        }
+      }
+    },
+    {
+      "id": "de_range_summary_11",
+      "language": "German",
+      "category": "range_summary",
+      "setup_query": "",
+      "query": "Fasse das Netz von 17:00 bis 20:30 zusammen.",
+      "expected_tools": [
+        "summarize_time_range"
+      ],
+      "expected_args_by_tool": {
+        "summarize_time_range": {
+          "start_time": "17:00",
+          "end_time": "20:30"
+        }
+      }
+    },
+    {
+      "id": "de_out_of_scope_12",
+      "language": "German",
+      "category": "out_of_scope",
+      "setup_query": "",
+      "query": "Buche für heute Abend ein Hotel.",
+      "expected_tools": [
+        "decline_out_of_scope"
+      ],
+      "expected_args_by_tool": {
+        "decline_out_of_scope": {}
+      }
+    },
+    {
+      "id": "fr_traffic_prediction_01",
+      "language": "French",
+      "category": "traffic_prediction",
+      "setup_query": "",
+      "query": "Charge prévue à 22h05 ?",
+      "expected_tools": [
+        "get_traffic_forecast"
+      ],
+      "expected_args_by_tool": {
+        "get_traffic_forecast": {
+          "time": "22:05"
+        }
+      }
+    },
+    {
+      "id": "fr_sla_risk_state_02",
+      "language": "French",
+      "category": "sla_risk_state",
+      "setup_query": "",
+      "query": "Quel est le niveau de risque SLA à 11h25 ?",
+      "expected_tools": [
+        "get_sla_prediction"
+      ],
+      "expected_args_by_tool": {
+        "get_sla_prediction": {
+          "time": "11:25"
+        }
+      }
+    },
+    {
+      "id": "fr_full_network_state_03",
+      "language": "French",
+      "category": "full_network_state",
+      "setup_query": "",
+      "query": "Donne-moi une vue complète du réseau à 15h40.",
+      "expected_tools": [
+        "get_network_state_at_time"
+      ],
+      "expected_args_by_tool": {
+        "get_network_state_at_time": {
+          "time": "15:40"
+        }
+      }
+    },
+    {
+      "id": "fr_policy_comparison_balanced_04",
+      "language": "French",
+      "category": "policy_comparison_balanced",
+      "setup_query": "",
+      "query": "Choisis la stratégie globale d’allocation à 17h35.",
+      "expected_tools": [
+        "compare_policies_at_time"
+      ],
+      "expected_args_by_tool": {
+        "compare_policies_at_time": {
+          "time": "17:35"
+        }
+      }
+    },
+    {
+      "id": "fr_objective_aware_policy_05",
+      "language": "French",
+      "category": "objective_aware_policy",
+      "setup_query": "",
+      "query": "À 19h25, privilégie le blocage le plus faible.",
+      "expected_tools": [
+        "compare_policies_at_time"
+      ],
+      "expected_args_by_tool": {
+        "compare_policies_at_time": {
+          "time": "19:25",
+          "objective": "min_blocking"
+        }
+      }
+    },
+    {
+      "id": "fr_policy_counterfactual_06",
+      "language": "French",
+      "category": "policy_counterfactual",
+      "setup_query": "",
+      "query": "Montre le résultat avec MBA à 13h50.",
+      "expected_tools": [
+        "simulate_policy_at_time"
+      ],
+      "expected_args_by_tool": {
+        "simulate_policy_at_time": {
+          "time": "13:50",
+          "policy": "MBA"
+        }
+      }
+    },
+    {
+      "id": "fr_sc_constraints_07",
+      "language": "French",
+      "category": "sc_constraints",
+      "setup_query": "",
+      "query": "Réserve un SC pour PON à 10h45.",
+      "expected_tools": [
+        "analyze_constrained_allocation"
+      ],
+      "expected_args_by_tool": {
+        "analyze_constrained_allocation": {
+          "time": "10:45",
+          "pon_subcarriers": 1
+        }
+      }
+    },
+    {
+      "id": "fr_conversational_context_08",
+      "language": "French",
+      "category": "conversational_context",
+      "setup_query": "Quel trafic est prévu à 10h45 ?",
+      "query": "À cette même heure, montre le risque SLA.",
+      "expected_tools": [
+        "get_sla_prediction"
+      ],
+      "expected_args_by_tool": {
+        "get_sla_prediction": {
+          "time": "10:45"
+        }
+      }
+    },
+    {
+      "id": "fr_temporal_comparison_09",
+      "language": "French",
+      "category": "temporal_comparison",
+      "setup_query": "",
+      "query": "Qu’est-ce qui change entre 13h20 et 19h25 ?",
+      "expected_tools": [
+        "compare_network_states"
+      ],
+      "expected_args_by_tool": {
+        "compare_network_states": {
+          "time_a": "13:20",
+          "time_b": "19:25"
+        }
+      }
+    },
+    {
+      "id": "fr_range_risk_discovery_10",
+      "language": "French",
+      "category": "range_risk_discovery",
+      "setup_query": "",
+      "query": "Montre les deux intervalles les plus chargés.",
+      "expected_tools": [
+        "find_risk_intervals"
+      ],
+      "expected_args_by_tool": {
+        "find_risk_intervals": {
+          "metric": "total_gbps",
+          "top_k": 2
+        }
+      }
+    },
+    {
+      "id": "fr_range_summary_11",
+      "language": "French",
+      "category": "range_summary",
+      "setup_query": "",
+      "query": "Résume le réseau de 17h00 à 20h30.",
+      "expected_tools": [
+        "summarize_time_range"
+      ],
+      "expected_args_by_tool": {
+        "summarize_time_range": {
+          "start_time": "17:00",
+          "end_time": "20:30"
+        }
+      }
+    },
+    {
+      "id": "fr_out_of_scope_12",
+      "language": "French",
+      "category": "out_of_scope",
+      "setup_query": "",
+      "query": "Réserve un hôtel pour ce soir.",
+      "expected_tools": [
+        "decline_out_of_scope"
+      ],
+      "expected_args_by_tool": {
+        "decline_out_of_scope": {}
+      }
+    },
+    {
+      "id": "es_traffic_prediction_01",
+      "language": "Spanish",
+      "category": "traffic_prediction",
+      "setup_query": "",
+      "query": "¿Carga prevista a las 22:05?",
+      "expected_tools": [
+        "get_traffic_forecast"
+      ],
+      "expected_args_by_tool": {
+        "get_traffic_forecast": {
+          "time": "22:05"
+        }
+      }
+    },
+    {
+      "id": "es_sla_risk_state_02",
+      "language": "Spanish",
+      "category": "sla_risk_state",
+      "setup_query": "",
+      "query": "¿Cuál es el nivel de riesgo SLA a las 11:25?",
+      "expected_tools": [
+        "get_sla_prediction"
+      ],
+      "expected_args_by_tool": {
+        "get_sla_prediction": {
+          "time": "11:25"
+        }
+      }
+    },
+    {
+      "id": "es_full_network_state_03",
+      "language": "Spanish",
+      "category": "full_network_state",
+      "setup_query": "",
+      "query": "Dame una vista completa de la red a las 15:40.",
+      "expected_tools": [
+        "get_network_state_at_time"
+      ],
+      "expected_args_by_tool": {
+        "get_network_state_at_time": {
+          "time": "15:40"
+        }
+      }
+    },
+    {
+      "id": "es_policy_comparison_balanced_04",
+      "language": "Spanish",
+      "category": "policy_comparison_balanced",
+      "setup_query": "",
+      "query": "Elige la estrategia general de asignación a las 17:35.",
+      "expected_tools": [
+        "compare_policies_at_time"
+      ],
+      "expected_args_by_tool": {
+        "compare_policies_at_time": {
+          "time": "17:35"
+        }
+      }
+    },
+    {
+      "id": "es_objective_aware_policy_05",
+      "language": "Spanish",
+      "category": "objective_aware_policy",
+      "setup_query": "",
+      "query": "A las 19:25, prioriza el menor bloqueo.",
+      "expected_tools": [
+        "compare_policies_at_time"
+      ],
+      "expected_args_by_tool": {
+        "compare_policies_at_time": {
+          "time": "19:25",
+          "objective": "min_blocking"
+        }
+      }
+    },
+    {
+      "id": "es_policy_counterfactual_06",
+      "language": "Spanish",
+      "category": "policy_counterfactual",
+      "setup_query": "",
+      "query": "Muestra el resultado con MBA a las 13:50.",
+      "expected_tools": [
+        "simulate_policy_at_time"
+      ],
+      "expected_args_by_tool": {
+        "simulate_policy_at_time": {
+          "time": "13:50",
+          "policy": "MBA"
+        }
+      }
+    },
+    {
+      "id": "es_sc_constraints_07",
+      "language": "Spanish",
+      "category": "sc_constraints",
+      "setup_query": "",
+      "query": "Reserva 1 SC para PON a las 10:45.",
+      "expected_tools": [
+        "analyze_constrained_allocation"
+      ],
+      "expected_args_by_tool": {
+        "analyze_constrained_allocation": {
+          "time": "10:45",
+          "pon_subcarriers": 1
+        }
+      }
+    },
+    {
+      "id": "es_conversational_context_08",
+      "language": "Spanish",
+      "category": "conversational_context",
+      "setup_query": "¿Qué tráfico se espera a las 10:45?",
+      "query": "A esa misma hora, muestra el riesgo SLA.",
+      "expected_tools": [
+        "get_sla_prediction"
+      ],
+      "expected_args_by_tool": {
+        "get_sla_prediction": {
+          "time": "10:45"
+        }
+      }
+    },
+    {
+      "id": "es_temporal_comparison_09",
+      "language": "Spanish",
+      "category": "temporal_comparison",
+      "setup_query": "",
+      "query": "¿Qué cambió entre las 13:20 y las 19:25?",
+      "expected_tools": [
+        "compare_network_states"
+      ],
+      "expected_args_by_tool": {
+        "compare_network_states": {
+          "time_a": "13:20",
+          "time_b": "19:25"
+        }
+      }
+    },
+    {
+      "id": "es_range_risk_discovery_10",
+      "language": "Spanish",
+      "category": "range_risk_discovery",
+      "setup_query": "",
+      "query": "Muestra los dos intervalos con mayor carga.",
+      "expected_tools": [
+        "find_risk_intervals"
+      ],
+      "expected_args_by_tool": {
+        "find_risk_intervals": {
+          "metric": "total_gbps",
+          "top_k": 2
+        }
+      }
+    },
+    {
+      "id": "es_range_summary_11",
+      "language": "Spanish",
+      "category": "range_summary",
+      "setup_query": "",
+      "query": "Resume la red de 17:00 a 20:30.",
+      "expected_tools": [
+        "summarize_time_range"
+      ],
+      "expected_args_by_tool": {
+        "summarize_time_range": {
+          "start_time": "17:00",
+          "end_time": "20:30"
+        }
+      }
+    },
+    {
+      "id": "es_out_of_scope_12",
+      "language": "Spanish",
+      "category": "out_of_scope",
+      "setup_query": "",
+      "query": "Reserva un hotel para esta noche.",
+      "expected_tools": [
+        "decline_out_of_scope"
+      ],
+      "expected_args_by_tool": {
+        "decline_out_of_scope": {}
+      }
+    }
+  ]
+}

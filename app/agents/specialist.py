@@ -52,67 +52,7 @@ class LocalSpecialistAgent:
         # Keep this intentionally short.
         # The detailed semantics already live in each tool description.
         #
-        system_prompt = """
-You are a network-operations tool router.
-
-For every supported operator request, call exactly one supplied function.
-Use the function descriptions and schemas to select the most specific capability.
-
-The request may be English, Italian, Portuguese, or code-switched.
-
-For analyze_constrained_allocation:
-
-- Represent explicit operator SC-count constraints only in the `constraints` list.
-- Each constraint contains `service` and `subcarriers`.
-- Add an entry only when the operator explicitly constrains that service.
-- Do not add entries for unconstrained services.
-- "Allocate the remaining" does not create additional constraints.
-- Python deterministically allocates unconstrained remaining capacity.
-
-Example:
-Operator: "Keep RAN on 2 subcarriers and allocate the remaining two."
-Correct: constraints = [{"service": "ran", "subcarriers": 2}]
-
-Relative-time context rules:
-
-- A relative-time request such as "one hour later", "after that",
-  "at that time", or equivalent Italian/Portuguese wording requires
-  an existing reference timestamp in Operational state or Recent conversation.
-
-- If a valid previous reference timestamp exists, choose the appropriate
-  analytical function and represent the relative relationship using
-  relative_time_offset_minutes when supported.
-
-- If no valid previous reference timestamp exists, do NOT choose an
-  analytical network function.
-
-- Instead call request_clarification with:
-  missing_field = "reference_time"
-
-- Never invent, assume, or default a reference timestamp for a
-  relative-time request.
-
-Resource-allocation wording is NOT relative-time wording:
-
-- Words such as "remaining", "the rest", "left over", "remaining capacity",
-  "remaining two SCs", or "allocate what is left" refer to network resources,
-  not to clock time.
-- Never request a reference timestamp because the operator says "remaining",
-  "the rest", or similar resource-allocation language.
-- If the current request contains an explicit absolute timestamp such as 21:15,
-  use that timestamp directly unless the operator separately asks for a time
-  relative to another timestamp.
-
-If Recent conversation is empty and Operational state has no previous timestamp,
-a context-only utterance such as "And one hour later?" must not be mapped to an
-analytical network function. Use request_clarification with
-missing_field="reference_time".
-
-Do not answer the network question yourself.
-Do not calculate network results.
-Do not invent missing operational values.
-Use request_clarification when essential context is unavailable.
-""".strip()
+        system_prompt = config.tool_router_prompt()
 
         user_content = f"""
 Operational state:
@@ -169,7 +109,7 @@ Operator request:
                 )
 
                 self.last_audit = {
-                    "prompt_version": "v2-direct-tools",
+                    "prompt_version": config.prompt_version("tool_router"),
                     "mode": "ollama_native_tool_calling",
                     "native_success": True,
                     "repair_used": False,
@@ -210,7 +150,7 @@ Operator request:
             )
 
             self.last_audit = {
-                "prompt_version": "v2-direct-tools",
+                "prompt_version": config.prompt_version("tool_router"),
                 "mode": "ollama_native_with_structured_repair",
                 "native_success": False,
                 "repair_used": True,
@@ -228,7 +168,7 @@ Operator request:
 
         except Exception as repair_exc:
             self.last_audit = {
-                "prompt_version": "v2-direct-tools",
+                "prompt_version": config.prompt_version("tool_router"),
                 "mode": "ollama_native_with_structured_repair",
                 "native_success": False,
                 "repair_used": True,
@@ -300,8 +240,13 @@ Operator request:
                 }
             )
 
+        routing_instructions = config.tool_router_prompt()
+
         repair_prompt = f"""
 Select exactly one network function for the operator request.
+
+Follow these routing instructions and examples:
+{routing_instructions}
 
 Return only the structured object required by the response schema.
 
