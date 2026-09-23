@@ -14,3 +14,4 @@ recommendation:
     balanced: [SAA, MBA, PCA]
     min_blocking: [MBA, SAA, PCA]
     min_reconfiguration: [SAA, PCA, MBA]
+    sla_priority: [PCA, MBA, SAA]

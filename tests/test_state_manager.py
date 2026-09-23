@@ -35,3 +35,10 @@ def test_constraint_memory_is_copied_and_typed():
         "ran_subcarriers": 2,
         "pon_subcarriers": 1,
     }
+
+
+def test_compact_state_does_not_mutate_source_memory():
+    memory = {"last_constraints_raw": {"ran_subcarriers": 2}}
+    state = ConversationStateManager.compact_state(memory)
+    state["last_constraints_raw"]["ran_subcarriers"] = 3
+    assert memory["last_constraints_raw"]["ran_subcarriers"] == 2

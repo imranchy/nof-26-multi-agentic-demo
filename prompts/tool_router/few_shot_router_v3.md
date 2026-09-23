@@ -48,7 +48,7 @@ User: `Give me a network summary from 17:00 to 20:30.`
 Call: `summarize_time_range(start_time="17:00", end_time="20:30")`
 
 ## 12. Out-of-scope boundary
-User: `Book a hotel for tonight.`
+User: `What is the weather today?`
 Call: `decline_out_of_scope()`
 
 Physical-layer boundary example:

@@ -2,7 +2,8 @@ id: SAA
 name: Stability-Aware Allocation
 type: stateful
 objective: balance blocking and SC reassignment stability
-paper_role: proposed policy
+operator_role: Stability-aware allocation policy.
+selection_role: Preferred by the balanced objective when candidate policies are otherwise tied.
 parameters:
   weights_from: config/sla.yaml
   beta_fraction_of_sc_capacity: 0.15

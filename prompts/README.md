@@ -1,20 +1,18 @@
 # Prompt modules
 
-The NoF demonstrator keeps routing and explanation behavior in versioned Markdown prompt modules rather than embedding long prompt text directly in Python.
+The NoF demonstrator keeps routing and explanation behavior in Markdown prompt modules rather than embedding long prompt text directly in Python.
 
 ## Tool router
 
-The active router is configured in `config/prompts.yaml`.
+The active and frozen demo router is configured in `config/prompts.yaml`:
 
-Current version:
+- `tool_router/base_v3.md` — compact English routing rules and contrastive capability boundaries.
+- `tool_router/few_shot_router_v3.md` — compact canonical examples for the supported demo intents.
 
-- `tool_router/base_v3.md` — concise language-agnostic routing rules and contrastive capability boundaries.
-- `tool_router/few_shot_router_v3.md` — one compact English canonical example per evaluated category, plus the physical-layer scope boundary.
+The production demo intentionally keeps one router version only. Earlier multilingual-heavy and larger few-shot prompt experiments were removed after evaluation showed that the compact v3 prompt was more reliable for the local Mistral model.
 
-The router is intentionally instructed in English even though operator requests may be English, Italian, Portuguese, German, French, Spanish, or code-switched. The design relies on multilingual semantic understanding plus language-independent function schemas, instead of repeating every example in every language.
-
-The previous files `base_v2.md` and `few_shot_multilingual_v1.md` may be retained for benchmark provenance/rollback, but they are no longer loaded by the active configuration.
+Conversation state is not injected into the router for standalone intent selection. Python resolves only the arguments that are legitimately omitted by a follow-up, such as the timestamp and existing SC constraints in `Also reserve one SC for PON.`
 
 ## Explainer
 
-The explainer remains composed from its base prompt, category-specific module, and operator-style instructions. Those files are unchanged by the v3 router update.
+The explainer is composed from its base prompt, category-specific module, and operator-style instructions.

@@ -1,8 +1,9 @@
 id: PCA
 name: Priority-based Class Allocation
 type: memoryless
-objective: SLA-aware fixed priority allocation
-paper_role: baseline
+objective: SLA-aware fixed-priority allocation
+operator_role: Fixed service-priority baseline.
+selection_role: Used directly for the sla_priority objective and for explicit PCA counterfactuals.
 parameters:
   priority: [enterprise, ran, pon]
 requires_previous_state: false

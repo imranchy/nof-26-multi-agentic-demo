@@ -18,7 +18,7 @@ def _policy_description() -> str:
     parts = []
     for policy_id in _policy_ids():
         meta = config.load_policy_yaml(policy_id)
-        parts.append(f"{policy_id}={meta.get('name', policy_id)} ({meta.get('objective', 'configured policy')})")
+        parts.append(f"{policy_id}={meta.get('name', policy_id)}: {meta.get('operator_role', meta.get('objective', 'configured policy'))}")
     return "Configured allocation policy. " + "; ".join(parts) + "."
 
 

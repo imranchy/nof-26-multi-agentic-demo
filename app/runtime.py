@@ -14,6 +14,38 @@ from app.state_manager import ConversationStateManager
 from app.tools import OperatorTools
 
 
+OBJECTIVE_ALIASES = {
+    "minimize blocking": "min_blocking",
+    "minimum blocking": "min_blocking",
+    "lowest blocking": "min_blocking",
+    "reduce blocking": "min_blocking",
+    "minimise blocking": "min_blocking",
+    "minimise reconfiguration": "min_reconfiguration",
+    "minimize reconfiguration": "min_reconfiguration",
+    "minimum reconfiguration": "min_reconfiguration",
+    "reduce reconfiguration": "min_reconfiguration",
+    "favor stability": "min_reconfiguration",
+    "favour stability": "min_reconfiguration",
+    "prioritize sla": "sla_priority",
+    "prioritise sla": "sla_priority",
+    "sla priority": "sla_priority",
+    "protect sla": "sla_priority",
+}
+
+
+def _extract_explicit_objective(query: str) -> str | None:
+    """Resolve only explicit operator objective language.
+
+    This is intentionally narrow: it is a deterministic safety correction for
+    the policy-comparison path, not a general natural-language intent parser.
+    """
+    q = " ".join(str(query).lower().split())
+    for phrase, objective in OBJECTIVE_ALIASES.items():
+        if phrase in q:
+            return objective
+    return None
+
+
 class MultiAgentRuntime:
     """Direct Mistral tool routing over deterministic network capabilities.
 
@@ -43,15 +75,43 @@ class MultiAgentRuntime:
 
     def ask(self, query: str) -> AgentResponse:
         trace = [AgentEvent("Mistral Tool Router", "Selecting one analytical capability from the full local tool catalog")]
+        # Keep routing isolated from stale operational state. The router decides
+        # the current intent from the current utterance only. Deterministic Python
+        # may still resolve omitted follow-up arguments after tool selection.
         state = self.state_manager.compact_state(self.memory)
 
         try:
             tool_name, raw_arguments = self.router.select_tool(
                 query=query,
-                context_memory=state,
-                conversation_history=self.history,
+                context_memory={},
+                conversation_history=[],
             )
             router_audit = dict(self.router.last_audit)
+
+            # Preserve Mistral's proposal for auditability before any narrow,
+            # deterministic correction is applied.
+            mistral_tool_name = tool_name
+            mistral_raw_arguments = dict(raw_arguments)
+            route_correction: str | None = None
+
+            # An explicit policy objective is authoritative. In particular, a
+            # request such as "At 20:00, minimize blocking" must be evaluated
+            # by the policy-comparison capability, even if the small router
+            # accidentally proposes constrained allocation. No SC count is
+            # invented here; only the explicit objective is canonicalized.
+            explicit_objective = _extract_explicit_objective(query)
+            if explicit_objective is not None and tool_name not in {
+                "decline_out_of_scope",
+                "decline_physical_layer",
+            }:
+                corrected_arguments = dict(raw_arguments)
+                corrected_arguments["objective"] = explicit_objective
+                if tool_name != "compare_policies_at_time":
+                    route_correction = (
+                        f"explicit_objective_route:{tool_name}->compare_policies_at_time"
+                    )
+                    tool_name = "compare_policies_at_time"
+                raw_arguments = corrected_arguments
         except Exception as exc:
             router_audit = dict(self.router.last_audit)
             router_audit.setdefault("mode", "ollama_native_tool_calling")
@@ -66,9 +126,11 @@ class MultiAgentRuntime:
             return self._clarification_response(query, raw_arguments, router_audit, trace)
 
         try:
-            args = self._normalize_tool_arguments(tool_name, raw_arguments, state)
+            args = self._normalize_tool_arguments(tool_name, raw_arguments, state, query)
             trace.append(AgentEvent("Deterministic Validation", "Validated and resolved tool arguments", detail=str(args)))
-            evidence, fallback = self.tools.execute(tool_name, args, self.memory)
+            # All required context has already been resolved into args. Do not let
+            # tool execution re-read stale conversational memory.
+            evidence, fallback = self.tools.execute(tool_name, args, {})
         except Exception as exc:
             return self._tool_validation_failure_response(
                 query=query,
@@ -109,10 +171,16 @@ class MultiAgentRuntime:
             warnings=list(self.startup_warnings),
             trace=trace,
             routing_audit={
-                "mistral_proposed": [{"tool": tool_name, "arguments": dict(raw_arguments)}],
+                "mistral_proposed": [{
+                    "tool": mistral_tool_name,
+                    "arguments": mistral_raw_arguments,
+                }],
                 "tool_router": router_audit,
                 "executed": [{"tool": tool_name, "arguments": args}],
-                "deterministic_correction": self._argument_resolution_changed(raw_arguments, args),
+                "deterministic_correction": (
+                    route_correction
+                    or self._argument_resolution_changed(raw_arguments, args)
+                ),
                 "tool_calling_mode": router_audit.get(
                 "mode",
                 "ollama_native_tool_calling",
@@ -125,9 +193,13 @@ class MultiAgentRuntime:
         tool_name: str,
         arguments: dict[str, Any],
         state: dict[str, Any],
+        query: str = "",
     ) -> dict[str, Any]:
         raw_input = dict(arguments)
         allowed = self.TOOL_ARGUMENTS.get(tool_name, set())
+        explicit_time_present = (
+            SemanticResolver.normalize_time_value(raw_input.get("time")) is not None
+        )
 
         # Preserve legacy scalar SC constraints for internal callers/tests.
         # These keys are intentionally not exposed in the Mistral-facing schema.
@@ -184,18 +256,12 @@ class MultiAgentRuntime:
         if tool_name == "compare_network_states":
             time_a = SemanticResolver.normalize_time_value(args.get("time_a"))
             time_b = SemanticResolver.normalize_time_value(args.get("time_b"))
-            if time_a is None:
-                time_a = SemanticResolver.normalize_time_value(state.get("comparison_time_a"))
-            if time_b is None:
-                time_b = SemanticResolver.normalize_time_value(state.get("comparison_time_b") or state.get("last_time"))
             if time_a is None or time_b is None:
-                raise ValueError("Two valid timestamps are required for network-state comparison.")
+                raise ValueError("Two explicit timestamps are required for network-state comparison.")
             args["time_a"] = time_a
             args["time_b"] = time_b
             args["policy"] = (
                 SemanticResolver.normalize_policy(args.get("policy"))
-                or SemanticResolver.normalize_policy(state.get("recommended_policy"))
-                or SemanticResolver.normalize_policy(state.get("last_policy"))
                 or str(self.tools.controller["active_policy"]).upper()
             )
 
@@ -207,12 +273,19 @@ class MultiAgentRuntime:
             args["start_time"] = start_time
             args["end_time"] = end_time
             args["objective"] = SemanticResolver.normalize_objective_value(
-                args.get("objective") or state.get("last_objective"), default_objective
+                args.get("objective"), default_objective
             )
 
-        if tool_name in {"compare_policies_at_time", "analyze_constrained_allocation"}:
+        if tool_name == "compare_policies_at_time":
+            explicit_objective = _extract_explicit_objective(query)
             args["objective"] = SemanticResolver.normalize_objective_value(
-                args.get("objective") or state.get("last_objective"), default_objective
+                explicit_objective or args.get("objective"),
+                default_objective,
+            )
+
+        if tool_name == "analyze_constrained_allocation":
+            args["objective"] = SemanticResolver.normalize_objective_value(
+                args.get("objective"), default_objective
             )
 
         if tool_name == "explain_sla_risk":
@@ -223,13 +296,9 @@ class MultiAgentRuntime:
                 args.pop("claimed_state", None)
 
         if tool_name == "simulate_policy_at_time":
-            policy = (
-                SemanticResolver.normalize_policy(args.get("policy"))
-                or SemanticResolver.normalize_policy(state.get("recommended_policy"))
-                or SemanticResolver.normalize_policy(state.get("last_policy"))
-            )
+            policy = SemanticResolver.normalize_policy(args.get("policy"))
             if policy is None:
-                raise ValueError("A policy is required for a policy counterfactual.")
+                raise ValueError("An explicit policy is required for a policy counterfactual.")
             args["policy"] = policy
 
         if tool_name == "analyze_constrained_allocation":
@@ -275,7 +344,13 @@ class MultiAgentRuntime:
                 **current_constraints,
             }
 
-            previous_constraints = self.state_manager.memory_for_constraints(state)
+            # An explicit timestamp starts a new constrained-allocation request.
+            # Only a time-omitting follow-up (for example, "Also reserve one SC
+            # for PON") may inherit the immediately preceding constraint set.
+            previous_constraints = (
+                {} if explicit_time_present
+                else self.state_manager.memory_for_constraints(state)
+            )
             merged_constraints = {**previous_constraints, **current_constraints}
             if not merged_constraints:
                 raise ValueError(
@@ -285,16 +360,16 @@ class MultiAgentRuntime:
             args.update(merged_constraints)
             args["reference_policy"] = (
                 SemanticResolver.normalize_policy(args.get("reference_policy"))
-                or SemanticResolver.normalize_policy(state.get("last_reference_policy"))
-                or SemanticResolver.normalize_policy(state.get("recommended_policy"))
-                or SemanticResolver.normalize_policy(state.get("last_policy"))
+                or (
+                    SemanticResolver.normalize_policy(state.get("last_reference_policy"))
+                    if not explicit_time_present else None
+                )
                 or str(self.tools.controller["active_policy"]).upper()
             )
 
         if tool_name == "get_network_state_at_time":
             args["policy"] = (
                 SemanticResolver.normalize_policy(args.get("policy"))
-                or SemanticResolver.normalize_policy(state.get("last_policy"))
                 or str(self.tools.controller["active_policy"]).upper()
             )
 
@@ -449,6 +524,13 @@ class MultiAgentRuntime:
         return None
 
     def _update_memory(self, tool_name: str, args: dict[str, Any], evidence: dict[str, Any]) -> None:
+        # Constraint memory is intentionally short-lived. Any non-constraint
+        # operation closes the previous constrained-allocation thread so stale
+        # SC requirements cannot leak into later standalone requests.
+        if tool_name != "analyze_constrained_allocation":
+            for key in ("last_constraints_raw", "last_constraints", "last_reference_policy"):
+                self.memory.pop(key, None)
+
         if evidence.get("timestamp"):
             self.memory["last_time"] = evidence["timestamp"]
         if evidence.get("time_a"):

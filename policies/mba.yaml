@@ -2,7 +2,8 @@ id: MBA
 name: Minimum-Blocking Allocation
 type: memoryless
 objective: weighted residual-demand allocation
-paper_role: blocking-optimal reference
+operator_role: Blocking-oriented allocation reference.
+selection_role: Preferred by the min_blocking objective when blocking and reconfiguration metrics tie.
 parameters:
   weights_from: config/sla.yaml
 requires_previous_state: false
